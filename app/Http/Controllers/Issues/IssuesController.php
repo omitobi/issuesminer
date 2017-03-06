@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Issues;
 use App\Issue;
 use GuzzleHttp;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Model;
 
 class IssuesController extends Controller
 {
@@ -22,7 +23,7 @@ class IssuesController extends Controller
                 [
                     'laravel' =>
                         [
-                            'link' => 'https://api.github.com/repos/laravel/laravel/issues?state=closed&since=2000-01-01%2000:00:00&direction=asc',
+                            'link' => 'https://api.github.com/repos/laravel/laravel/issues?state=closed&since=2000-01-01%2000:00:00&per_page=100&direction=asc',
 //                    'link' => 'https://api.github.com/repos/laravel/laravel/issues?state=closed',
                             'status' => 'done',
                             'file' => 'issues.json',
@@ -76,6 +77,7 @@ class IssuesController extends Controller
         if($success)
             $response = file_get_contents(storage_path("{$file_and_path}"));
 
+//        return response($response);
         $array_responses = json_decode($response, true);
 
         $final_issues = [];
@@ -87,16 +89,21 @@ class IssuesController extends Controller
             $final_issues['issues'][$idx]['title'] = $array_response['title'];
             $final_issues['issues'][$idx]['reporter_name'] = $array_response['user']['login'];
             $final_issues['issues'][$idx]['state'] = $array_response['state'];
+            $final_issues['issues'][$idx]['description'] = $array_response['body'];
+            $final_issues['issues'][$idx]['pr_url'] = $array_response['pull_request']['url'];
             $final_issues['issues'][$idx]['date_created'] = $array_response['created_at'];
             $final_issues['issues'][$idx]['date_updated'] = $array_response['updated_at'];
             $final_issues['issues'][$idx]['date_closed'] = $array_response['closed_at'];
-            $final_issues['issues'][$idx]['description'] = $array_response['body'];
         }
-        
-        foreach ($final_issues as $final_issue)
-        {
-            (new Issue())->save($final_issue);
+//        if(!Issue::all()->count()) {
+        Model::unguard();
+        foreach ($final_issues['issues'] as $final_issue) {
+            Issue::UpdateOrcreate(['identifier' => $final_issue['identifier']], $final_issue);
         }
+        Model::reguard();
+//        }
+
+        return Issue::first();
         return response()->json($final_issues);
     }
 }

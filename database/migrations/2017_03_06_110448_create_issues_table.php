@@ -19,8 +19,10 @@ class CreateIssuesTable extends Migration
             $table->integer('number')->unsigned();
             $table->string('title');
             $table->string('reporter_name');
+            $table->string('state', 10);
             $table->string('url');
             $table->string('description');
+            $table->string('pr_url');
             $table->string('date_created');
             $table->string('date_updated');
             $table->string('date_closed');
