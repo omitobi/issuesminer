@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateIssuesTable extends Migration
+class CreateIssuesPrsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,21 @@ class CreateIssuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('issues', function (Blueprint $table) {
+        Schema::create('issues_prs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('identifier')->unsigned()->unique();
-            $table->integer('number')->unsigned();
+            $table->integer('project_id')->unsigned();
+            $table->string('issue_id');
+            $table->string('pr_id');
+            $table->string('commits_counts');
+            $table->string('merged_status'); //**very important to filter merged prs
+//            $table->string('message');
+            $table->string('author_id');
+            $table->string('author_name');
             $table->string('title');
-            $table->string('reporter_name');
-            $table->string('state', 10);
             $table->string('description');
             $table->string('api_url');
             $table->string('web_url');
-            $table->string('pr_url');
+            $table->enum('state',['open', 'closed']);
             $table->string('date_created');
             $table->string('date_updated');
             $table->string('date_closed');
@@ -38,6 +42,6 @@ class CreateIssuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('issues');
+        Schema::dropIfExists('issues_prs');
     }
 }
