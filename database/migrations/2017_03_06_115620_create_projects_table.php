@@ -15,11 +15,16 @@ class CreateProjectsTable extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('identifier')->unique();
+            $table->string('organization_name');
             $table->string('name')->unique();
-            $table->string('url');
-            $table->string('type');
+            $table->string('type'); //maybe framework or something else?
             $table->string('language');
             $table->string('description');
+            $table->string('homepage');
+            $table->string('api_url');
+            $table->string('web_url');
+            $table->string('default_branch');
             $table->timestamps();
         });
     }

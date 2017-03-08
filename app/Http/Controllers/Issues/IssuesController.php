@@ -9,48 +9,30 @@
 namespace App\Http\Controllers\Issues;
 
 use App\Issue;
-use GuzzleHttp;
-use App\Http\Controllers\Controller;
+use App\Utilities\Utility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Mockery\CountValidator\Exception;
 
-class IssuesController extends Controller
+class IssuesController extends Utility
 {
 
     public function resolve(Request $request)
     {
-        $done = [
-            'issues' =>
-                [
-                    'laravel' =>
-                        [
-                            'link' => 'https://api.github.com/repos/laravel/laravel/issues?state=closed&since=2000-01-01%2000:00:00&per_page=100&direction=asc',
-//                    'link' => 'https://api.github.com/repos/laravel/laravel/issues?state=closed',
-                            'status' => 'done',
-                            'file' => 'issues.json',
-                            'directory' => 'laravel'
-                        ],
-                    'others' =>
-                        [
-                            'link' => 'https://api.github.com/repos/laravel/laravel/issues?state=closed',
-                            'status' => 'done',
-                            'file' => 'issues.json',
-                            'directory' => 'others'
-                        ],
-                ]
-        ];
+
+        $done = $this->setDone()->getDone();
 
       /*  $done_obj = (object)$done;
-        $requests = $request->all();*/
+        */
 /*
+ *
         if($first_call = $this->firstCall($request, $done))
         {
             return $first_call;
         }*/
 
-
-        return response($this->pullCall());
+        return $this->firstCall($request, $done);
+//        return response($this->pullCall());
         return response()->json(['something went wrong'], 500);
     }
 
@@ -106,16 +88,7 @@ class IssuesController extends Controller
         return $success;
     }
 
-    protected function ping( $link, $headers = [], $default_response = 'body', $method = 'GET')
-    {
-        $client = new GuzzleHttp\Client();
-        $res = $client->request($method, $link, $headers);
-        $result = $res;
-        if($default_response === 'body') {
-            $result = $res->getBody();
-        }
-        return $result;
-    }
+
 
     protected function firstCall($request, $done)
     {
@@ -129,27 +102,28 @@ class IssuesController extends Controller
         ];
 
 
-        $file_and_path = "app/{$done['issues']['laravel']['directory']}/{$done['issues']['laravel']['file']}";
+        $file_and_path = $this->___path('issues', $done[0]['repo']);
+
 
         $response = [];
         $success = false;
         $result = '';
-        if($to_update || !file_exists(storage_path("{$file_and_path}"))) {
+        if($to_update || !file_exists("{$file_and_path}")) {
 //            touch("storage/{$file_and_path}")
             $result = $this->ping($done['issues']['laravel']['link'], $headers);
         }
 
-        if($result && $this->addContent(storage_path($file_and_path), $result, $to_update))
+        if($result && $this->addContent($file_and_path, $result, $to_update))
         {
             $success = true;
         }
 
-        if($response = file_get_contents(storage_path("{$file_and_path}")))
+        if($response = file_get_contents("{$file_and_path}"))
         {
             $success = true;
         }
 
-        if ($success) {
+        if ($success && $response) {
 //        return response($response);
             $array_responses = json_decode($response, true);
 
@@ -180,13 +154,5 @@ class IssuesController extends Controller
         }
         return false;
     }
-
-    public function getContents($file_and_path)
-    {
-        if($response = file_get_contents(storage_path("{$file_and_path}")))
-        {
-            return $response;
-        }
-        return null;
-    }
+    
 }
