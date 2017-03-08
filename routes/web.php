@@ -11,8 +11,12 @@
 |
 */
 
+//php -S localhost:8000 -t ./public
+
 $app->get('/', function () use ($app) {
     return $app->version();
 });
 
 $app->get('/issues', 'Issues\IssuesController@resolve');
+$app->post('/projects', 'Issues\ProjectsController@store');
+$app->get('/projects', 'Issues\ProjectsController@fetch');
