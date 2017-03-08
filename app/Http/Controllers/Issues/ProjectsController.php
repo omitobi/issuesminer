@@ -9,17 +9,18 @@
 namespace App\Http\Controllers\Issues;
 
 
-use App\Http\Controllers\Controller;
 use App\Project;
+use App\Utilities\Utility;
 use Illuminate\Http\Request;
 
-class ProjectsController extends Controller
+class ProjectsController extends Utility
 {
     public function store(Request $request)
     {
         $url = $request->get('url');
+        $res = $this->ping($url, $this->headers );
 
-        return $url;
+        return $res;
     }
 
     public function fetch()

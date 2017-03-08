@@ -17,6 +17,13 @@ class Utility extends Controller
     const BEFORE_STRING = 0;
     const AFTER_STRING = 1;
 
+    protected $headers = [
+                'headers' => [
+                    'User-Agent' => 'omitobi',
+                    'Accept' => 'application/vnd.github.v3+json',
+                ]
+    ];
+
     protected $access_token;
     protected $github_url;
 
