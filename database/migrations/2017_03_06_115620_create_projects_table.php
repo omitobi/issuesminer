@@ -18,12 +18,16 @@ class CreateProjectsTable extends Migration
             $table->string('identifier')->unique();
             $table->string('organization_name');
             $table->string('name')->unique();
-            $table->string('type'); //maybe framework or something else?
+            $table->string('type')->default('framework'); //maybe framework or something else?
             $table->string('language');
             $table->string('description');
             $table->string('homepage');
-            $table->string('api_url');
-            $table->string('web_url');
+            $table->string('api_url')->unique();
+            $table->string('web_url')->unique();
+            $table->string('commits_url')->unique();
+            $table->string('issues_url')->unique();
+            $table->string('prs_url')->unique();
+            $table->string('date_created');
             $table->string('default_branch');
             $table->timestamps();
         });

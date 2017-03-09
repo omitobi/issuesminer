@@ -13,5 +13,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-
+    protected $fillable = [
+        'identifier',
+        'organization_name',
+        'name',
+        'type',
+        'language',
+        'description',
+        'homepage',
+        'api_url',
+        'web_url',
+        'commits_url',
+        'issues_url',
+        'prs_url',
+        'organization_name',
+        'date_created',
+        'default_branch'
+    ];
 }
