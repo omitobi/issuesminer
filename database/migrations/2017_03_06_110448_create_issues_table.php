@@ -15,6 +15,7 @@ class CreateIssuesTable extends Migration
     {
         Schema::create('issues', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('project_id')->unsigned();
             $table->integer('identifier')->unsigned()->unique();
             $table->integer('number')->unsigned();
             $table->string('title');
@@ -27,6 +28,7 @@ class CreateIssuesTable extends Migration
             $table->string('date_created');
             $table->string('date_updated');
             $table->string('date_closed');
+            $table->string('pr_retrieved')->default(0);
             $table->timestamps();
         });
     }

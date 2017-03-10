@@ -19,6 +19,8 @@ class CreateIssuesPrsTable extends Migration
             $table->string('issue_id');
             $table->string('pr_id');
             $table->string('commits_counts');
+            $table->string('merge_commit_sha')->nullable();
+            $table->string('commits_url')->nullable();
             $table->string('merged_status'); //**very important to filter merged prs
 //            $table->string('message');
             $table->string('author_id');
@@ -31,6 +33,8 @@ class CreateIssuesPrsTable extends Migration
             $table->string('date_created');
             $table->string('date_updated');
             $table->string('date_closed');
+            $table->string('date_merged')->nullable();
+            $table->string('commits_retrieved')->default('0');
             $table->timestamps();
         });
     }

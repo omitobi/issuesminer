@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Issues;
 
 use App\Issue;
+use App\Project;
 use App\Utilities\Utility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -17,10 +18,111 @@ use Mockery\CountValidator\Exception;
 class IssuesController extends Utility
 {
 
+    public function load(Request $request)
+    {
+
+        if(!$project_name = $request->get('project_name'))
+        {
+            return response(['error' => 'invalid project_name'], 400);
+        }
+
+        if(!$request->get('is_update'))
+        {
+
+            $project = Project::where('name', $project_name)->first();
+
+            $_query = http_build_query(array_except($request->all(), ['project_name']));
+            $issue_url = substr($project->issues_url, 0, -9);
+            $issues_query_url = $this->concat($issue_url, $_query, '?');
+
+            $in_issues = $this->jsonToArray($this->ping($issues_query_url, $this->headers));
+
+
+            $final_issues = [];
+            foreach ($in_issues as $idx => $in_issue) {
+                $final_issues['issues'][$idx]['project_id'] = $project->id;
+                $final_issues['issues'][$idx]['identifier'] = $in_issue['id'];
+                $final_issues['issues'][$idx]['number'] = $in_issue['number'];
+                $final_issues['issues'][$idx]['title'] = $in_issue['title'];
+                $final_issues['issues'][$idx]['reporter_name'] = $in_issue['user']['login'];
+                $final_issues['issues'][$idx]['state'] = $in_issue['state'];
+                $final_issues['issues'][$idx]['description'] = $in_issue['body'];
+                $final_issues['issues'][$idx]['api_url'] = $in_issue['url'];
+                $final_issues['issues'][$idx]['web_url'] = $in_issue['html_url'];
+                $final_issues['issues'][$idx]['pr_url'] = $in_issue['pull_request']['url'];
+                $final_issues['issues'][$idx]['date_created'] = $in_issue['created_at'];
+                $final_issues['issues'][$idx]['date_updated'] = $in_issue['updated_at'];
+                $final_issues['issues'][$idx]['date_closed'] = $in_issue['closed_at'];
+            }
+//        if(!Issue::all()->count()) {
+            Model::unguard();
+            foreach ($final_issues['issues'] as $final_issue) {
+                Issue::UpdateOrcreate([
+                    'project_id' => $final_issue['project_id'],
+                    'identifier' => $final_issue['identifier'],
+                ], $final_issue);
+            }
+            Model::reguard();
+
+            $final_response[]['response_status'] = 'Successfully loaded issues!';
+            return response()->json($final_response, 201);
+//            return response($issues);
+
+
+        }
+
+        response()->json(['something went wrong']);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function resolve(Request $request)
     {
 
-        $done = $this->setDone()->getDone();
+        /*$done = $this->setDone()->getDone();*/
 
       /*  $done_obj = (object)$done;
         */
@@ -31,7 +133,7 @@ class IssuesController extends Utility
             return $first_call;
         }*/
 
-        return $this->firstCall($request, $done);
+//        return $this->firstCall($request, $done);
 //        return response($this->pullCall());
         return response()->json(['something went wrong'], 500);
     }

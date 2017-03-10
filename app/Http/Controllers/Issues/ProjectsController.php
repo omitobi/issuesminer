@@ -47,7 +47,7 @@ class ProjectsController extends Utility
         
         if(Project::create($project))
         {
-            $project[]['status'] = 'Successfully added project \''.$project['name'].'\'';
+            $project[]['response_status'] = 'Successfully added project \''.$project['name'].'\'';
             return response($project, 201);
         }
 
@@ -57,20 +57,5 @@ class ProjectsController extends Utility
     public function fetch()
     {
         return Project::all();
-    }
-
-    function jsonToArray($_json)
-    {
-        return json_decode($_json, true);
-    }
-
-    function jsonToObject($_json)
-    {
-        return json_decode($_json);
-    }
-
-    function toArray($_var)
-    {
-        return (array)$_var;
     }
 }

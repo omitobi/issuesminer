@@ -78,7 +78,7 @@ $app->singleton(
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
+ $app->register('Barryvdh\Cors\LumenServiceProvider');
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
@@ -96,5 +96,5 @@ $app->singleton(
 $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
     require __DIR__.'/../routes/web.php';
 });
-
+$app->configure('cors');
 return $app;

@@ -91,7 +91,7 @@ class Utility extends Controller
         return storage_path("app/{$project_name}/{$file}.{$type}");
     }
 
-    protected function concat($_in, $_in2 = '', $separator = "/?access_token=", $option = self::AFTER_STRING)
+    protected function concat($_in, $_in2 = '', $separator = "?access_token=", $option = self::AFTER_STRING)
     {
         if($option === self::AFTER_STRING && !$_in2)
         {
@@ -132,5 +132,25 @@ class Utility extends Controller
             return $response;
         }
         return null;
+    }
+
+    function jsonToArray($_json)
+    {
+        return json_decode($_json, true);
+    }
+
+    function jsonToObject($_json)
+    {
+        return json_decode($_json);
+    }
+
+    function toArray($_var)
+    {
+        return (array)$_var;
+    }
+
+    protected function respond($__attr, $code = 200)
+    {
+        return response()->json($__attr, $code);
     }
 }

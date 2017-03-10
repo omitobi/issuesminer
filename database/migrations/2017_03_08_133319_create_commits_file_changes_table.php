@@ -15,8 +15,10 @@ class CreateCommitsFileChangesTable extends Migration
     {
         Schema::create('commits_file_changes', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('project_id')->unsigned();
             $table->integer('commit_id')->unsigned();
             $table->string('issue_id');  //from the URL
+            $table->string('issue_url');  //from the URL
             $table->string('author_id');
             $table->string('author_name');
             $table->string('file');
