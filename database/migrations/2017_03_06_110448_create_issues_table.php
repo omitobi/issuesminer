@@ -20,14 +20,14 @@ class CreateIssuesTable extends Migration
             $table->integer('number')->unsigned();
             $table->string('title');
             $table->string('reporter_name');
-            $table->string('state', 10);
-            $table->string('description');
+            $table->string('state', 10)->nullable(true);
+            $table->string('description')->nullable(true);
             $table->string('api_url');
             $table->string('web_url');
-            $table->string('pr_url');
+            $table->string('pr_url')->nullable(true);
             $table->string('date_created');
             $table->string('date_updated');
-            $table->string('date_closed');
+            $table->string('date_closed')->nullable(true);
             $table->string('pr_retrieved')->default(0);
             $table->timestamps();
         });

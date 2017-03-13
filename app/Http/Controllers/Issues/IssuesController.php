@@ -21,13 +21,23 @@ class IssuesController extends Utility
     public function load(Request $request)
     {
 
+
         if(!$project_name = $request->get('project_name'))
         {
             return response(['error' => 'invalid project_name'], 400);
         }
 
+        $_next = [];
         if(!$request->get('is_update'))
         {
+
+            session_start();
+            if(isset($_SESSION['timeout']) && $_SESSION['timeout'] >= time()){
+                $diff = $_SESSION['timeout'] - time();
+                $error = ["You need to wait $diff seconds before making another request"];
+                return $this->respond($error, 503);
+            }
+            $_SESSION['timeout'] = time() + 75;
 
             $project = Project::where('name', $project_name)->first();
 
@@ -35,10 +45,32 @@ class IssuesController extends Utility
             $issue_url = substr($project->issues_url, 0, -9);
             $issues_query_url = $this->concat($issue_url, $_query, '?');
 
-            $in_issues = $this->jsonToArray($this->ping($issues_query_url, $this->headers));
+            $ping = $this->ping($issues_query_url, $this->headers, ['body', 'head'] );
+            $_body = $ping->getBody();
+
+            if(count($header_ = $ping->getHeader('Link')))
+            {
+
+                $links = explode(',', $header_[0]);
+
+                if (($_fs = strpos($links[0], '<')) === 0)
+                    $_next['page'] =  substr($links[0], $_fs+1, strpos($links[0],'>')-1);
+
+                if (($_ls = strpos($links[1], '<')) === 1)
+                    $_next['last'] =  substr($links[1], $_ls+1, strpos($links[1],'>')-2);
+
+                if (($_fsn = strpos($links[0], "&page=")) > 0)
+                    $_next['next_page'] = substr($links[0], $_fsn+6, -13);
+
+                if (($_lsn = strpos($links[1], "&page=")) > 0)
+                    $_next['last_page'] = substr($links[1], $_lsn+6, -13);
+            }
+
+            $in_issues = $this->jsonToArray($_body);
 
 
             $final_issues = [];
+            $_record_count = 0;
             foreach ($in_issues as $idx => $in_issue) {
                 $final_issues['issues'][$idx]['project_id'] = $project->id;
                 $final_issues['issues'][$idx]['identifier'] = $in_issue['id'];
@@ -57,21 +89,38 @@ class IssuesController extends Utility
 //        if(!Issue::all()->count()) {
             Model::unguard();
             foreach ($final_issues['issues'] as $final_issue) {
-                Issue::UpdateOrcreate([
+                if(Issue::firstOrcreate([
                     'project_id' => $final_issue['project_id'],
                     'identifier' => $final_issue['identifier'],
-                ], $final_issue);
+                ], $final_issue))
+                {
+                    $_record_count++; //put in update?
+                }
             }
             Model::reguard();
 
-            $final_response[]['response_status'] = 'Successfully loaded issues!';
-            return response()->json($final_response, 201);
+            $requests = $request->all();
+            $requests['page'] = $_next['next_page'];
+            $msg = [
+                "status" => "success",
+                "message" => "'{$_record_count}' record(s) successfully loaded to {$project->name}'s 'issues'",
+                "extra" => (!$_record_count) ? 'covered' : '',
+                'next' => ($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page'],
+                'params' => http_build_query($requests),
+            ];
+            return response()->json($msg, 201);
 //            return response($issues);
-
-
         }
 
-        response()->json(['something went wrong']);
+        return response()->json(
+            $msg = [
+                "status" => "error",
+                "message" => "Something went wrong",
+                "extra" => '',
+                'next' => $_next['last_page'],
+            ],
+            500
+        );
     }
 
 

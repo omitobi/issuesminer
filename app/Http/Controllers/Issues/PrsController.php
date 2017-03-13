@@ -89,7 +89,8 @@ class PrsController extends Utility
              $msg = [
                  "status" => "success",
                  "message" => "'{$_record_count}' record(s) successfully added to {$project->name}'s 'issues_prs'",
-                 "extra" => (!$_record_count) ? 'covered' : ''
+                 "extra" => (!$_record_count) ? 'covered' : '',
+                 "params" => ''
              ];
              return $this->respond($msg, 201);
          }
@@ -99,7 +100,8 @@ class PrsController extends Utility
                 'status' => 'error',
                 'message' => 'something went wrong',
                 "extra" =>  ''
-            ]
+            ],
+            500
         );
     }
 }

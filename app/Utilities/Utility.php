@@ -114,13 +114,11 @@ class Utility extends Controller
         $client = new GuzzleHttp\Client();
         $res = $client->request($method, $link, $headers);
         $result = $res;
-        if($default_response[0] === 'body') {
+        $_d_count = count($default_response);
+        if($default_response[0] === 'body' && $_d_count === 1) {
             $result = $res->getBody();
-        } elseif($default_response[0] === 'head') {
+        } elseif($default_response[0] === 'head'  && $_d_count === 1) {
             $result = $res->getHeaders();
-        }elseif($default_response === ['body','head']) {
-            $result['head'] = $res->getHeaders();
-            $result['body'] = $res->getBody();
         }
         return $result;
     }

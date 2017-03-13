@@ -17,12 +17,14 @@ class ProjectsController extends Utility
 {
     public function store(Request $request)
     {
+
         $url = $request->get('url');
 
         if(Project::where('api_url', $url)->first())
         {
             return response()->json(null, 204);
         }
+
         $res = $this->jsonToObject($this->ping($url, $this->headers ));
 
 //        return $this->toArray($res);
@@ -45,7 +47,7 @@ class ProjectsController extends Utility
         $project['date_created'] = $res->created_at;
         $project['default_branch'] = $res->default_branch;
         
-        if(Project::create($project))
+        if(Project::UpdateOrCreate(['identifier' => $project['identifier']], $project))
         {
             $project[]['response_status'] = 'Successfully added project \''.$project['name'].'\'';
             return response($project, 201);

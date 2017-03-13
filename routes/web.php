@@ -12,12 +12,13 @@
 */
 
 //php -S localhost:8000 -t ./public
-$app->configure('cors');
+//$app->configure('cors');
 $app->get('/', function () use ($app) {
     return $app->version();
 });
+$app->get('prs/commits/load', 'Issues\CommitsController@loadFromPrs');
 
-$app->get('/issues', 'Issues\IssuesController@resolve');
+//$app->get('/issues', 'Issues\IssuesController@resolve');
 $app->get('/issues/load', 'Issues\IssuesController@load');
 $app->get('/issues/prs/load', 'Issues\PrsController@load');
 
