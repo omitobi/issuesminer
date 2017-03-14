@@ -21,6 +21,7 @@ class CreateIssuesTable extends Migration
             $table->string('title');
             $table->string('reporter_name');
             $table->string('state', 10)->nullable(true);
+            $table->string('type', 10)->nullable(true);
             $table->string('description')->nullable(true);
             $table->string('api_url');
             $table->string('web_url');

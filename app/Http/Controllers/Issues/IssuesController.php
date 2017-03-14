@@ -32,7 +32,7 @@ class IssuesController extends Utility
         {
             if(!$project = Project::where('name', $project_name)->first())
             {
-                return $this->respond("{$project_name} does not exist", 400);
+                return $this->respond("Project '{$project_name}' does not exist", 400);
             }
 
            /* session_start();
@@ -75,24 +75,36 @@ class IssuesController extends Utility
             $final_issues = [];
             $_record_count = 0;
             foreach ($in_issues as $idx => $in_issue) {
+                if(!isset($in_issue['pull_request']))
+                {
+                    continue;
+                }
                 $final_issues['issues'][$idx]['project_id'] = $project->id;
                 $final_issues['issues'][$idx]['identifier'] = $in_issue['id'];
                 $final_issues['issues'][$idx]['number'] = $in_issue['number'];
                 $final_issues['issues'][$idx]['title'] = $in_issue['title'];
                 $final_issues['issues'][$idx]['reporter_name'] = $in_issue['user']['login'];
                 $final_issues['issues'][$idx]['state'] = $in_issue['state'];
+                if(isset($in_issue['labels']))
+                {
+                    foreach ($in_issue['labels'] as  $label)
+                    {
+                        if ($label['name'] && $label['name'] === $request->get('labels'))
+                        {
+                            $final_issues['issues'][$idx]['type'] = $label['name'];
+                        }
+                    }
+                }
                 $final_issues['issues'][$idx]['description'] = $in_issue['body'];
                 $final_issues['issues'][$idx]['api_url'] = $in_issue['url'];
                 $final_issues['issues'][$idx]['web_url'] = $in_issue['html_url'];
-                if(!isset($in_issue['pull_request']))
-                {
-                    continue;
-                }
                 $final_issues['issues'][$idx]['pr_url'] = $in_issue['pull_request']['url'];
                 $final_issues['issues'][$idx]['date_created'] = $in_issue['created_at'];
                 $final_issues['issues'][$idx]['date_updated'] = $in_issue['updated_at'];
                 $final_issues['issues'][$idx]['date_closed'] = $in_issue['closed_at'];
             }
+
+            
 //        if(!Issue::all()->count()) {
             Model::unguard();
             foreach ($final_issues['issues'] as $final_issue) {
