@@ -30,16 +30,19 @@ class IssuesController extends Utility
         $_next = [];
         if(!$request->get('is_update'))
         {
+            if(!$project = Project::where('name', $project_name)->first())
+            {
+                return $this->respond("{$project_name} does not exist", 400);
+            }
 
-            session_start();
+           /* session_start();
             if(isset($_SESSION['timeout']) && $_SESSION['timeout'] >= time()){
                 $diff = $_SESSION['timeout'] - time();
                 $error = ["You need to wait $diff seconds before making another request"];
                 return $this->respond($error, 503);
             }
-            $_SESSION['timeout'] = time() + 75;
+            $_SESSION['timeout'] = time() + 75;*/
 
-            $project = Project::where('name', $project_name)->first();
 
             $_query = http_build_query(array_except($request->all(), ['project_name']));
             $issue_url = substr($project->issues_url, 0, -9);
@@ -81,6 +84,10 @@ class IssuesController extends Utility
                 $final_issues['issues'][$idx]['description'] = $in_issue['body'];
                 $final_issues['issues'][$idx]['api_url'] = $in_issue['url'];
                 $final_issues['issues'][$idx]['web_url'] = $in_issue['html_url'];
+                if(!isset($in_issue['pull_request']))
+                {
+                    continue;
+                }
                 $final_issues['issues'][$idx]['pr_url'] = $in_issue['pull_request']['url'];
                 $final_issues['issues'][$idx]['date_created'] = $in_issue['created_at'];
                 $final_issues['issues'][$idx]['date_updated'] = $in_issue['updated_at'];

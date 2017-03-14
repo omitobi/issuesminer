@@ -17,6 +17,7 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 $app->get('prs/commits/load', 'Issues\CommitsController@loadFromPrs');
+$app->get('commits/files/load', 'Issues\CommitsFilesController@loadFromCommits');
 
 //$app->get('/issues', 'Issues\IssuesController@resolve');
 $app->get('/issues/load', 'Issues\IssuesController@load');

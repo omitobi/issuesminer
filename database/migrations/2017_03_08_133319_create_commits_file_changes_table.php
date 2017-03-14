@@ -18,12 +18,10 @@ class CreateCommitsFileChangesTable extends Migration
             $table->integer('project_id')->unsigned();
             $table->integer('commit_id')->unsigned();
             $table->string('issue_id');  //from the URL
-            $table->string('issue_url');  //from the URL
-            $table->string('author_id');
             $table->string('author_name');
             $table->string('file');
-            $table->string('api_url');
-            $table->string('web_url'); //web_url
+            $table->string('file_sha');
+            $table->string('status');
             $table->string('date_changed');
             $table->timestamps();
         });

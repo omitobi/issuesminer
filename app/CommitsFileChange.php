@@ -9,7 +9,9 @@
 namespace App;
 
 
-class CommitsFileChange
+use Illuminate\Database\Eloquent\Model;
+
+class CommitsFileChange extends Model
 {
 
 }

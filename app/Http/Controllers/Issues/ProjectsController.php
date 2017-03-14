@@ -33,7 +33,7 @@ class ProjectsController extends Utility
             return response()->json(null, 204);
         }
         $project['identifier'] = $res->id;
-        $project['organization_name'] = $res->organization->login;
+        $project['organization_name'] = (isset($res->organization)) ? $res->organization->login: 'Unknown';
         $project['name'] = $res->name;
         $project['type'] = 'framework';
         $project['language'] = $res->language;
