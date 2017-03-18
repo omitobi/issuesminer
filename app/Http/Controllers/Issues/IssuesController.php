@@ -104,30 +104,32 @@ class IssuesController extends Utility
                 $final_issues['issues'][$idx]['date_closed'] = $in_issue['closed_at'];
             }
 
-            
 //        if(!Issue::all()->count()) {
-            Model::unguard();
-            foreach ($final_issues['issues'] as $final_issue) {
-                if(Issue::firstOrcreate([
-                    'project_id' => $final_issue['project_id'],
-                    'identifier' => $final_issue['identifier'],
-                ], $final_issue))
-                {
-                    $_record_count++; //put in update?
+            if(isset($final_issues['issues']) && count($final_issues['issues']))
+            {
+                Model::unguard();
+                foreach ($final_issues['issues'] as $final_issue) {
+                    if(Issue::firstOrcreate([
+                        'project_id' => $final_issue['project_id'],
+                        'identifier' => $final_issue['identifier'],
+                    ], $final_issue))
+                    {
+                        $_record_count++; //put in update?
+                    }
                 }
-            }
-            Model::reguard();
+                Model::reguard();
 
-            $requests = $request->all();
-            $requests['page'] = $_next['next_page'];
-            $msg = [
-                "status" => "success",
-                "message" => "'{$_record_count}' record(s) successfully loaded to {$project->name}'s 'issues'",
-                "extra" => (!$_record_count) ? 'covered' : '',
-                'next' => ($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page'],
-                'params' => http_build_query($requests),
-            ];
-            return response()->json($msg, 201);
+                $requests = $request->all();
+                $requests['page'] = $_next['next_page'];
+                $msg = [
+                    "status" => "success",
+                    "message" => "'{$_record_count}' record(s) successfully loaded to {$project->name}'s 'issues'",
+                    "extra" => (!$_record_count) ? 'covered' : '',
+                    'next' => ($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page'],
+                    'params' => http_build_query($requests),
+                ];
+                return response()->json($msg, 201);
+            }
 //            return response($issues);
         }
 
@@ -136,7 +138,7 @@ class IssuesController extends Utility
                 "status" => "error",
                 "message" => "Something went wrong",
                 "extra" => '',
-                'next' => $_next['last_page'],
+                'next' => '',
             ],
             500
         );
