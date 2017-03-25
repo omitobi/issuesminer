@@ -22,7 +22,12 @@ class ProjectsController extends Utility
 
         if(Project::where('api_url', $url)->first())
         {
-            return response()->json(null, 204);
+            return $this->respond(
+                [
+                    "status" => "error",
+                    "message" => "project already exists",
+                ]
+            );
         }
 
         $res = $this->jsonToObject($this->ping($url, $this->headers ));
@@ -30,7 +35,12 @@ class ProjectsController extends Utility
 //        return $this->toArray($res);
         if(Project::where('identifier', $res->id)->first())
         {
-            return response()->json(null, 204);
+            return $this->respond(
+                [
+                    "status" => "error",
+                    "message" => "project already exists",
+                ]
+            );
         }
         $project['identifier'] = $res->id;
         $project['organization_name'] = (isset($res->organization)) ? $res->organization->login: 'Unknown';
@@ -47,17 +57,52 @@ class ProjectsController extends Utility
         $project['date_created'] = $res->created_at;
         $project['default_branch'] = $res->default_branch;
         
-        if(Project::UpdateOrCreate(['identifier' => $project['identifier']], $project))
+        if(Project::firstOrCreate(['identifier' => $project['identifier']], $project))
         {
-            $project[]['response_status'] = 'Successfully added project \''.$project['name'].'\'';
-            return response($project, 201);
+//            $project[]['response_status'] = 'Successfully added project \''.$project['name'].'\'';
+
+            return $this->respond(
+                [
+                    "status" => "success",
+                    "message" => 'Successfully added project \''.$project['name'].'\'',
+                    "model" => "projects",
+                    'params' => $project
+                ],
+                201
+            );
         }
 
-        return response()->json(['error' => 'something went wrong']);
+        return $this->respond(
+            [
+                "status" => "error",
+                "message" => "Something went wrong while adding project",
+                "model" => "project"
+            ],
+            500
+        );
     }
 
-    public function fetch()
+    public function fetch(Request $request)
     {
-        return Project::all();
+        $requests = $request->only(['by']);
+
+        if($requests['by'])
+        {
+            return $this->respond(
+                [
+                    'status' => 'success',
+                    'message' => "retrieved projects by '{$requests['by']}'",
+                    'model' => 'projects',
+                    'params' => Project::all()->pluck($requests['by'])
+            ]);
+        }
+
+        return $this->respond(
+        [
+            'status' => 'success',
+            'message' => 'retrieved all projects',
+            'model' => 'projects',
+            'params' => Project::all()
+        ]);
     }
 }

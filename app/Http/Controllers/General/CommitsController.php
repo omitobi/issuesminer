@@ -31,10 +31,14 @@ class CommitsController extends Utility
 
         $_query = http_build_query(array_except($request->all(), ['project_name']));
         $_commits_url = substr($project->commits_url, 0, -6);
-        $_commits_query_url = $this->concat($_commits_url, $_query, '?');
+        $_commits_query_url = $this->concat($this->concat($_commits_url, $_query, '?'));
 
-
+        $this->headers['headers']['If-Modified-Since'] = 'Thu, 25 Mar 2017 15:31:30 GMT+2';
         $ping = $this->ping($_commits_query_url, $this->headers, ['body', 'head'] );
+
+        $_next =[];
+        $_next['next_page'] = 'x';
+        $_next['last_page'] = 'x';
 
         if(count($header_ = $ping->getHeader('Link')))
         {

@@ -28,6 +28,8 @@ class IssuesController extends Utility
         }
 
         $_next = [];
+        $_next['next_page'] = 'x';
+        $_next['last_page'] = 'x';
         if(!$request->get('is_update'))
         {
             if(!$project = Project::where('name', $project_name)->first())
@@ -41,7 +43,7 @@ class IssuesController extends Utility
                 $error = ["You need to wait $diff seconds before making another request"];
                 return $this->respond($error, 503);
             }
-            $_SESSION['timeout'] = time() + 75;
+            $_SESSION['timeout'] = time() + 65;
 
 
             $_query = http_build_query(array_except($request->all(), ['project_name']));
@@ -53,7 +55,7 @@ class IssuesController extends Utility
             $_body = $ping->getBody();
 
 
-            if(count($header_ = $ping->getHeader('Link')))
+            if($ping->getHeader('Link') && count($header_ = $ping->getHeader('Link')))
             {
 
                 $links = explode(',', $header_[0]);
@@ -109,7 +111,7 @@ class IssuesController extends Utility
             {
                 Model::unguard();
                 foreach ($final_issues['issues'] as $final_issue) {
-                    if(Issue::firstOrcreate([
+                    if(Issue::updateOrCreate([
                         'project_id' => $final_issue['project_id'],
                         'identifier' => $final_issue['identifier'],
                     ], $final_issue))
@@ -126,7 +128,7 @@ class IssuesController extends Utility
                     'model' => 'issues',
                     "message" => "'{$_record_count}' record(s) successfully loaded to {$project->name}'s 'issues'",
                     "extra" => (!$_record_count || !is_numeric($_next['next_page']) ) ? 'covered' : '',
-                    'next' => (isset($_next['next_page'])) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
+                    'next' => (isset($_next['next_page'])) ? (is_numeric(!$_next['next_page']) || ($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
                     'params' => http_build_query($requests),
                 ];
                 return response()->json($msg, 201);
@@ -140,7 +142,7 @@ class IssuesController extends Utility
                 'model' => 'issues',
                 "message" => "Something went wrong",
                 "extra" => '',
-                'next' => (isset($_next['next_page'])) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
+                'next' => ($_next['next_page']) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
             ],
             500
         );
