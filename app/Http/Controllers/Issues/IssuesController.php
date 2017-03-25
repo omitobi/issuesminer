@@ -123,6 +123,7 @@ class IssuesController extends Utility
                 $requests['page'] = (isset($_next['next_page'])) ? $_next['next_page'] : '';
                 $msg = [
                     "status" => "success",
+                    'model' => 'issues',
                     "message" => "'{$_record_count}' record(s) successfully loaded to {$project->name}'s 'issues'",
                     "extra" => (!$_record_count || !is_numeric($_next['next_page']) ) ? 'covered' : '',
                     'next' => (isset($_next['next_page'])) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
@@ -136,6 +137,7 @@ class IssuesController extends Utility
         return response()->json(
             $msg = [
                 "status" => "error",
+                'model' => 'issues',
                 "message" => "Something went wrong",
                 "extra" => '',
                 'next' => (isset($_next['next_page'])) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
