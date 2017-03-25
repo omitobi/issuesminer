@@ -1,0 +1,5 @@
+1,2017_03_06_110448_create_issues_table,1
+2,2017_03_06_115620_create_projects_table,1
+3,2017_03_08_133106_create_issues_prs_table,1
+4,2017_03_08_133149_create_issues_commits_table,1
+5,2017_03_08_133319_create_commits_file_changes_table,1

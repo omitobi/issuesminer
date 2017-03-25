@@ -23,7 +23,7 @@ class CreateIssuesCommitsTable extends Migration
             $table->string('author_name');
             $table->string('api_url');
             $table->string('web_url');
-            $table->string('description');
+            $table->text('description');
             $table->integer('file_changed_count')->unsigned(); //optional?
             $table->string('date_committed');
             $table->string('files_retrieved')->default('0');

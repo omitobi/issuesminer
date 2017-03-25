@@ -26,7 +26,7 @@ class CreateIssuesPrsTable extends Migration
             $table->string('author_id');
             $table->string('author_name');
             $table->string('title');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('api_url');
             $table->string('web_url');
             $table->enum('state',['open', 'closed']);

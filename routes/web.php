@@ -16,13 +16,27 @@
 $app->get('/', function () use ($app) {
     return $app->version();
 });
-$app->get('prs/commits/load', 'Issues\CommitsController@loadFromPrs');
-$app->get('commits/files/load', 'Issues\CommitsFilesController@loadFromCommits');
 
-//$app->get('/issues', 'Issues\IssuesController@resolve');
+
+$app->get('/projects', 'Issues\ProjectsController@fetch');
+
+//1. Create/Store: project
+$app->post('/projects', 'Issues\ProjectsController@store');
+
+
+//2. Load: project->issues
 $app->get('/issues/load', 'Issues\IssuesController@load');
+
+//3. Load: issues->prs
 $app->get('/issues/prs/load', 'Issues\PrsController@load');
 
+//4. Load: prs->commits
+$app->get('prs/commits/load', 'Issues\CommitsController@loadFromPrs');
 
-$app->post('/projects', 'Issues\ProjectsController@store');
-$app->get('/projects', 'Issues\ProjectsController@fetch');
+//5. Load: commits->file_changes
+$app->get('commits/files/load', 'Issues\CommitsFilesController@loadFromCommits');
+
+
+
+
+//$app->get('/issues', 'Issues\IssuesController@resolve');

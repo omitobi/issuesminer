@@ -20,7 +20,7 @@ class CreateProjectsTable extends Migration
             $table->string('name')->unique();
             $table->string('type')->default('framework'); //maybe framework or something else?
             $table->string('language');
-            $table->string('description');
+            $table->text('description');
             $table->string('homepage');
             $table->string('api_url')->unique();
             $table->string('web_url')->unique();

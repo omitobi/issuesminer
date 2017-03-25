@@ -1,0 +1,984 @@
+1,1,7988999,224,fix  bug 63392,xuzhi,closed,Bugfix,"i delete these code if(time->relative.weekday == 0)time->relative.weekday == 7; these code cause bug 63392  , bug test  script blow
+<?php
+
+$dt = new DateTime(""2012-05-13"");
+$dt->modify(""Sunday this week"");
+var_dump($dt->format('r'));
+## Expected result:
+
+",https://api.github.com/repos/php/php-src/issues/224,https://github.com/php/php-src/pull/224,https://api.github.com/repos/php/php-src/pulls/224,2012-10-31T03:49:21Z,2016-08-07T09:35:35Z,2016-08-07T09:35:35Z,2830549,2017-03-20 14:12:25,2017-03-20 14:14:18
+2,1,24101836,542,Fix bug #54379 PDO_OCI: UTF-8 output gets truncated,gureedo,closed,Bugfix,"Oracle docs defines three versions of utf8 encoding.
+- AL32UTF8 and UTFE character can occupy up to 4 bytes.
+- UTF8 character can occupy up to 6 bytes.
+  Details here: http://docs.oracle.com/cd/B19306_01/server.102/b14225/ch6unicode.htm#i1006998 
+  We can",https://api.github.com/repos/php/php-src/issues/542,https://github.com/php/php-src/pull/542,https://api.github.com/repos/php/php-src/pulls/542,2013-12-11T11:46:28Z,2017-01-04T22:18:46Z,2017-01-04T22:18:39Z,10723009,2017-03-20 14:12:25,2017-03-20 14:14:19
+3,1,29088930,620,Fix #44643: PDO-ODBC: bound parameters ignore explicit type definitions,billschaller,closed,Bugfix,"This bug is also referenced in
+[#44643](https://bugs.php.net/bug.php?id=44643)
+pdo_odbc has had well-documented issues with parameterised queries accessing SQL Server for a long time. The issue is that when SQLDescribeParam does not return information abo",https://api.github.com/repos/php/php-src/issues/620,https://github.com/php/php-src/pull/620,https://api.github.com/repos/php/php-src/pulls/620,2014-03-10T11:45:55Z,2017-01-11T04:34:11Z,2017-01-04T12:38:51Z,13367779,2017-03-20 14:12:25,2017-03-20 14:14:20
+4,1,30286650,633,Fix bug #55138 PDO OCI cannot insert more than 1332 bytes,gureedo,closed,Bugfix,"According to Oracle docs `value_sz` defines size in bytes, not characters.
+`OCIBindByName()` docs:
+http://docs.oracle.com/cd/E16655_01/appdev.121/e17625/oci16rel003.htm#LNOCI17140
+
+```
+value_sz (IN)
+The maximum size possible in bytes of any data value (pa",https://api.github.com/repos/php/php-src/issues/633,https://github.com/php/php-src/pull/633,https://api.github.com/repos/php/php-src/pulls/633,2014-03-27T10:00:31Z,2017-01-04T22:19:27Z,2017-01-04T22:19:20Z,14049774,2017-03-20 14:12:25,2017-03-20 14:14:21
+5,1,37259564,710,* double fastcgi_end_request on max_children limit,dmitry-saprykin,closed,Bugfix,"Php sends 2 fastcgi FCGI_END_REQUEST records instead of one when `fastcgi_finish_request();` called and fpm param max_requests exceeded.
+- one is sent on `fastcgi_finish_request();` call
+- other is sent in block
+  `
+  fpm_main.c:1951
+  requests++;
+  if (m",https://api.github.com/repos/php/php-src/issues/710,https://github.com/php/php-src/pull/710,https://api.github.com/repos/php/php-src/pulls/710,2014-07-07T11:15:50Z,2015-03-11T09:30:31Z,2015-03-08T15:27:31Z,18038505,2017-03-20 14:12:25,2017-03-20 14:14:22
+6,1,37682293,714,Fix php cli (-S option) inconsistent port parsing,nil0x42,closed,Bugfix,"## Description
+
+The php cli server (-S) option parser uses strtol(3) to retrieve the port
+from address argument. Therefore, htons(3) is used to normalize the
+address port, which leads to an unverified cast.
+
+The issue may appear trivial, therefore, assumi",https://api.github.com/repos/php/php-src/issues/714,https://github.com/php/php-src/pull/714,https://api.github.com/repos/php/php-src/pulls/714,2014-07-11T17:54:13Z,2014-12-01T06:48:40Z,2014-12-01T06:48:40Z,18292147,2017-03-20 14:12:25,2017-03-20 14:14:23
+7,1,37740017,718,Fix #53092 - dns_get_record does not return false on dns server failure,datibbaw,closed,Bugfix,"This aims to fix [bug 53092](https://bugs.php.net/bug.php?id=53092) by making `dns_get_record()` return `false` when an error has occurred during the query.
+
+It's similar to its Windows counter part and adds a few useful warning messages when a request fa",https://api.github.com/repos/php/php-src/issues/718,https://github.com/php/php-src/pull/718,https://api.github.com/repos/php/php-src/pulls/718,2014-07-13T12:06:49Z,2014-12-01T06:48:27Z,2014-12-01T06:48:27Z,18322795,2017-03-20 14:12:25,2017-03-20 14:14:24
+8,1,37766324,719,PostgreSQL - Convert Boolean & Integers to 'native' types,nathan-muir,closed,Bugfix,"Hi,
+
+This PR fixes a long standing issue with the pgsql extension and native boolean & integer types. (https://bugs.php.net/bug.php?id=29213, https://bugs.php.net/bug.php?id=47051) It's also a source of developer confusion, and ends up with questions like",https://api.github.com/repos/php/php-src/issues/719,https://github.com/php/php-src/pull/719,https://api.github.com/repos/php/php-src/pulls/719,2014-07-14T08:06:55Z,2016-04-16T03:22:57Z,2016-04-16T03:22:57Z,18335947,2017-03-20 14:12:25,2017-03-20 14:14:24
+9,1,38093037,728,Fixed bug #67643 (curl_multi_getcontent returns '' when RETURNTRANSFER isn't set),Jille,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/728,https://github.com/php/php-src/pull/728,https://api.github.com/repos/php/php-src/pulls/728,2014-07-17T15:24:19Z,2014-12-01T17:44:06Z,2014-12-01T06:24:52Z,18535009,2017-03-20 14:12:25,2017-03-20 14:14:25
+10,1,38927862,747,Fix #66606: Sets HTTP_CONTENT_TYPE but not CONTENT_TYPE,evliu,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/747,https://github.com/php/php-src/pull/747,https://api.github.com/repos/php/php-src/pulls/747,2014-07-28T20:13:11Z,2015-08-08T21:31:51Z,2015-08-08T21:31:51Z,18990463,2017-03-20 14:12:25,2017-03-20 14:14:26
+11,1,39446998,760,remove 'broken tar' detection by filename,nike-17,closed,Bugfix,"Really confuding place, that occure bugs like this
+https://bugs.php.net/bug.php?id=67761
+We can't handle file as tar just because it contain .tar
+",https://api.github.com/repos/php/php-src/issues/760,https://github.com/php/php-src/pull/760,https://api.github.com/repos/php/php-src/pulls/760,2014-08-04T18:26:18Z,2015-03-30T12:49:34Z,2015-03-30T12:49:34Z,19298587,2017-03-20 14:12:25,2017-03-20 14:14:26
+12,1,39886540,766,Fix bug #66091 (memory leak in DateTime::createFromFormat()),Entea,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/766,https://github.com/php/php-src/pull/766,https://api.github.com/repos/php/php-src/pulls/766,2014-08-09T14:35:10Z,2016-03-03T19:37:37Z,2016-03-03T19:37:37Z,19564789,2017-03-20 14:12:25,2017-03-20 14:14:27
+13,1,41259773,783,fix the bug of curl_setopt,redfoxli,closed,Bugfix,"curl_setopt will  modify the type of param
+the bugs is here: https://bugs.php.net/bug.php?id=67704
+",https://api.github.com/repos/php/php-src/issues/783,https://github.com/php/php-src/pull/783,https://api.github.com/repos/php/php-src/pulls/783,2014-08-27T08:31:08Z,2014-11-26T08:53:19Z,2014-11-26T08:28:28Z,20359151,2017-03-20 14:12:25,2017-03-20 14:14:28
+14,1,41399264,787,Bug #67913 - mysqlnd ignores MYSQLI_OPT_CONNECT_TIMEOUT option,ablyler,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/787,https://github.com/php/php-src/pull/787,https://api.github.com/repos/php/php-src/pulls/787,2014-08-28T14:56:02Z,2017-01-02T15:05:58Z,2017-01-02T15:05:58Z,20443781,2017-03-20 14:12:25,2017-03-20 14:14:29
+15,1,41564342,789,Bug 66777,bor0,closed,Bugfix,"https://bugs.php.net/bug.php?id=66777
+
+Remove upper bound for reallocations
+",https://api.github.com/repos/php/php-src/issues/789,https://github.com/php/php-src/pull/789,https://api.github.com/repos/php/php-src/pulls/789,2014-08-30T14:25:35Z,2017-01-04T08:36:57Z,2017-01-04T08:36:57Z,20536115,2017-03-20 14:12:25,2017-03-20 14:14:30
+16,1,41564541,790,Bug 67634,bor0,closed,Bugfix,"https://bugs.php.net/bug.php?id=67634
+
+Create clone of object instead of updating the values of the original object
+",https://api.github.com/repos/php/php-src/issues/790,https://github.com/php/php-src/pull/790,https://api.github.com/repos/php/php-src/pulls/790,2014-08-30T14:36:53Z,2017-01-04T08:38:31Z,2017-01-04T08:38:31Z,20536204,2017-03-20 14:12:25,2017-03-20 14:14:31
+17,1,41667336,796,Conditional checks against the same value twice,tml,closed,Bugfix,"The comment immediately before implies that one of the 'auto's should probably be 'none'.
+
+Error caught by PVS-Studio (see http://www.viva64.com/en/b/0277/)
+",https://api.github.com/repos/php/php-src/issues/796,https://github.com/php/php-src/pull/796,https://api.github.com/repos/php/php-src/pulls/796,2014-09-02T00:31:15Z,2015-01-18T20:32:08Z,2015-01-18T20:25:28Z,20587819,2017-03-20 14:12:25,2017-03-20 14:14:32
+18,1,41683459,798,Fix bug #67644 - Memory corruption & crash during ob_start function call...,smalyshev,closed,Bugfix,"...back
+",https://api.github.com/repos/php/php-src/issues/798,https://github.com/php/php-src/pull/798,https://api.github.com/repos/php/php-src/pulls/798,2014-09-02T07:52:58Z,2017-02-22T08:21:34Z,2017-02-22T08:21:34Z,20596708,2017-03-20 14:12:25,2017-03-20 14:14:33
+19,1,41988653,806,Fixes #67960 - Long/short day names reversed in jddayofweek(),fisharebest,closed,Bugfix,"See https://bugs.php.net/bug.php?id=67960
+
+We reverse the definitions of the constants, so that `CAL_DOW_LONG` is now `1` and `CAL_DOW_SHORT` is now `2` so that they correspond with the definitions given in the documentation at http://www.php.net/function",https://api.github.com/repos/php/php-src/issues/806,https://github.com/php/php-src/pull/806,https://api.github.com/repos/php/php-src/pulls/806,2014-09-04T21:34:25Z,2015-01-02T09:23:10Z,2015-01-02T09:23:10Z,20774489,2017-03-20 14:12:25,2017-03-20 14:14:33
+20,1,42917132,825,Fix for PHP ODBC bug #68014 - Result data values can be truncated because...,hard-at-work,closed,Bugfix,"This corrects bug 68014 in php versions 5.4.32 to current.
+",https://api.github.com/repos/php/php-src/issues/825,https://github.com/php/php-src/pull/825,https://api.github.com/repos/php/php-src/pulls/825,2014-09-16T18:39:14Z,2015-04-12T12:46:43Z,2015-04-11T17:19:25Z,21318939,2017-03-20 14:12:25,2017-03-20 14:14:34
+21,1,43012381,827,Use ASCII delimiters for browscap regular expressions,datibbaw,closed,Bugfix,"Fixes [bug 68012](https://bugs.php.net/bug.php?id=68021).
+
+Uses the tilde as the expression delimiter to make them ASCII compatible instead of `\xA7`.
+",https://api.github.com/repos/php/php-src/issues/827,https://github.com/php/php-src/pull/827,https://api.github.com/repos/php/php-src/pulls/827,2014-09-17T13:44:47Z,2015-03-23T05:15:10Z,2015-03-23T05:15:10Z,21366839,2017-03-20 14:12:25,2017-03-20 14:14:34
+22,1,43679184,838,Bug #34380: preserve errno for stream_select and stream_socket_pair,zackse,closed,Bugfix,"When the system calls underneath stream_select() and stream_socket_pair()
+fail, errno is logged but is not preserved. This change preservers errno in
+posix_globals to allow the caller to query posix_get_last_error() to determine
+the cause of the failure.
+",https://api.github.com/repos/php/php-src/issues/838,https://github.com/php/php-src/pull/838,https://api.github.com/repos/php/php-src/pulls/838,2014-09-23T20:25:23Z,2017-01-05T06:21:16Z,2017-01-05T06:21:16Z,21673349,2017-03-20 14:12:25,2017-03-20 14:14:35
+23,1,44079547,845,Opcache: Fix segfault while pre-evaluating a disabled function,manuelm,closed,Bugfix,"Opcache pass 1 accesses func->module in the ""pre-evaluate constant functions""-step. However if the function has been disabled func->module will be NULL.
+
+I think this will fix https://bugs.php.net/bug.php?id=68104
+",https://api.github.com/repos/php/php-src/issues/845,https://github.com/php/php-src/pull/845,https://api.github.com/repos/php/php-src/pulls/845,2014-09-26T16:19:44Z,2014-12-01T06:00:06Z,2014-12-01T06:00:06Z,21858965,2017-03-20 14:12:25,2017-03-20 14:14:36
+24,1,44194659,849,Fixes setcookie to only send one Set-Cookie header per name,ralt,closed,Bugfix,"According to the IETF RFC 6265, only one Set-Cookie header should be sent per cookie name.
+
+Fixes https://bugs.php.net/bug.php?id=67736
+
+Cherry-picks and adapts 208deda (#795) for master
+",https://api.github.com/repos/php/php-src/issues/849,https://github.com/php/php-src/pull/849,https://api.github.com/repos/php/php-src/pulls/849,2014-09-27T22:31:41Z,2017-01-05T06:24:55Z,2017-01-05T06:24:55Z,21894947,2017-03-20 14:12:25,2017-03-20 14:14:37
+25,1,44933084,864,Fixed bug #68129,datibbaw,closed,Bugfix,"Empty usernames and passwords are now treated differently from no username or password
+
+For example, empty password:
+
+```
+ftp://user:@example.org
+```
+
+Empty username:
+
+```
+ftp://:password@example.org
+```
+
+Empty username and empty password
+
+```
+ftp://:@exa",https://api.github.com/repos/php/php-src/issues/864,https://github.com/php/php-src/pull/864,https://api.github.com/repos/php/php-src/pulls/864,2014-10-05T23:31:57Z,2014-12-01T05:59:14Z,2014-12-01T05:59:14Z,22260568,2017-03-20 14:12:25,2017-03-20 14:14:38
+26,1,44957115,866,Fixed #68110,datibbaw,closed,Bugfix,"Addresses [bug 68110](https://bugs.php.net/bug.php?id=68110).
+
+Raise a warning when a variable is dereferenced as an array but is neither a string, array or object.
+",https://api.github.com/repos/php/php-src/issues/866,https://github.com/php/php-src/pull/866,https://api.github.com/repos/php/php-src/pulls/866,2014-10-06T08:04:58Z,2016-09-19T14:15:19Z,2016-09-19T14:15:19Z,22269197,2017-03-20 14:12:25,2017-03-20 14:14:39
+27,1,44979151,868,Upgrade crypt_blowfish to 1.3,lt,closed,Bugfix,"I would like an opinion on whether this is a security fix, which affects it being merged to 5.4
+
+Version 1.3 addresses: [OpenBSD bcrypt 8-bit key_len wraparound](http://www.openwall.com/lists/oss-security/2012/01/02/4)
+
+I have received and followed some [",https://api.github.com/repos/php/php-src/issues/868,https://github.com/php/php-src/pull/868,https://api.github.com/repos/php/php-src/pulls/868,2014-10-06T12:47:38Z,2015-01-11T15:29:00Z,2014-12-01T05:48:02Z,22281450,2017-03-20 14:12:25,2017-03-20 14:14:40
+28,1,45205266,870,Bug #68161 - DateTime::setTimestamp doesn't clear relative data,lt,closed,Bugfix,"Fixes [PHP bug #68161](https://bugs.php.net/bug.php?id=68161) - Explicitly setting a timestamp does not clear previously set relative data.
+",https://api.github.com/repos/php/php-src/issues/870,https://github.com/php/php-src/pull/870,https://api.github.com/repos/php/php-src/pulls/870,2014-10-08T05:28:47Z,2017-01-03T12:27:51Z,2017-01-03T12:27:51Z,22401499,2017-03-20 14:12:25,2017-03-20 14:14:40
+29,1,45247943,871,Fixed #68024 #68171 #60387,datibbaw,closed,Bugfix,"Bugs: [68024](https://bugs.php.net/bug.php?id=68024), [68171](https://bugs.php.net/bug.php?id=68171), [60387](https://bugs.php.net/bug.php?id=60387)
+
+Instead of prepending key/value pairs into a linked list, we maintain
+a head and tail for the three array",https://api.github.com/repos/php/php-src/issues/871,https://github.com/php/php-src/pull/871,https://api.github.com/repos/php/php-src/pulls/871,2014-10-08T14:09:18Z,2017-01-05T06:29:05Z,2017-01-05T06:29:05Z,22425473,2017-03-20 14:12:25,2017-03-20 14:14:41
+30,1,47263573,884,Fix #66479: Wrong response to FCGI_GET_VALUES,frankstolle,closed,Bugfix,"Requesting Get-Values via FCGI caused an ""endless"" loop over the last requested parameter and ended with an invalid response. this patch solves this loop bug.
+",https://api.github.com/repos/php/php-src/issues/884,https://github.com/php/php-src/pull/884,https://api.github.com/repos/php/php-src/pulls/884,2014-10-30T12:25:06Z,2015-02-01T08:38:29Z,2015-02-01T08:38:29Z,23600710,2017-03-20 14:12:25,2017-03-20 14:26:11
+31,1,47482758,885,Fix bug #68335: rmdir doesnt work with file:// stream wrapper,mcq8,closed,Bugfix,"https://bugs.php.net/bug.php?id=68335
+",https://api.github.com/repos/php/php-src/issues/885,https://github.com/php/php-src/pull/885,https://api.github.com/repos/php/php-src/pulls/885,2014-11-01T03:34:54Z,2014-12-01T01:36:52Z,2014-12-01T01:36:52Z,23715375,2017-03-20 14:12:25,2017-03-20 14:26:12
+32,1,49809888,914,Fixes memory leak introduced in 2b9af967,ralt,closed,Bugfix,"Fixes https://bugs.php.net/bug.php?id=68285
+",https://api.github.com/repos/php/php-src/issues/914,https://github.com/php/php-src/pull/914,https://api.github.com/repos/php/php-src/pulls/914,2014-11-23T00:43:21Z,2014-12-01T03:38:53Z,2014-12-01T03:38:53Z,24895741,2017-03-20 14:12:25,2017-03-20 14:26:13
+33,1,49853725,917,SPL: Fix for bug 66405 RecursiveDirectoryIterator with CURRENT_AS_PATHNA...,paulyg,closed,Bugfix,"Currently when you use RecursiveDirectoryIterator with the
+CURRENT_AS_PATHNAME flag PHP will throw an UnexpectedValueException with
+message 'Objects returned by RecursiveIterator::getChildren() must implement
+RecursiveIterator'.This happend because getChi",https://api.github.com/repos/php/php-src/issues/917,https://github.com/php/php-src/pull/917,https://api.github.com/repos/php/php-src/pulls/917,2014-11-24T03:41:22Z,2014-11-29T13:27:45Z,2014-11-29T13:27:45Z,24912440,2017-03-20 14:12:25,2017-03-20 14:26:14
+34,1,50130766,924,Fix bug #67704: CURLOPT_POSTFIELDS modify the type of param,redfoxli,closed,Bugfix,"curl_setopt will modify the type of param
+the bugs is here: https://bugs.php.net/bug.php?id=67704
+
+when the type of param is not string, we use a temp variable(current_tmp in the code)， then convert it to string, free the memory of the variable at last
+",https://api.github.com/repos/php/php-src/issues/924,https://github.com/php/php-src/pull/924,https://api.github.com/repos/php/php-src/pulls/924,2014-11-26T08:24:17Z,2014-12-22T21:11:48Z,2014-12-12T16:49:13Z,25067469,2017-03-20 14:12:25,2017-03-20 14:26:14
+35,1,50503474,927,Fix bug #67704: CURLOPT_POSTFIELDS modify the type of param base php-5.5,redfoxli,closed,Bugfix,"curl_setopt will modify the type of param
+the bugs is here: https://bugs.php.net/bug.php?id=67704
+
+when the type of param is not string, we use a temp variable， then convert it to string, free the memory of the variable at last
+
+bug fix base php-5.4 is he",https://api.github.com/repos/php/php-src/issues/927,https://github.com/php/php-src/pull/927,https://api.github.com/repos/php/php-src/pulls/927,2014-12-01T09:31:15Z,2017-01-02T08:41:35Z,2017-01-02T08:41:35Z,25255882,2017-03-20 14:12:25,2017-03-20 14:26:15
+36,1,51028109,936,Fix bug #68532: convert.base64-encode omits padding bytes,mcq8,closed,Bugfix,"The memory stream will now read as much as possible and only set the EOF when you try to read when there is nothing left.
+This is the way file streams do it and apparently some filter algorithms as convert.base64-encode depend on it.
+",https://api.github.com/repos/php/php-src/issues/936,https://github.com/php/php-src/pull/936,https://api.github.com/repos/php/php-src/pulls/936,2014-12-04T20:57:39Z,2015-02-07T13:43:19Z,2014-12-12T16:05:05Z,25527864,2017-03-20 14:12:25,2017-03-20 14:26:16
+37,1,51295907,945,Wasted Shared Memory aboce 2Gb fix,jedi-pl,closed,Bugfix,"When I set opcache.memory_consumption to 10240 (10Gb), it is possible to have more than 2Gb of wasted memory.
+
+The Wasted memory variable in code is stored in signed int instead of size_t.
+
+In fact I end up with negative value of wasted memory and wasted ",https://api.github.com/repos/php/php-src/issues/945,https://github.com/php/php-src/pull/945,https://api.github.com/repos/php/php-src/pulls/945,2014-12-08T12:15:43Z,2015-02-01T07:13:06Z,2015-02-01T07:13:06Z,25662130,2017-03-20 14:12:25,2017-03-20 14:26:17
+38,1,51307304,946,Fixed Bug #65576 (Constructor from trait conflicts with inherited...),dunglas,closed,Bugfix,"Fixed Bug #65576 (Constructor from trait conflicts with inherited constructor). See https://bugs.php.net/bug.php?id=65576
+
+cc @meyerbaptiste
+",https://api.github.com/repos/php/php-src/issues/946,https://github.com/php/php-src/pull/946,https://api.github.com/repos/php/php-src/pulls/946,2014-12-08T14:27:52Z,2014-12-12T15:20:11Z,2014-12-12T15:17:56Z,25669080,2017-03-20 14:12:25,2017-03-20 14:26:18
+39,1,51421274,948,Fix bug #68571 : core dump when webserver close the socket,redfoxli,closed,Bugfix,"the bug is here: https://bugs.php.net/bug.php?id=68571
+
+There is several conditions when core dump
+1 don't use error_log in php.ini.
+2 a lot of stderr log generate
+3 webserver close the socket after send the request(request timeout will lead the action)
+
+",https://api.github.com/repos/php/php-src/issues/948,https://github.com/php/php-src/pull/948,https://api.github.com/repos/php/php-src/pulls/948,2014-12-09T12:24:31Z,2015-01-28T02:35:27Z,2015-01-27T14:16:20Z,25738870,2017-03-20 14:12:25,2017-03-20 14:26:18
+40,1,51997160,959,Fixed phpinfo() issues since ad01fd8,mbeccati,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/959,https://github.com/php/php-src/pull/959,https://api.github.com/repos/php/php-src/pulls/959,2014-12-15T15:16:16Z,2014-12-16T11:42:19Z,2014-12-16T11:42:07Z,26075766,2017-03-20 14:12:25,2017-03-20 14:26:19
+41,1,53113686,968,Fixed bug #68371 PDO#getAttribute() cannot be called with platform-specific attribute names,mbeccati,closed,Bugfix,"The PR is for 5.5. Merging up to 5.6 and master requires more changes.
+
+Please do not merge. I will take care of it once Travis is happy.
+",https://api.github.com/repos/php/php-src/issues/968,https://github.com/php/php-src/pull/968,https://api.github.com/repos/php/php-src/pulls/968,2014-12-30T12:51:50Z,2015-01-05T09:54:03Z,2015-01-05T09:50:51Z,26684248,2017-03-20 14:12:25,2017-03-20 14:26:20
+42,1,53188924,971,Fix 61285 - SSL connections do not timeout,bbroerman30,closed,Bugfix,"Updated xp_ssl.c to use non-blocking SSL read and write along with php_pollfd_for to perform a timed wait if data can not be read / written. Tested with blocking (no timeout set), and non-blocking IO 
+",https://api.github.com/repos/php/php-src/issues/971,https://github.com/php/php-src/pull/971,https://api.github.com/repos/php/php-src/pulls/971,2014-12-31T15:38:33Z,2015-01-30T22:02:59Z,2015-01-23T06:06:38Z,26727075,2017-03-20 14:12:25,2017-03-20 14:26:21
+43,1,53211883,973,Fix bug #65003 Wrong date diff,pasindud,closed,Bugfix,"https://bugs.php.net/bug.php?id=65003
+
+Fixed by only timelib_apply_localtime when zone is different, current date test passes. Hope this is correct.
+",https://api.github.com/repos/php/php-src/issues/973,https://github.com/php/php-src/pull/973,https://api.github.com/repos/php/php-src/pulls/973,2015-01-01T03:03:30Z,2017-02-03T06:30:01Z,2017-02-03T06:29:56Z,26740200,2017-03-20 14:12:25,2017-03-20 14:26:22
+44,1,53277620,974,Fix #49270: configure fails if PHP source folder path contains spaces,kassner,closed,Bugfix,"Hi,
+
+I added some basic escaping to buildconf files, so I hope it fixes [#49270](https://bugs.php.net/bug.php?id=49270).
+
+Is there a way to test these changes? I guess `phpt` files aren't able to test this, am I wrong?
+",https://api.github.com/repos/php/php-src/issues/974,https://github.com/php/php-src/pull/974,https://api.github.com/repos/php/php-src/pulls/974,2015-01-02T21:00:36Z,2017-01-07T08:36:31Z,2017-01-07T08:36:31Z,26770972,2017-03-20 14:12:25,2017-03-20 14:26:23
+45,1,53311400,975,Fixes #66764 - configure doesn't define EXPANDED_DATADIR / PHP_DATADIR correctly,Tyrael,closed,Bugfix,"as the bugreport explains the value for EXPANDED_DATADIR doesn't gets properly expanded.
+it is borked since 5.4 when we moved from autoconf 2.13 to 2.59: http://3v4l.org/IpcgT
+the reason is that there are some autoconf default values which were changed in",https://api.github.com/repos/php/php-src/issues/975,https://github.com/php/php-src/pull/975,https://api.github.com/repos/php/php-src/pulls/975,2015-01-03T18:29:37Z,2015-01-05T04:55:52Z,2015-01-05T04:55:52Z,26785529,2017-03-20 14:12:25,2017-03-20 14:26:23
+46,1,53885792,989,Crypt error-condition fixes,ircmaxell,closed,Bugfix,"Crypt is currently documented to fail if provided invalid salts for STD_DES. The current implementation does not do so.
+
+This can cause `crypt` to become silently insecure by falling back to STD_DES if there is a mistake in the salt format for another alg",https://api.github.com/repos/php/php-src/issues/989,https://github.com/php/php-src/pull/989,https://api.github.com/repos/php/php-src/pulls/989,2015-01-09T16:27:52Z,2015-02-01T06:21:47Z,2015-02-01T06:05:51Z,27110926,2017-03-20 14:12:25,2017-03-20 14:26:24
+47,1,54139733,994,Added test and possible fix for https://bugs.php.net/bug.php?id=67068,Danack,closed,Bugfix,"This is either a trivial bug, with a trivial fix, or ....there may be a cunning reason why this flag was not set.
+",https://api.github.com/repos/php/php-src/issues/994,https://github.com/php/php-src/pull/994,https://api.github.com/repos/php/php-src/pulls/994,2015-01-13T01:36:11Z,2015-02-01T07:13:08Z,2015-02-01T07:13:07Z,27242015,2017-03-20 14:12:25,2017-03-20 14:26:25
+48,1,54155995,995,Fix bug #68822 php-fpm - the result of access log is wrong when use fastcgi_finish_request,redfoxli,closed,Bugfix,"the bug is here: https://bugs.php.net/bug.php?id=68822
+
+When I use fastcgi_finish_request in php script,  I find the result of access log is wrong
+
+I read the php-src, whe use fastcgi_finish_request, it will call fpm_request_finished(it will clean the val",https://api.github.com/repos/php/php-src/issues/995,https://github.com/php/php-src/pull/995,https://api.github.com/repos/php/php-src/pulls/995,2015-01-13T06:33:52Z,2015-02-16T12:38:33Z,2015-02-16T12:38:33Z,27250740,2017-03-20 14:12:25,2017-03-20 14:26:26
+49,1,54554642,1001,Fix null pointer dereferences,MegaManSec,closed,Bugfix,"## 
+
+Multiple places 'spprintf' is called with a NULL 'pbuf', which
+passes itself to vspprintf, which dereferences it.
+
+Although most places check whether 'pbuf'(normally called 'error')
+is null, it is smarter to check it inside the function that
+requires",https://api.github.com/repos/php/php-src/issues/1001,https://github.com/php/php-src/pull/1001,https://api.github.com/repos/php/php-src/pulls/1001,2015-01-16T09:18:57Z,2015-01-20T20:03:55Z,2015-01-20T20:03:55Z,27492656,2017-03-20 14:12:25,2017-03-20 14:26:26
+50,1,54802340,1009,Fix potential int overflow in date extension.,MegaManSec,closed,Bugfix,"On 20/01/15 06:15, Joshua Rogers wrote:
+
+> ## 
+> 
+>  ext/date/lib/tm2unixtime.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> Somebody please take a look at /ext/date/lib/parse_tz.c too:
+
+438timelib_sll timelib_get_current_offset(timelib",https://api.github.com/repos/php/php-src/issues/1009,https://github.com/php/php-src/pull/1009,https://api.github.com/repos/php/php-src/pulls/1009,2015-01-19T19:23:10Z,2017-01-05T06:26:43Z,2017-01-05T06:26:43Z,27629691,2017-03-20 14:12:25,2017-03-20 14:26:27
+51,1,55056862,1014,Lsapi ndef,MegaManSec,closed,Bugfix,"Various non-serious security issues,  and some other stuff.
+",https://api.github.com/repos/php/php-src/issues/1014,https://github.com/php/php-src/pull/1014,https://api.github.com/repos/php/php-src/pulls/1014,2015-01-21T18:22:46Z,2015-02-02T11:40:54Z,2015-02-02T11:40:54Z,27782309,2017-03-20 14:12:25,2017-03-20 14:26:27
+52,1,55201829,1019,Fix bug #64938: libxml_disable_entity_loader setting is shared between threads,mj,closed,Bugfix,The availability of entity loading is stored in a module global which previously was only initialized in the GINIT constructor. This had the effect that disabling the entity loader in one request caused subsequent requests hitting the same Apache child pr,https://api.github.com/repos/php/php-src/issues/1019,https://github.com/php/php-src/pull/1019,https://api.github.com/repos/php/php-src/pulls/1019,2015-01-22T20:05:42Z,2015-02-01T08:11:09Z,2015-02-01T08:11:09Z,27873163,2017-03-20 14:12:25,2017-03-20 14:26:28
+53,1,55317841,1022,Fix segfaults with string_replace and string_ireplace,marcioAlmada,closed,Bugfix,"Like in `ext/standard/tests/strings/str_replace_array_refs.phpt`:
+
+``` php
+<?php
+$data = ['a' => 'b'];
+$ref = &$data;
+$b = &$ref['a'];
+var_dump(str_replace(array_keys($data), $data, ""a""));
+// segfault :~
+```
+
+And other possible very obscure situations inv",https://api.github.com/repos/php/php-src/issues/1022,https://github.com/php/php-src/pull/1022,https://api.github.com/repos/php/php-src/pulls/1022,2015-01-23T18:53:55Z,2015-01-27T12:30:29Z,2015-01-27T12:30:29Z,27946053,2017-03-20 14:12:25,2017-03-20 14:26:29
+54,1,55616492,1032,do_fstat changes,MegaManSec,closed,Bugfix,"Check return values of 'do_fstat' function in all places.
+",https://api.github.com/repos/php/php-src/issues/1032,https://github.com/php/php-src/pull/1032,https://api.github.com/repos/php/php-src/pulls/1032,2015-01-27T13:19:42Z,2015-02-01T08:58:28Z,2015-02-01T08:58:28Z,28107558,2017-03-20 14:12:25,2017-03-20 14:26:29
+55,1,56038343,1038,Fix for 61285 - SSL connections do not timeout,bbroerman30,closed,Bugfix,"This is a fix for bug 61285 - SSL connections do not timeout, back-ported from trunk
+",https://api.github.com/repos/php/php-src/issues/1038,https://github.com/php/php-src/pull/1038,https://api.github.com/repos/php/php-src/pulls/1038,2015-01-30T14:19:01Z,2016-04-05T17:11:35Z,2015-02-09T20:35:00Z,28363949,2017-03-20 14:12:25,2017-03-20 14:26:30
+56,1,56161023,1041,Fix build in OSX with --enable-dtrace,guoxiao,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/1041,https://github.com/php/php-src/pull/1041,https://api.github.com/repos/php/php-src/pulls/1041,2015-02-01T11:44:17Z,2015-02-07T03:34:29Z,2015-02-07T03:34:29Z,28430014,2017-03-20 14:12:25,2017-03-20 14:26:31
+57,1,56465379,1046,Fixed bug #68638 pg_update() fails to store infinite values.,wfelipew,closed,Bugfix,"Regex to check float values changed to accept ""infinity"" values and ignore case. 
+Quotes are added to prevent syntax error on PostgreSQL.
+",https://api.github.com/repos/php/php-src/issues/1046,https://github.com/php/php-src/pull/1046,https://api.github.com/repos/php/php-src/pulls/1046,2015-02-04T01:09:00Z,2016-06-03T12:49:56Z,2016-06-03T12:49:56Z,28605210,2017-03-20 14:12:25,2017-03-20 14:26:31
+58,1,56524549,1047,Upgrade pcre to 8.36,arjenschol,closed,Bugfix,"Fixes memory errors, see https://bugs.php.net/bug.php?id=68933
+
+Upgraded using upgrade-pcre.php script in ext/pcre
+",https://api.github.com/repos/php/php-src/issues/1047,https://github.com/php/php-src/pull/1047,https://api.github.com/repos/php/php-src/pulls/1047,2015-02-04T13:13:31Z,2015-02-06T10:31:06Z,2015-02-06T10:31:06Z,28637092,2017-03-20 14:12:25,2017-03-20 14:26:32
+59,1,56769970,1057,Fixed serialization of non string values on __sleep,jrbasso,closed,Bugfix,"Returning just `N;` (null) on the `__sleep` makes the number of fields/values be incomplete and corrupting the generated value from serialize, making impossible to unserialize it.
+
+This was discussed on this thread: https://www.mail-archive.com/internals@",https://api.github.com/repos/php/php-src/issues/1057,https://github.com/php/php-src/pull/1057,https://api.github.com/repos/php/php-src/pulls/1057,2015-02-06T04:48:23Z,2015-03-23T03:36:17Z,2015-03-23T03:36:16Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+60,1,56829931,1060,Invalid free of CG(interned_empty_string),manuelm,closed,Bugfix,"On failure php_escape_html_entities returns STR_EMPTY_ALLOC which is an
+alias of CG(interned_empty_string) if interned strings are enabled.
+Make sure we don't free this.
+
+Fixes #68996
+",https://api.github.com/repos/php/php-src/issues/1060,https://github.com/php/php-src/pull/1060,https://api.github.com/repos/php/php-src/pulls/1060,2015-02-06T16:01:32Z,2015-02-08T11:44:24Z,2015-02-08T11:44:24Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+61,1,56899301,1064,Fixed bug #69001: PHP crashed when calling zend_error during zend_startup,reeze,closed,Bugfix,"https://bugs.php.net/bug.php?id=69001
+
+When build with ZTS, if any function inside zend_startup() throws
+any errors(invoke `zend_error()`) will crash PHP. such as: https://github.com/php/php-src/blob/master/Zend/zend_API.c#L1976 
+
+This also move EG() fiel",https://api.github.com/repos/php/php-src/issues/1064,https://github.com/php/php-src/pull/1064,https://api.github.com/repos/php/php-src/pulls/1064,2015-02-07T06:01:09Z,2015-02-12T03:32:02Z,2015-02-10T13:38:21Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+62,1,56901003,1067,Fix wrong format args warning of opcache,reeze,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/1067,https://github.com/php/php-src/pull/1067,https://api.github.com/repos/php/php-src/pulls/1067,2015-02-07T07:11:51Z,2015-02-09T03:40:44Z,2015-02-09T03:40:44Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+63,1,57819307,1087,Fix for #69061 - Remove timestamp for mail.log = syslog,tomsommer,closed,Bugfix,"Fix for #69061
+
+- Remove timestamp when sending to syslog
+- Make mail.log append correct PHP_EOL to file ",https://api.github.com/repos/php/php-src/issues/1087,https://github.com/php/php-src/pull/1087,https://api.github.com/repos/php/php-src/pulls/1087,2015-02-16T15:45:07Z,2017-01-14T12:59:34Z,2017-01-14T12:59:34Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+64,1,57859384,1090,Fix freeing null segfault. Added test for behaviour.,Danack,closed,Bugfix,"An exception in an callback function for a custom collator function caused a segfault in PHP5.x. https://bugs.php.net/bug.php?id=68760
+
+There is a different PR incoming for the behaviour in 7.
+",https://api.github.com/repos/php/php-src/issues/1090,https://github.com/php/php-src/pull/1090,https://api.github.com/repos/php/php-src/pulls/1090,2015-02-16T22:35:17Z,2015-03-23T00:01:20Z,2015-03-23T00:01:20Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+65,1,57860090,1091,Sqlite3 exception7,Danack,closed,Bugfix,"An exception in an callback function for a custom collator function should stop calling the callback function immediately. The change also suppresses the error message that duplicates the exception message. 
+
+This is the 7 version of https://github.com/ph",https://api.github.com/repos/php/php-src/issues/1091,https://github.com/php/php-src/pull/1091,https://api.github.com/repos/php/php-src/pulls/1091,2015-02-16T22:43:23Z,2015-04-11T15:54:47Z,2015-03-22T23:49:43Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+66,1,58079783,1092,Fix for #68846,masakielastic,closed,Bugfix,"mbstring miscaliculate the codepoint when converting string from GB18030 to UTF-32. This pull request add missing missing parentheses.
+
+``` c
+// http://icu-project.org/docs/papers/gb18030.html#h7
+// uFirst = 0x10000;
+// bFirst = [0x90, 0x30, 0x81, 0x30];
+",https://api.github.com/repos/php/php-src/issues/1092,https://github.com/php/php-src/pull/1092,https://api.github.com/repos/php/php-src/pulls/1092,2015-02-18T15:11:18Z,2015-03-09T06:48:19Z,2015-03-09T06:48:19Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+67,1,58347063,1104,Fix #63486,jpauli,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/1104,https://github.com/php/php-src/pull/1104,https://api.github.com/repos/php/php-src/pulls/1104,2015-02-20T12:40:06Z,2015-03-09T07:52:51Z,2015-03-09T06:45:39Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+68,1,58366005,1106,Fix #67626,jpauli,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/1106,https://github.com/php/php-src/pull/1106,https://api.github.com/repos/php/php-src/pulls/1106,2015-02-20T15:16:20Z,2015-03-09T07:10:53Z,2015-03-09T06:45:39Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+69,1,59398017,1131,Bug #69151 - mb_ereg should reject ill-formed byte sequence,masakielastic,closed,Bugfix,This pull request add validation for encoding. Some of  ill-formed byte sequence can be converterted to dangerous ascii characters by legacy UTF-8 decoder without checking trailing bytes. `htmlspecharchars` and PCRE functions reject them. [Unicode Securit,https://api.github.com/repos/php/php-src/issues/1131,https://github.com/php/php-src/pull/1131,https://api.github.com/repos/php/php-src/pulls/1131,2015-03-01T14:36:22Z,2016-07-17T16:38:00Z,2016-07-17T16:38:00Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+70,1,59774908,1143,Fixed bug #68917 (parse_url fails on some partial urls),zxcvdavid,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/1143,https://github.com/php/php-src/pull/1143,https://api.github.com/repos/php/php-src/pulls/1143,2015-03-04T10:02:13Z,2015-03-06T15:44:44Z,2015-03-06T13:09:20Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+71,1,59944214,1148,Fixes bug #69181 (csv parsing drops newlines within fields with SplFileObject::DROP_NEW_LINE),g105b,closed,Bugfix,"This pull request fixes buggy behaviour when using `SplFileObject` to work with CSV files.
+
+According to the documentation, the `DROP_NEW_LINE` flag drops newlines at the end of a line. http://php.net/manual/en/class.splfileobject.php#splfileobject.consta",https://api.github.com/repos/php/php-src/issues/1148,https://github.com/php/php-src/pull/1148,https://api.github.com/repos/php/php-src/pulls/1148,2015-03-05T12:19:33Z,2017-01-04T08:38:35Z,2017-01-04T07:51:16Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+72,1,60042325,1152,Fix #66590: imagewebp() sometimes returns broken image,POPSuL,closed,Bugfix,"This pull-request based on https://bugs.php.net/bug.php?id=66590#1390869798
+",https://api.github.com/repos/php/php-src/issues/1152,https://github.com/php/php-src/pull/1152,https://api.github.com/repos/php/php-src/pulls/1152,2015-03-06T00:54:00Z,2015-08-06T13:09:08Z,2015-08-06T13:09:08Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+73,1,60055205,1153,Fix #68948: Revert "Fix bug #68532: convert.base64-encode omits padding ...,slusarz,closed,Bugfix,"...bytes""
+
+This reverts commit 86f18755362b594c519ccde37c3b3f98158b591e.
+
+This is incorrect based on the current text of the PHP documentation
+and, more important, broke backward compatibility with PHP < 5.5.21 and
+< 5.6.5
+",https://api.github.com/repos/php/php-src/issues/1153,https://github.com/php/php-src/pull/1153,https://api.github.com/repos/php/php-src/pulls/1153,2015-03-06T03:43:14Z,2017-01-04T23:22:31Z,2017-01-04T23:22:31Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+74,1,60200506,1159,fixed Bug #68621,Neeke,closed,Bugfix,"The ZipArchive::open treats the filename not as defined per php manual on valid file wrappers. It appends the filename to the base url. Hence, creating/manipulating a zip file in memory space would be impossible.
+
+https://bugs.php.net/bug.php?id=68621
+",https://api.github.com/repos/php/php-src/issues/1159,https://github.com/php/php-src/pull/1159,https://api.github.com/repos/php/php-src/pulls/1159,2015-03-07T10:16:17Z,2015-03-09T04:20:52Z,2015-03-09T04:20:52Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+75,1,60261531,1162,Adjust logic in sanity checks.,whatthejeff,closed,Bugfix,"The code should return false when the provided options argument is neither an
+array nor a valid filter.
+",https://api.github.com/repos/php/php-src/issues/1162,https://github.com/php/php-src/pull/1162,https://api.github.com/repos/php/php-src/pulls/1162,2015-03-08T15:32:53Z,2015-03-09T04:02:49Z,2015-03-09T04:02:49Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+76,1,60630841,1169,Double fastcgi_end_request on max_children limit (bug #67583),Berbe,closed,Bugfix,"PHP sends 2 FastCGI `FCGI_END_REQUEST` records instead of one when `fastcgi_finish_request();` is called and the FPM param `max_requests` is exceeded.
+- One is sent on `fastcgi_finish_request();` call
+- The other is sent in block `fpm_main.c:1951 requests",https://api.github.com/repos/php/php-src/issues/1169,https://github.com/php/php-src/pull/1169,https://api.github.com/repos/php/php-src/pulls/1169,2015-03-11T09:27:36Z,2017-01-07T21:59:29Z,2017-01-05T06:43:37Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+77,1,64083562,1196,Php 5.5 spl class extend https://bugs.php.net/bug.php?id=69275,Danack,closed,Bugfix,"Fix https://bugs.php.net/bug.php?id=69275 constructor not called correctly for extended class.
+
+When a user specifies which class should be created for each 'file object' by having set `$fileInfo->setFileClass('TestFileObject');` the constructor was not b",https://api.github.com/repos/php/php-src/issues/1196,https://github.com/php/php-src/pull/1196,https://api.github.com/repos/php/php-src/pulls/1196,2015-03-24T19:43:09Z,2017-01-01T19:39:41Z,2017-01-01T19:39:41Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+78,1,64163554,1197,Fix #62172: FPM not working with Apache httpd 2.4 balancer/fcgi setup,haught,closed,Bugfix,"mod_proxy_balancer uses proxy:balancer:// instead of proxy:fcgi:// for its prefix. This patch simply adds support for this prefix based off of proxy:fcgi.
+",https://api.github.com/repos/php/php-src/issues/1197,https://github.com/php/php-src/pull/1197,https://api.github.com/repos/php/php-src/pulls/1197,2015-03-25T03:34:57Z,2016-01-29T09:27:37Z,2016-01-29T09:27:37Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+79,1,64820420,1202,Fix bug 69291,Danack,closed,Bugfix,"Fix bug testing whether timestamp. When validate_timestamps is set to 0, the timestamp field is not set, and so should not be used for testing whether the script is valid or not.
+
+https://bugs.php.net/bug.php?id=69281
+
+Probably needs to be applied to all ",https://api.github.com/repos/php/php-src/issues/1202,https://github.com/php/php-src/pull/1202,https://api.github.com/repos/php/php-src/pulls/1202,2015-03-27T18:13:36Z,2015-04-02T01:13:49Z,2015-04-02T01:13:49Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+80,1,65386074,1207,Fixed bug #69336 (Parsing error of strtotime),zxcvdavid,closed,Bugfix,"I found this problem from: https://twitter.com/laruence/status/582766663705083904
+This problem can be reproduced if the day num we are parsing is smaller than today's num.
+
+Example:
+Today is 31/03/2015, we want get the last day of April
+Today is 29/05/201",https://api.github.com/repos/php/php-src/issues/1207,https://github.com/php/php-src/pull/1207,https://api.github.com/repos/php/php-src/pulls/1207,2015-03-31T07:27:00Z,2015-03-31T15:38:32Z,2015-03-31T15:38:32Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+81,1,65586889,1210,Fixed bug #69325 (php_copy_file_ex does not pass the argument),zxcvdavid,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/1210,https://github.com/php/php-src/pull/1210,https://api.github.com/repos/php/php-src/pulls/1210,2015-04-01T02:17:41Z,2015-04-07T02:29:03Z,2015-04-07T02:28:58Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+82,1,66430958,1219,Fix #69374 IntlDateFormatter::formatObject returns wrong utf8 value,micti,closed,Bugfix,"We can use simple ICU UnicodeString constructor or UnicodeString::fromUTF8
+",https://api.github.com/repos/php/php-src/issues/1219,https://github.com/php/php-src/pull/1219,https://api.github.com/repos/php/php-src/pulls/1219,2015-04-05T11:57:02Z,2016-06-02T20:49:43Z,2016-06-02T20:49:43Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+83,1,66489547,1222,Fix #69373 References to deleted XPath query results,ttoohey,closed,Bugfix,"xmlNodeSetContentLen() calls xmlFreeNode() on node->children. This causes
+problems if there are other references around to those children.
+",https://api.github.com/repos/php/php-src/issues/1222,https://github.com/php/php-src/pull/1222,https://api.github.com/repos/php/php-src/pulls/1222,2015-04-05T22:25:32Z,2017-02-03T06:37:25Z,2017-02-03T06:37:21Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+84,1,66744801,1223,Fixed Bug #68276 Reproducible memory corruption: openssl extension,wfelipew,closed,Bugfix,"PHP leaves error on the openssl queue if the developer don't call openssl_error_string() for each ssl call. This behaviour makes a landmine for every lib that use OpenSSL that not clean the error queue before IO calls.
+
+I propose a patch to clean the erro",https://api.github.com/repos/php/php-src/issues/1223,https://github.com/php/php-src/pull/1223,https://api.github.com/repos/php/php-src/pulls/1223,2015-04-07T01:19:22Z,2016-06-19T16:03:23Z,2016-06-19T15:57:35Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+85,1,66911141,1225,Fixed phpdbg build broken when dtrace enabled,reeze,closed,Bugfix,"This also fixed a zend_string related warning.
+",https://api.github.com/repos/php/php-src/issues/1225,https://github.com/php/php-src/pull/1225,https://api.github.com/repos/php/php-src/pulls/1225,2015-04-07T15:08:33Z,2015-09-02T15:37:23Z,2015-09-02T15:37:23Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+86,1,68355846,1238,"Bug 61116 - HTML functions use encoding, not charset",masakielastic,closed,Bugfix,"This pull request applies vrana's [patch](https://bugs.php.net/bug.php?id=61116) and fixes inconsistencies between PHP's manual and argument's info.
+",https://api.github.com/repos/php/php-src/issues/1238,https://github.com/php/php-src/pull/1238,https://api.github.com/repos/php/php-src/pulls/1238,2015-04-14T12:26:14Z,2015-04-19T03:42:34Z,2015-04-19T03:42:34Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+87,1,68827901,1239,fixes confusing SQLDescribeParam error message,cmb69,closed,Bugfix,"The function is called SQLDescribeParam and not SQLDescribeParameter.
+",https://api.github.com/repos/php/php-src/issues/1239,https://github.com/php/php-src/pull/1239,https://api.github.com/repos/php/php-src/pulls/1239,2015-04-16T02:13:38Z,2015-07-12T23:03:05Z,2015-04-19T03:45:52Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+88,1,70603395,1248,PoC patch for bug #69111,yohgaki,closed,Bugfix,"This PoC patch for bug #69111. I didn't even try to compile it because I think this is not needed.
+https://bugs.php.net/bug.php?id=69111
+
+I would rather deprecate use of previous save handler functions as ""base"" class method for SessionHandler. Session mo",https://api.github.com/repos/php/php-src/issues/1248,https://github.com/php/php-src/pull/1248,https://api.github.com/repos/php/php-src/pulls/1248,2015-04-24T06:36:37Z,2017-01-05T06:57:46Z,2017-01-05T06:57:41Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+89,1,72469654,1256,Expand path names in php-fpm.service,maxnet,closed,Bugfix,"Currently the PHP build creates a non-working php-fpm.service systemd service file that looks like:
+
+```
+[Unit]
+Description=The PHP FastCGI Process Manager
+After=syslog.target network.target
+
+[Service]
+Type=simple
+PIDFile=${prefix}/var/run/php-fpm.pid
+Exe",https://api.github.com/repos/php/php-src/issues/1256,https://github.com/php/php-src/pull/1256,https://api.github.com/repos/php/php-src/pulls/1256,2015-05-01T16:33:43Z,2017-01-05T06:55:58Z,2017-01-05T06:55:18Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+90,1,72479664,1257,return FALSE instead of NULL from ZipArchive::getStream when php_stream_...,cmb69,closed,Bugfix,"...zip_open() fails (fixes #67161)
+",https://api.github.com/repos/php/php-src/issues/1257,https://github.com/php/php-src/pull/1257,https://api.github.com/repos/php/php-src/pulls/1257,2015-05-01T17:28:59Z,2015-07-12T23:01:55Z,2015-05-12T12:36:42Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+91,1,73491084,1262,Fix #69579: Invalid free with extension trait,jbboehr,closed,Bugfix,"For bug: https://bugs.php.net/bug.php?id=69579
+",https://api.github.com/repos/php/php-src/issues/1262,https://github.com/php/php-src/pull/1262,https://api.github.com/repos/php/php-src/pulls/1262,2015-05-06T02:20:53Z,2016-09-22T10:52:16Z,2016-09-22T10:52:16Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+92,1,74260527,1265,Fix #48147 - implement manual handling of  //IGNORE for broken libc,smalyshev,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/1265,https://github.com/php/php-src/pull/1265,https://api.github.com/repos/php/php-src/pulls/1265,2015-05-08T07:09:13Z,2015-05-10T02:29:46Z,2015-05-10T02:29:46Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+93,1,74267292,1266,Fix #69521 Segfault in gc_collect_cycles().,arjenschol,closed,Bugfix,"Correctly destroy zval see https://bugs.php.net/bug.php?id=69521
+",https://api.github.com/repos/php/php-src/issues/1266,https://github.com/php/php-src/pull/1266,https://api.github.com/repos/php/php-src/pulls/1266,2015-05-08T07:36:35Z,2015-07-02T10:48:58Z,2015-07-02T10:48:58Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+94,1,75473388,1270,Fix bug #69625 php-fpm return http 200 response  without SCRIPT_FILENAME,cfc4n,closed,Bugfix,"BUG report: https://bugs.php.net/bug.php?id=69625
+
+In nginx config.conf file, configure info without fastcgi_param  SCRIPT_FILENAME default ,  http://trac.nginx.org/nginx/browser/nginx/conf/fastcgi_params  Any PHP files are returned blank response and  ht",https://api.github.com/repos/php/php-src/issues/1270,https://github.com/php/php-src/pull/1270,https://api.github.com/repos/php/php-src/pulls/1270,2015-05-12T05:41:09Z,2017-01-05T07:15:10Z,2017-01-05T07:15:10Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+95,1,75788235,1273,Fixed bug #68776,yohgaki,closed,Bugfix,"https://bugs.php.net/bug.php?id=68776
+",https://api.github.com/repos/php/php-src/issues/1273,https://github.com/php/php-src/pull/1273,https://api.github.com/repos/php/php-src/pulls/1273,2015-05-13T00:21:18Z,2015-07-10T21:00:18Z,2015-06-10T04:41:51Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+96,1,76155098,1278,fix #69628: complex GLOB_BRACE fails on Windows,cmb69,closed,Bugfix,"The problem is that `pl` is advanced to `pm` after an opening bracket has been encountered, so the characters before the last opening bracket are ignored. This might be a deliberate design decision (allow only one bracketed expression inside a braced alte",https://api.github.com/repos/php/php-src/issues/1278,https://github.com/php/php-src/pull/1278,https://api.github.com/repos/php/php-src/pulls/1278,2015-05-13T23:07:35Z,2015-07-12T22:59:02Z,2015-05-21T06:55:56Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+97,1,77778380,1285,fix #64878: 304 responses return Content-Type header,cmb69,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/1285,https://github.com/php/php-src/pull/1285,https://api.github.com/repos/php/php-src/pulls/1285,2015-05-18T19:37:26Z,2015-06-27T12:41:13Z,2015-06-27T12:40:57Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+98,1,77802770,1286,fix #69655: php -S changes MKCALENDAR request method,cmb69,closed,Bugfix,,https://api.github.com/repos/php/php-src/issues/1286,https://github.com/php/php-src/pull/1286,https://api.github.com/repos/php/php-src/pulls/1286,2015-05-18T20:55:33Z,2015-07-12T22:53:24Z,2015-06-27T16:29:17Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+99,1,78759317,1291,Fix #50678: files extracted by ZipArchive class lost their original mtime,cmb69,closed,Bugfix,"It might be considered to trigger an E_NOTICE if setting of the mtime fails, but that might even be a bigger BC break as the patch is now. Not sure…
+",https://api.github.com/repos/php/php-src/issues/1291,https://github.com/php/php-src/pull/1291,https://api.github.com/repos/php/php-src/pulls/1291,2015-05-21T00:31:47Z,2017-02-22T09:55:49Z,2017-02-22T09:07:29Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+100,1,78960388,1294,Make the phar symlink relative,Ponce,closed,Bugfix,"or we got a symlink pointing to the build files
+thanks also to remicollet (see also https://github.com/php/php-src/pull/1288)
+",https://api.github.com/repos/php/php-src/issues/1294,https://github.com/php/php-src/pull/1294,https://api.github.com/repos/php/php-src/pulls/1294,2015-05-21T11:49:42Z,2015-05-22T00:26:23Z,2015-05-21T12:10:49Z,0,2017-03-20 14:12:25,2017-03-20 14:12:25
+101,2,170717605,12396,Fix Regression In #12317 For zsh and Patch Environment On OSX For Users Of fish,joefitzgerald,closed,bug,"In Atom 1.7 and 1.8, the environment would be patched for users of the zsh shell on OS X, who launched Atom from the Dock / Finder / Spotlight. A whitelist of shells was established in #12317, which is extended here to include zsh and fish.
+
+Tested with b",https://api.github.com/repos/atom/atom/issues/12396,https://github.com/atom/atom/pull/12396,https://api.github.com/repos/atom/atom/pulls/12396,2016-08-11T18:47:48Z,2016-08-11T23:17:10Z,2016-08-11T23:17:10Z,81009613,2017-03-21 19:18:37,2017-03-21 19:28:35
+102,2,148875872,11498,Copy active item when splitting from TextEditor context menu,BinaryMuse,closed,bug,"Potentially fixes #11381 
+
+/cc @lee-dohm 
+",https://api.github.com/repos/atom/atom/issues/11498,https://github.com/atom/atom/pull/11498,https://api.github.com/repos/atom/atom/pulls/11498,2016-04-16T18:01:21Z,2016-04-18T18:15:23Z,2016-04-18T18:15:23Z,66745156,2017-03-21 19:18:37,2017-03-21 19:28:36
+103,2,136255971,10959,Refactor pending state to live in pane instead of items,kuychaco,closed,bug,"- ~~New public API `workspace.setItemNotPending` that
+  packages can use to set an item to set an item to not pending
+  (e.g. when the user interacts with the item)~~
+- Pending state for newly opened items with `{pending: true}`
+  is now tracked by `Pane`",https://api.github.com/repos/atom/atom/issues/10959,https://github.com/atom/atom/pull/10959,https://api.github.com/repos/atom/atom/pulls/10959,2016-02-25T02:27:16Z,2017-03-16T00:20:07Z,2016-02-26T22:19:24Z,60615062,2017-03-21 19:18:47,2017-03-21 19:28:37
+104,2,116351441,9527,Lierdakil: Defer Activation Hooks,joefitzgerald,closed,bug,"- Fixes #8692 
+- Fixes #8313
+
+This PR fixes merge conflicts for #8692. #8692 fixes a bug with the following scenario:
+- Open a file (e.g. `sample.js`)
+- Close Atom
+- Open Atom (observing that `sample.js` is open)
+- A package with an activationHook of `lan",https://api.github.com/repos/atom/atom/issues/9527,https://github.com/atom/atom/pull/9527,https://api.github.com/repos/atom/atom/pulls/9527,2015-11-11T15:01:24Z,2015-11-12T23:07:05Z,2015-11-12T23:06:41Z,50392416,2017-03-21 19:18:47,2017-03-21 19:28:37
+113,3,23565062,2512,fixing LESS imports,kosmik-koi,closed,bug,"LESS imports use a .less file extension in order to be compiled
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/2512,https://github.com/FortAwesome/Font-Awesome/pull/2512,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/2512,2013-12-02T10:56:06Z,2014-06-13T17:24:45Z,2014-06-13T17:24:45Z,10428215,2017-03-21 19:42:10,2017-03-21 19:46:02
+114,3,23661370,2526,change from component.json to bower.json,wazoo,closed,bug,"Changes based on the discussion in #2344 on the 4.0.4 branch.  Closing other pull request.
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/2526,https://github.com/FortAwesome/Font-Awesome/pull/2526,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/2526,2013-12-03T18:04:08Z,2014-06-13T15:40:49Z,2013-12-03T19:43:20Z,10482016,2017-03-21 19:42:10,2017-03-21 19:46:03
+115,3,34038331,3500,Added link to spinning icons example page,leniel,closed,bug,,https://api.github.com/repos/FortAwesome/Font-Awesome/issues/3500,https://github.com/FortAwesome/Font-Awesome/pull/3500,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/3500,2014-05-21T23:39:38Z,2014-08-20T14:21:45Z,2014-05-22T10:22:12Z,16194956,2017-03-21 19:42:29,2017-03-21 19:46:04
+116,3,34071133,3508,Files permissions,sigo,closed,bug,"Patch resolving wrong files permission, as I mention at [#3425](https://github.com/FortAwesome/Font-Awesome/issues/3425#issue-33604985).
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/3508,https://github.com/FortAwesome/Font-Awesome/pull/3508,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/3508,2014-05-22T11:01:46Z,2014-08-20T14:21:45Z,2014-05-22T11:06:27Z,16212944,2017-03-21 19:42:29,2017-03-21 19:46:04
+117,3,34351434,3549,Fix Issue with fa-rotate-* in IE9 #3527,jacekhajduk,closed,bug,"Issue related with IE9 : fa-rotate-\* not work correctly ;/ (css filter and -ms-transform)
+Solution is add:
+:root .@{fa-css-prefix}-rotate-90,
+:root .@{fa-css-prefix}-rotate-180,
+:root .@{fa-css-prefix}-rotate-270,
+:root .@{fa-css-prefix}-flip-horizontal,",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/3549,https://github.com/FortAwesome/Font-Awesome/pull/3549,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/3549,2014-05-27T08:35:19Z,2014-08-20T14:21:45Z,2014-05-28T09:14:05Z,16359776,2017-03-21 19:42:29,2017-03-21 19:46:05
+118,3,38725219,3996,Use byebug instead of debugger for ruby 2.x support,pebra,closed,bug,"Hey guys,
+`bundle install` will fail on the project with ruby 2.x versions because the debugger gem does not support it.
+I recommend using byebug instead.
+
+Have a nice day!
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/3996,https://github.com/FortAwesome/Font-Awesome/pull/3996,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/3996,2014-07-25T12:36:37Z,2014-08-26T20:33:55Z,2014-08-20T14:34:40Z,18893046,2017-03-21 19:42:29,2017-03-21 19:46:06
+119,3,39840903,4098,404 on whats-new page.,nahakiole,closed,bug,"If you visit the current fontawesome.io website and click twice on the whats-new page you'll be redirected to the Url http://fontawesome.io/whats-new/whats-new/ which doesn't exist.
+
+This is due to the last commit b331a9a1c5d5fb1260de2f702623e26ac8e343dd ",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/4098,https://github.com/FortAwesome/Font-Awesome/pull/4098,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/4098,2014-08-08T16:34:18Z,2014-08-20T14:13:17Z,2014-08-20T14:13:17Z,19537640,2017-03-21 19:42:29,2017-03-21 19:46:06
+120,3,43297476,4491,remove reference to bootstrap in getting-started,preaction,closed,bug,"""with the default Bootstrap CSS"" makes it sound like Bootstrap is coming with FontAwesome, but they're completely separate.
+
+Trying the Github live editing feature again.
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/4491,https://github.com/FortAwesome/Font-Awesome/pull/4491,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/4491,2014-09-20T01:35:47Z,2014-09-20T08:40:16Z,2014-09-20T08:39:22Z,21532270,2017-03-21 19:42:29,2017-03-21 19:46:07
+121,3,43337533,4499,Punctuation fix.,araratm,closed,bug,"Punctuation is important in texts. You need to pay attention to them.
+
+I changes 'it's' to 'its', because it will mean another thing to use 'it's' instead of 'its'.
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/4499,https://github.com/FortAwesome/Font-Awesome/pull/4499,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/4499,2014-09-21T15:25:45Z,2014-09-21T17:52:10Z,2014-09-21T17:52:05Z,21549193,2017-03-21 19:42:29,2017-03-21 19:46:08
+122,3,44680844,4636,Rename dot-circle-o to match naming conventions,paulftw,closed,bug,"Minor edit: all other icons have 'Outlined' in their name, but not dot-circle-o
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/4636,https://github.com/FortAwesome/Font-Awesome/pull/4636,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/4636,2014-10-02T12:30:27Z,2014-10-02T13:08:29Z,2014-10-02T13:08:24Z,22136655,2017-03-21 19:42:29,2017-03-21 19:46:08
+123,3,45163895,4679,Correct bootstrapcdn link,glombek,closed,bug,,https://api.github.com/repos/FortAwesome/Font-Awesome/issues/4679,https://github.com/FortAwesome/Font-Awesome/pull/4679,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/4679,2014-10-07T20:41:07Z,2014-10-07T22:30:11Z,2014-10-07T22:30:07Z,22382025,2017-03-21 19:42:29,2017-03-21 19:46:09
+124,3,52414865,5256,Switch SASS to Sass. :),jina,closed,bug,"Closes #5250
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/5256,https://github.com/FortAwesome/Font-Awesome/pull/5256,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/5256,2014-12-18T20:54:06Z,2015-01-21T08:58:11Z,2014-12-19T09:42:08Z,26330956,2017-03-21 19:42:29,2017-03-21 19:46:10
+125,3,60723051,5934,Fix link to spinning examples href to be #animated instead of #spinning,timlevett,closed,bug,"`#spinning` doesn't exist currently in the examples page, however `#animated` does.
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/5934,https://github.com/FortAwesome/Font-Awesome/pull/5934,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/5934,2015-03-11T20:22:12Z,2015-03-11T20:23:13Z,2015-03-11T20:22:48Z,30981337,2017-03-21 19:42:29,2017-03-21 19:46:10
+126,3,87432969,6728,fixes issue #6552,bsara,closed,bug,"See issue #6552 comments for details on why the issue was occurring and what changes needed to happen to fix the issue.
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/6728,https://github.com/FortAwesome/Font-Awesome/pull/6728,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/6728,2015-06-11T18:05:46Z,2015-06-19T20:05:46Z,2015-06-19T20:01:45Z,37491570,2017-03-21 19:42:29,2017-03-21 19:46:11
+127,3,89653982,6793,fixes issue #6552 (non-patch),bsara,closed,bug,,https://api.github.com/repos/FortAwesome/Font-Awesome/issues/6793,https://github.com/FortAwesome/Font-Awesome/pull/6793,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/6793,2015-06-19T20:31:03Z,2015-08-12T18:11:34Z,2015-08-12T18:11:34Z,38144951,2017-03-21 19:42:29,2017-03-21 19:46:12
+128,3,114939911,7813,"Docs, Examples: fixed old icon-* to fa-*",AlfioEmanueleFresta,closed,bug,"I spotted this very small mistake while checking out the examples page. It must have been carried on from version 3. This PR fixes it.
+
+Page: https://fortawesome.github.io/Font-Awesome/examples/
+
+-- Was #7808 but this time the file is the right one hopefu",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/7813,https://github.com/FortAwesome/Font-Awesome/pull/7813,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/7813,2015-11-04T00:10:23Z,2015-11-05T08:53:09Z,2015-11-05T08:52:53Z,49631580,2017-03-21 19:42:29,2017-03-21 19:46:13
+129,3,118627618,7971,Update versions for component.json and package.json,juliankrispel,closed,bug,"cc @davegandy 
+
+I need this to update font awesome on npm
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/7971,https://github.com/FortAwesome/Font-Awesome/pull/7971,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/7971,2015-11-24T15:03:33Z,2015-11-30T17:39:00Z,2015-11-30T17:28:02Z,51670455,2017-03-21 19:42:29,2017-03-21 19:46:13
+130,3,147580393,8950,Update using-with-accessibility.html,patrickhlauke,closed,bug,"A few minor grammar fixes, better explanation of the use of visually hidden `<span>`s and the use of `title`, better example and explanation for interactive elements
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/8950,https://github.com/FortAwesome/Font-Awesome/pull/8950,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/8950,2016-04-11T23:02:36Z,2016-04-12T17:14:33Z,2016-04-12T13:47:18Z,66076720,2017-03-21 19:42:29,2017-03-21 19:46:14
+131,3,147580754,8951,Update other.html,patrickhlauke,closed,bug,"low ""quality"" vision is an unfortunate wording - ""low vision"" is the generally accepted term. plus minor tweak to last sentence to make it flow better.
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/8951,https://github.com/FortAwesome/Font-Awesome/pull/8951,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/8951,2016-04-11T23:04:45Z,2016-04-12T09:12:06Z,2016-04-12T09:10:17Z,66076947,2017-03-21 19:42:29,2017-03-21 19:46:15
+132,3,147580961,8952,Update background.html,patrickhlauke,closed,bug,"Minor typo and a few commas to break up the overly long sentence
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/8952,https://github.com/FortAwesome/Font-Awesome/pull/8952,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/8952,2016-04-11T23:06:06Z,2016-04-12T09:12:01Z,2016-04-12T09:08:57Z,66077082,2017-03-21 19:42:29,2017-03-21 19:46:15
+133,3,147731637,8958,Fix aria-hidden Attribute,ikourfaln,closed,bug,,https://api.github.com/repos/FortAwesome/Font-Awesome/issues/8958,https://github.com/FortAwesome/Font-Awesome/pull/8958,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/8958,2016-04-12T12:11:00Z,2016-04-12T13:13:32Z,2016-04-12T13:13:26Z,66146488,2017-03-21 19:42:29,2017-03-21 19:46:16
+134,3,182679806,10062,Replaced UTF codes with html entities.,MacroChip,closed,bug,"My build was dying with the output:
+Liquid Exception: invalid byte sequence in US-ASCII in _includes/examples/bordered-pulled.html, included in examples.html
+
+I used the changes in these commits to move past the issue to continue development. If this PR i",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/10062,https://github.com/FortAwesome/Font-Awesome/pull/10062,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/10062,2016-10-13T02:25:10Z,2016-10-13T11:57:41Z,2016-10-13T11:57:34Z,89126555,2017-03-21 19:42:29,2017-03-21 19:46:17
+135,3,185970282,10137,corrected aria-hidde_ to aria-hidden,josdea,closed,bug,"I notice the aria-hidden value was incomplete.  
+
+cheers
+",https://api.github.com/repos/FortAwesome/Font-Awesome/issues/10137,https://github.com/FortAwesome/Font-Awesome/pull/10137,https://api.github.com/repos/FortAwesome/Font-Awesome/pulls/10137,2016-10-28T16:50:46Z,2016-10-28T20:46:41Z,2016-10-28T20:46:30Z,91414789,2017-03-21 19:42:29,2017-03-21 19:46:17
+136,4,33602076,1580,Event: Restore the `constructor` property on jQuery.Event prototype,dcherman,closed,Bug,"The original definition of the jQuery.Event prototype was paving over the
+`constructor` property which was causing jQuery.isPlainObject to
+improperly report that an instance of jQuery.Event was a plain object.
+
+Fixes #15090
+",https://api.github.com/repos/jquery/jquery/issues/1580,https://github.com/jquery/jquery/pull/1580,https://api.github.com/repos/jquery/jquery/pulls/1580,2014-05-15T16:28:11Z,2014-12-04T14:56:14Z,2014-09-04T07:35:24Z,15943877,2017-03-21 21:32:06,2017-03-21 21:34:52
+137,4,33755481,1583,CSS: Do not throw on frame elements in FF,markelog,closed,Bug,"IE9-10 throws on elements created in popups (see <a href=""http://bugs.jquery.com/ticket/14150"">#14150</a>), FF meanwhile throws on frame elements through ""defaultView.getComputedStyle"" (see <a href=""http://bugs.jquery.com/ticket/15098"">#15098</a>)
+
+Use ""d",https://api.github.com/repos/jquery/jquery/issues/1583,https://github.com/jquery/jquery/pull/1583,https://api.github.com/repos/jquery/jquery/pulls/1583,2014-05-18T16:59:56Z,2014-12-15T14:30:36Z,2014-06-15T23:15:51Z,16030584,2017-03-21 21:32:06,2017-03-21 21:34:53
+138,4,212275876,3560,Core: Fix nodeName-related issues,mgol,closed,Bug,"### Summary ###
+The jQuery.nodeName deprecation (ac9e3016) introduced a few serious regressions.
+
+1. jQuery.nodeName was undefined, jQuery.fn.nodeName was defined instead.
+2. Our AMD modules had parameters passed in incorrect order.
+
+The second issu",https://api.github.com/repos/jquery/jquery/issues/3560,https://github.com/jquery/jquery/pull/3560,https://api.github.com/repos/jquery/jquery/pulls/3560,2017-03-06T22:53:12Z,2017-03-07T09:12:29Z,2017-03-06T23:42:44Z,109368090,2017-03-21 21:32:06,2017-03-21 21:34:54
+139,5,162465841,2432,leafnode: add plist files,rakkesh,closed,,"- [x] Have you followed the guidelines in our [Contributing](https://github.com/Homebrew/homebrew-core/blob/master/.github/CONTRIBUTING.md) document?
+- [x] Have you checked to ensure there aren't other open [Pull Requests](https://github.com/Homebrew/home",https://api.github.com/repos/Homebrew/homebrew-core/issues/2432,https://github.com/Homebrew/homebrew-core/pull/2432,https://api.github.com/repos/Homebrew/homebrew-core/pulls/2432,2016-06-27T14:30:09Z,2016-10-15T10:49:26Z,2016-10-15T10:49:23Z,75321075,2017-03-21 21:42:46,2017-03-21 21:43:18
+140,5,157264844,1485,aws-sdk-cpp 0.12.4,Jerzerak,closed,,"- [x] Have you followed the guidelines in our [Contributing](https://github.com/Homebrew/homebrew-core/blob/master/.github/CONTRIBUTING.md) document?
+- [x] Have you checked to ensure there aren't other open [Pull Requests](https://github.com/Homebrew/home",https://api.github.com/repos/Homebrew/homebrew-core/issues/1485,https://github.com/Homebrew/homebrew-core/pull/1485,https://api.github.com/repos/Homebrew/homebrew-core/pulls/1485,2016-05-27T18:26:32Z,2016-06-03T07:09:13Z,2016-06-03T07:05:27Z,71754020,2017-03-21 21:42:46,2017-03-21 21:43:19
+141,5,152697311,794,baresip 0.4.18,yous,closed,,"- [x] Have you followed the guidelines in our [Contributing](https://github.com/Homebrew/homebrew-core/blob/master/.github/CONTRIBUTING.md) document?
+- [x] Have you checked to ensure there aren't other open [Pull Requests](https://github.com/Homebrew/home",https://api.github.com/repos/Homebrew/homebrew-core/issues/794,https://github.com/Homebrew/homebrew-core/pull/794,https://api.github.com/repos/Homebrew/homebrew-core/pulls/794,2016-05-03T04:27:03Z,2016-06-19T20:32:29Z,2016-06-19T20:32:29Z,68656399,2017-03-21 21:42:46,2017-03-21 21:43:20
+142,5,146735502,137,chapel 1.13.0,awallace-cray,closed,,"- [ yes ] Have you followed the guidelines in our [Contributing](https://github.com/Homebrew/homebrew-core/blob/master/.github/CONTRIBUTING.md) document?
+- [ yes ] Have you checked to ensure there aren't other open [Pull Requests](https://github.com/Homeb",https://api.github.com/repos/Homebrew/homebrew-core/issues/137,https://github.com/Homebrew/homebrew-core/pull/137,https://api.github.com/repos/Homebrew/homebrew-core/pulls/137,2016-04-07T20:37:33Z,2016-04-13T07:03:13Z,2016-04-13T07:03:10Z,65695509,2017-03-21 21:42:46,2017-03-21 21:43:20
+143,5,146147894,88,nginx 1.9.14 (devel),matteocng,closed,,"- [X] Have you followed the guidelines in our [Contributing](https://github.com/Homebrew/homebrew-core/blob/master/.github/CONTRIBUTING.md) document?
+- [X] Have you checked to ensure there aren't other open [Pull Requests](https://github.com/Homebrew/home",https://api.github.com/repos/Homebrew/homebrew-core/issues/88,https://github.com/Homebrew/homebrew-core/pull/88,https://api.github.com/repos/Homebrew/homebrew-core/pulls/88,2016-04-06T00:22:31Z,2016-04-07T22:25:47Z,2016-04-07T19:07:01Z,65393031,2017-03-21 21:42:46,2017-03-21 21:43:21
+144,6,206819888,4123,Clarifies that changes cause Collection update event,olanb7,closed,bug,"This fixes #4109 by indicating that any set on a model, which causes a
+change event will results in the change event being bubbled up to the
+collection.",https://api.github.com/repos/jashkenas/backbone/issues/4123,https://github.com/jashkenas/backbone/pull/4123,https://api.github.com/repos/jashkenas/backbone/pulls/4123,2017-02-10T15:08:21Z,2017-02-13T21:43:02Z,2017-02-13T21:43:02Z,105645027,2017-03-21 21:50:11,2017-03-21 21:51:07
+145,6,185547875,4091,Docs capitalization consistency,philfreo,closed,bug,,https://api.github.com/repos/jashkenas/backbone/issues/4091,https://github.com/jashkenas/backbone/pull/4091,https://api.github.com/repos/jashkenas/backbone/pulls/4091,2016-10-27T00:53:43Z,2016-10-27T14:35:01Z,2016-10-27T14:34:55Z,91116035,2017-03-21 21:50:11,2017-03-21 21:51:08
+146,6,152023948,4026,Fixed updating URL with uri-decoded value,Flamefork,closed,bug,"Fixes #4025
+",https://api.github.com/repos/jashkenas/backbone/issues/4026,https://github.com/jashkenas/backbone/pull/4026,https://api.github.com/repos/jashkenas/backbone/pulls/4026,2016-04-30T10:52:04Z,2016-05-06T17:03:48Z,2016-05-06T17:03:00Z,68464925,2017-03-21 21:50:11,2017-03-21 21:51:08
+147,6,139093988,3980,Fix 1.3.1 regression with once and no context,megawac,closed,bug,"ping #3975
+
+/cc @jridgewell  @elgubenis
+",https://api.github.com/repos/jashkenas/backbone/issues/3980,https://github.com/jashkenas/backbone/pull/3980,https://api.github.com/repos/jashkenas/backbone/pulls/3980,2016-03-07T21:07:35Z,2016-03-08T20:10:45Z,2016-03-08T19:22:35Z,61980728,2017-03-21 21:50:11,2017-03-21 21:51:09
+148,6,119649188,3875,Fixed Collection#set regression when parse returns falsy value,Flamefork,closed,bug,"Restored previous code for this logic.
+Added a regression test.
+
+Fixes #3871 
+",https://api.github.com/repos/jashkenas/backbone/issues/3875,https://github.com/jashkenas/backbone/pull/3875,https://api.github.com/repos/jashkenas/backbone/pulls/3875,2015-12-01T06:06:01Z,2015-12-01T15:25:27Z,2015-12-01T15:25:23Z,52219748,2017-03-21 21:50:11,2017-03-21 21:51:09
+149,6,114206745,3844,typo fix,darky,closed,bug,,https://api.github.com/repos/jashkenas/backbone/issues/3844,https://github.com/jashkenas/backbone/pull/3844,https://api.github.com/repos/jashkenas/backbone/pulls/3844,2015-10-30T05:50:22Z,2015-10-30T15:13:44Z,2015-10-30T15:13:44Z,49233913,2017-03-21 21:50:11,2017-03-21 21:51:10
+150,6,112824147,3834,Fix _onModelEvent regression,jridgewell,closed,bug,"Fixes #3662. Fixes #3717
+",https://api.github.com/repos/jashkenas/backbone/issues/3834,https://github.com/jashkenas/backbone/pull/3834,https://api.github.com/repos/jashkenas/backbone/pulls/3834,2015-10-22T15:07:39Z,2015-10-26T19:27:30Z,2015-10-26T19:18:41Z,48469739,2017-03-21 21:50:11,2017-03-21 21:51:11
+151,6,112823566,3833,Fix 1.2.2 Model#id regression,jridgewell,closed,bug,"Fixes #3778.
+",https://api.github.com/repos/jashkenas/backbone/issues/3833,https://github.com/jashkenas/backbone/pull/3833,https://api.github.com/repos/jashkenas/backbone/pulls/3833,2015-10-22T15:04:49Z,2015-11-01T16:32:56Z,2015-10-22T15:08:04Z,48469356,2017-03-21 21:50:11,2017-03-21 21:51:12
+152,6,110249723,3820,Add reduce to deopted methods,jridgewell,closed,bug,"All of our currently deoptimized Underscore methods (`pick`, `omit`, `invoke`, `without`, and `difference`) change behavior based on the number of arguments pass to the call. This both adds `reduce` (and friends).
+
+Supersedes (and incorporates) #3810.
+",https://api.github.com/repos/jashkenas/backbone/issues/3820,https://github.com/jashkenas/backbone/pull/3820,https://api.github.com/repos/jashkenas/backbone/pulls/3820,2015-10-07T15:22:17Z,2015-10-28T16:14:24Z,2015-10-28T14:36:49Z,47041720,2017-03-21 21:50:11,2017-03-21 21:51:12
+153,6,108763095,3810,Reduce without initial value doesn't work,just-boris,closed,bug,"Underscore's reduce as well as native Array.prototype.reduce can work without initial value.
+
+See two similar calls:
+
+``` js
+equal(_.reduce(col.models, function(a, b) {return a.id > b.id ? a : b}).id, 3); // works fine
+equal(col.reduce(function(a, b) {ret",https://api.github.com/repos/jashkenas/backbone/issues/3810,https://github.com/jashkenas/backbone/pull/3810,https://api.github.com/repos/jashkenas/backbone/pulls/3810,2015-09-28T22:58:17Z,2015-10-11T12:32:55Z,2015-10-11T12:32:54Z,46218624,2017-03-21 21:50:11,2017-03-21 21:51:13
+154,6,102404159,3770,fix error when adding model to collection at an out of bounds index,ahumphreys87,closed,bug,"@jridgewell 
+
+Fixes an issue noticed when running Marionette tests against 1.2.2. Adding a model at index 5 to a collection with a length of 3 throws an error. Previously this would add to the end of the collection.
+",https://api.github.com/repos/jashkenas/backbone/issues/3770,https://github.com/jashkenas/backbone/pull/3770,https://api.github.com/repos/jashkenas/backbone/pulls/3770,2015-08-21T15:28:56Z,2015-09-03T16:15:41Z,2015-08-21T17:16:31Z,43050017,2017-03-21 21:50:11,2017-03-21 21:51:13
+155,6,94737757,3709,Update collection.js,elgubenis,closed,bug,,https://api.github.com/repos/jashkenas/backbone/issues/3709,https://github.com/jashkenas/backbone/pull/3709,https://api.github.com/repos/jashkenas/backbone/pulls/3709,2015-07-13T14:44:30Z,2015-07-13T15:00:59Z,2015-07-13T14:45:25Z,39819100,2017-03-21 21:50:11,2017-03-21 21:51:14
+156,6,90610062,3690,Fix test for IE7/IE8 build,sophietk,closed,bug,"Wrapping test object keys as string to avoid IE7/IE8 error (reserved identifiers).
+Tests were added with #3667 : https://travis-ci.org/jashkenas/backbone/builds/66548299.
+",https://api.github.com/repos/jashkenas/backbone/issues/3690,https://github.com/jashkenas/backbone/pull/3690,https://api.github.com/repos/jashkenas/backbone/pulls/3690,2015-06-24T08:33:24Z,2015-06-24T18:21:30Z,2015-06-24T12:22:09Z,38418723,2017-03-21 21:50:11,2017-03-21 21:51:15
+157,6,81507752,3639,Fix syntax error,jridgewell,closed,bug,,https://api.github.com/repos/jashkenas/backbone/issues/3639,https://github.com/jashkenas/backbone/pull/3639,https://api.github.com/repos/jashkenas/backbone/pulls/3639,2015-05-27T15:54:09Z,2015-05-27T16:06:22Z,2015-05-27T15:55:40Z,36319043,2017-03-21 21:50:11,2017-03-21 21:51:15
+158,6,81278405,3637,Return removed models from #_removeModels,jridgewell,closed,bug,"Instead of returning a boolean, just return the removed models (or false if nothing is removed).
+",https://api.github.com/repos/jashkenas/backbone/issues/3637,https://github.com/jashkenas/backbone/pull/3637,https://api.github.com/repos/jashkenas/backbone/pulls/3637,2015-05-27T05:03:39Z,2015-05-27T16:06:02Z,2015-05-27T15:49:44Z,36269554,2017-03-21 21:50:11,2017-03-21 21:51:16
+159,6,79898481,3628,Model#fetch parse option,jridgewell,closed,bug,"- Respect `#fetch`'s `parse` option (extends #3508)
+- Use extend to default `parse`
+",https://api.github.com/repos/jashkenas/backbone/issues/3628,https://github.com/jashkenas/backbone/pull/3628,https://api.github.com/repos/jashkenas/backbone/pulls/3628,2015-05-23T17:00:08Z,2015-05-26T21:34:07Z,2015-05-26T21:34:04Z,36090314,2017-03-21 21:50:11,2017-03-21 21:51:17
+160,6,71552664,3580,"If the root doesn't match, no routes can match.",braddunbar,closed,bug,"It's hard to believe this has gone unreported for so long, but here it is! Currently, a route like 'test' will match the url `/test`, regardless of the root, and the url `/xxxx/test`, as long as the root is four characters long. This is obviously incorrec",https://api.github.com/repos/jashkenas/backbone/issues/3580,https://github.com/jashkenas/backbone/pull/3580,https://api.github.com/repos/jashkenas/backbone/pulls/3580,2015-04-28T10:43:56Z,2015-04-28T21:00:07Z,2015-04-28T17:42:30Z,34253885,2017-03-21 21:50:11,2017-03-21 21:51:17
+161,6,59637315,3524,Set the pathname explicitly for phantomjs.,braddunbar,closed,bug,"This fixes the test in phantomjs by setting the pathname to what it would be anyway in a browser.
+",https://api.github.com/repos/jashkenas/backbone/issues/3524,https://github.com/jashkenas/backbone/pull/3524,https://api.github.com/repos/jashkenas/backbone/pulls/3524,2015-03-03T12:52:29Z,2015-03-03T14:58:22Z,2015-03-03T14:20:01Z,30370681,2017-03-21 21:50:11,2017-03-21 21:51:18
+162,6,59637074,3523,Sync test scripts with karma config.,braddunbar,closed,bug,"`setup/dom-setup.js` depends on jQuery so it must be included after.
+",https://api.github.com/repos/jashkenas/backbone/issues/3523,https://github.com/jashkenas/backbone/pull/3523,https://api.github.com/repos/jashkenas/backbone/pulls/3523,2015-03-03T12:50:01Z,2015-03-03T15:12:54Z,2015-03-03T15:12:08Z,30370543,2017-03-21 21:50:11,2017-03-21 21:51:19
+163,6,58282930,3508,Fix for issue #3470,wettowelreactor,closed,bug,"Fix for issue #3470. Ensures that parse is not called when save is passed the option {parse:false} is set.
+",https://api.github.com/repos/jashkenas/backbone/issues/3508,https://github.com/jashkenas/backbone/pull/3508,https://api.github.com/repos/jashkenas/backbone/pulls/3508,2015-02-19T22:48:41Z,2015-03-04T16:16:32Z,2015-03-04T16:16:29Z,29656989,2017-03-21 21:50:11,2017-03-21 21:51:19
+164,6,57268931,3488,Include updated options in sync callbacks,platinumazure,closed,bug,"Better version of #3484. Fixes #3478.
+",https://api.github.com/repos/jashkenas/backbone/issues/3488,https://github.com/jashkenas/backbone/pull/3488,https://api.github.com/repos/jashkenas/backbone/pulls/3488,2015-02-11T02:30:15Z,2015-02-18T00:21:19Z,2015-02-18T00:20:02Z,29064246,2017-03-21 21:50:11,2017-03-21 21:51:20
+165,6,55319571,3461,Ensure listenToOnce without a callback noops,jridgewell,closed,bug,"This mirrors the test directly above, ensuring `#once` without a callback noops.
+",https://api.github.com/repos/jashkenas/backbone/issues/3461,https://github.com/jashkenas/backbone/pull/3461,https://api.github.com/repos/jashkenas/backbone/pulls/3461,2015-01-23T19:09:13Z,2015-01-23T19:12:16Z,2015-01-23T19:12:16Z,27947090,2017-03-21 21:50:11,2017-03-21 21:51:21
+166,6,55214249,3455,Fix listenTo memory leak,jridgewell,closed,bug,"Fixes https://github.com/jashkenas/backbone/issues/3453, and competes with https://github.com/jashkenas/backbone/pull/3049.
+
+I think this aligns more closely with what's currently implemented. :smile:
+
+It also implements `listenApi`, which is `eventsApi` ",https://api.github.com/repos/jashkenas/backbone/issues/3455,https://github.com/jashkenas/backbone/pull/3455,https://api.github.com/repos/jashkenas/backbone/pulls/3455,2015-01-22T21:53:06Z,2015-05-18T16:52:08Z,2015-02-03T19:16:16Z,27881533,2017-03-21 21:50:11,2017-03-21 21:51:21
+167,6,54771957,3449,Fix #3448. Ensure listenToOnce splits event names.,braddunbar,closed,bug,"Calling `listenToOnce('x y', …)` should be functionally equivalent to `listenToOnce('x', …); listenToOnce('y', …)`.
+
+I realize this isn't the most elegant fix, but it works correctly. The difference in argument order for `listenToOnce` makes it hard to im",https://api.github.com/repos/jashkenas/backbone/issues/3449,https://github.com/jashkenas/backbone/pull/3449,https://api.github.com/repos/jashkenas/backbone/pulls/3449,2015-01-19T14:44:06Z,2015-02-03T19:13:21Z,2015-01-20T06:33:56Z,27611130,2017-03-21 21:50:11,2017-03-21 21:51:22
+168,6,53693787,3441,Update documentation for Backbone.Router,balloob,closed,bug,"The old documentation makes it look `Backbone.history.start()` starts listening for new hash changes and you have to call `Backbone.history.start({pushState: true})` to route the current URL too. This does not match the behavior in the code.
+
+I removed th",https://api.github.com/repos/jashkenas/backbone/issues/3441,https://github.com/jashkenas/backbone/pull/3441,https://api.github.com/repos/jashkenas/backbone/pulls/3441,2015-01-07T23:00:29Z,2015-04-05T15:27:10Z,2015-04-05T15:27:10Z,26995085,2017-03-21 21:50:11,2017-03-21 21:51:23
+169,6,53341106,3435,Ensure a search test fails when appropriate.,braddunbar,closed,bug,"Since `%20` is decoded by `decodeURI` as well as `decodeURIComponent`, this test was rendered ineffective. Using an escape only decoded by `decodeURIComponent` fixes things up.
+",https://api.github.com/repos/jashkenas/backbone/issues/3435,https://github.com/jashkenas/backbone/pull/3435,https://api.github.com/repos/jashkenas/backbone/pulls/3435,2015-01-04T16:39:56Z,2015-01-05T04:22:11Z,2015-01-05T04:22:02Z,26796878,2017-03-21 21:50:11,2017-03-21 21:51:23
+170,6,48426138,3378,"Collection spec is listening for ""error"", when it should be ""invalid""",robrobbins,closed,bug,,https://api.github.com/repos/jashkenas/backbone/issues/3378,https://github.com/jashkenas/backbone/pull/3378,https://api.github.com/repos/jashkenas/backbone/pulls/3378,2014-11-11T19:48:56Z,2014-11-12T22:29:15Z,2014-11-12T22:29:07Z,24244710,2017-03-21 21:50:11,2017-03-21 21:51:24
+171,6,47603598,3366,Fix listenToOnce memory leak,akre54,closed,bug,"Builds off of @jmeas' #3341, fixes #3226
+
+We split out listenTo and listenToOnce from `once` to clean up any lingering listeners. Also adds some tests to check that `listenToOnce` works with maps.
+",https://api.github.com/repos/jashkenas/backbone/issues/3366,https://github.com/jashkenas/backbone/pull/3366,https://api.github.com/repos/jashkenas/backbone/pulls/3366,2014-11-03T15:10:14Z,2014-11-04T14:57:32Z,2014-11-03T17:01:47Z,23765686,2017-03-21 21:50:11,2017-03-21 21:51:25
+172,6,46752205,3359,Transition with search params.,braddunbar,closed,bug,,https://api.github.com/repos/jashkenas/backbone/issues/3359,https://github.com/jashkenas/backbone/pull/3359,https://api.github.com/repos/jashkenas/backbone/pulls/3359,2014-10-24T15:42:47Z,2014-12-01T17:23:17Z,2014-11-30T13:40:17Z,23304746,2017-03-21 21:50:11,2017-03-21 21:51:26
+173,6,46446150,3351,Hyphenate compound modifier.,jaepage,closed,bug,"It's a single adjective: the compound word ""two-way"" (as opposed to two adjectives: ""two"" and ""way"").
+",https://api.github.com/repos/jashkenas/backbone/issues/3351,https://github.com/jashkenas/backbone/pull/3351,https://api.github.com/repos/jashkenas/backbone/pulls/3351,2014-10-21T21:19:38Z,2014-10-21T21:55:07Z,2014-10-21T21:20:44Z,23118818,2017-03-21 21:50:11,2017-03-21 21:54:11
+174,6,45809480,3341,Fix for listenToOnce mem. leak,jmeas,closed,bug,"This is a failing test demonstrating #3226, then a patch that makes the test pass.
+",https://api.github.com/repos/jashkenas/backbone/issues/3341,https://github.com/jashkenas/backbone/pull/3341,https://api.github.com/repos/jashkenas/backbone/pulls/3341,2014-10-14T22:42:50Z,2015-06-02T05:45:42Z,2014-11-03T17:04:19Z,22749205,2017-03-21 21:50:11,2017-03-21 21:54:12
+175,6,45408539,3336,clone options passed to reset,admangum,closed,bug,"Fix for issue #3306 
+",https://api.github.com/repos/jashkenas/backbone/issues/3336,https://github.com/jashkenas/backbone/pull/3336,https://api.github.com/repos/jashkenas/backbone/pulls/3336,2014-10-09T19:43:53Z,2014-10-09T19:56:57Z,2014-10-09T19:56:57Z,22518329,2017-03-21 21:50:11,2017-03-21 21:54:13
+176,6,43691879,3318,Update README to better match backbonejs.org,NickStefan,closed,bug,"line 14 readme missing the word ""with"":
+Backbone supplies structure to JavaScript-heavy applications by providing models key-value binding and custom events, collections...
+--> on backbonejs.org reads as -->
+Backbone.js gives structure to web applications",https://api.github.com/repos/jashkenas/backbone/issues/3318,https://github.com/jashkenas/backbone/pull/3318,https://api.github.com/repos/jashkenas/backbone/pulls/3318,2014-09-23T22:21:30Z,2014-09-25T16:59:41Z,2014-09-25T16:59:35Z,21680498,2017-03-21 21:50:11,2017-03-21 21:54:13
+177,6,32068342,3131,Set attribute instead of property.,braddunbar,closed,bug,"Fix #3130.
+",https://api.github.com/repos/jashkenas/backbone/issues/3131,https://github.com/jashkenas/backbone/pull/3131,https://api.github.com/repos/jashkenas/backbone/pulls/3131,2014-04-23T14:57:18Z,2014-06-13T16:12:19Z,2014-04-23T14:58:27Z,15070274,2017-03-21 21:50:11,2017-03-21 21:54:14
+178,6,30359602,3094,History#atRoot handles params without path.,braddunbar,closed,bug,"Noticed this while looking at a different issue.
+",https://api.github.com/repos/jashkenas/backbone/issues/3094,https://github.com/jashkenas/backbone/pull/3094,https://api.github.com/repos/jashkenas/backbone/pulls/3094,2014-03-28T02:45:51Z,2014-06-24T22:07:04Z,2014-03-28T03:13:48Z,14093251,2017-03-21 21:50:11,2017-03-21 21:54:14
+179,6,29071124,3053,Remove un-used local variables,sfishel18,closed,bug,,https://api.github.com/repos/jashkenas/backbone/issues/3053,https://github.com/jashkenas/backbone/pull/3053,https://api.github.com/repos/jashkenas/backbone/pulls/3053,2014-03-10T03:43:29Z,2014-07-04T17:57:01Z,2014-03-10T05:33:38Z,13358210,2017-03-21 21:50:11,2017-03-21 21:54:15
+180,6,28681134,3039,Send correct 'at' when firing 'add' event,fastest963,closed,bug,"If you add an array of models to a collection and specify `at` in options when the add event is fired on the collection for each model the `at` sent in the options is incorrect for that specific model.
+
+The `extend` is only necessary when the `at` is not ",https://api.github.com/repos/jashkenas/backbone/issues/3039,https://github.com/jashkenas/backbone/pull/3039,https://api.github.com/repos/jashkenas/backbone/pulls/3039,2014-03-04T05:24:56Z,2014-10-01T17:14:14Z,2014-09-11T17:45:42Z,13147737,2017-03-21 21:50:11,2017-03-21 21:54:16
+181,6,26829472,2986,Fix #2976 Do not add multiple models with same `id`,caseywebdev,closed,bug,"`add` is protected from this, but when using the `order` array to reorder models, we need to make sure multiple models with the same `id` aren't both pushed onto `order`.
+",https://api.github.com/repos/jashkenas/backbone/issues/2986,https://github.com/jashkenas/backbone/pull/2986,https://api.github.com/repos/jashkenas/backbone/pulls/2986,2014-02-03T19:21:25Z,2014-06-26T22:40:33Z,2014-02-03T21:38:45Z,12147201,2017-03-21 21:50:11,2017-03-21 21:54:16
+182,6,23074953,2885,Fix for shadowed _ dep and broken AMD tests,akre54,closed,bug,"The test AMD page isn't loading underscore correctly (passes `undefined`), and the underscore loader in the main backbone.js closure shadows the output from the UMD loader completely. Fixes these two bugs.
+
+We can remove the `shim` config from the amd-tes",https://api.github.com/repos/jashkenas/backbone/issues/2885,https://github.com/jashkenas/backbone/pull/2885,https://api.github.com/repos/jashkenas/backbone/pulls/2885,2013-11-21T15:44:51Z,2014-06-26T11:46:16Z,2013-11-22T19:55:57Z,10174480,2017-03-21 21:50:11,2017-03-21 21:54:17
+183,6,15350072,2602,Ensure Collection#get does not return a false negative during the change:attr event,caseywebdev,closed,bug,"As explained by @jrreed in #2177, it's possible for `collection.get(model)` to incorrectly return `undefined` while the model's id is being set (see added test). I'm fairly certain this won't break any existing code, but please take a look before I merge.",https://api.github.com/repos/jashkenas/backbone/issues/2602,https://github.com/jashkenas/backbone/pull/2602,https://api.github.com/repos/jashkenas/backbone/pulls/2602,2013-06-10T14:34:52Z,2014-07-01T09:52:55Z,2013-06-10T16:13:11Z,6221479,2017-03-21 21:50:11,2017-03-21 21:54:18
+184,6,8175106,1806,Update backbone.js,liadlivnat,closed,bug,"Model.save fails if key is null and wait is true.
+Need to check key isnt null before calling validate
+",https://api.github.com/repos/jashkenas/backbone/issues/1806,https://github.com/jashkenas/backbone/pull/1806,https://api.github.com/repos/jashkenas/backbone/pulls/1806,2012-11-07T15:55:57Z,2014-07-01T03:55:05Z,2012-11-19T20:29:43Z,2914939,2017-03-21 21:50:30,2017-03-21 21:54:18
+185,6,2173982,729,Inclusion of a context parameter to unbind method,krange,closed,bug,"Update to unbind method to allow a context parameter. This fixes an issue where bindings aren't removed correctly where 2 instances of the same class listening to the a single instances' trigger event. When unbinding from the second instance, unbind metho",https://api.github.com/repos/jashkenas/backbone/issues/729,https://github.com/jashkenas/backbone/pull/729,https://api.github.com/repos/jashkenas/backbone/pulls/729,2011-11-08T13:05:29Z,2014-06-13T22:57:46Z,2012-01-12T23:27:29Z,473276,2017-03-21 21:50:30,2017-03-21 21:54:19
+186,6,2087412,693,unset attributes should show up in changedAttributes - tidying up current pull request.,iros,closed,bug,"Tidying up the unset changedAttributes looping. Replacing void 0 with undefined.
+",https://api.github.com/repos/jashkenas/backbone/issues/693,https://github.com/jashkenas/backbone/pull/693,https://api.github.com/repos/jashkenas/backbone/pulls/693,2011-10-29T15:53:50Z,2014-06-19T18:00:53Z,2011-10-29T17:29:40Z,445636,2017-03-21 21:50:30,2017-03-21 21:54:19
+187,6,1462517,575,The attributes argument defaults to an empty object if the Backbone.View ,basketofsoftkittens,closed,bug,"The attributes argument defaults to an empty object if the Backbone.View is instantiated without attributes. Trying to set an empty object as attributes of an element gives an error in jQuery 1.5.2 (only one tested)
+",https://api.github.com/repos/jashkenas/backbone/issues/575,https://github.com/jashkenas/backbone/pull/575,https://api.github.com/repos/jashkenas/backbone/pulls/575,2011-08-23T00:18:46Z,2014-07-05T15:23:40Z,2011-08-24T16:32:46Z,284780,2017-03-21 21:50:30,2017-03-21 21:54:20
+188,6,1427415,565,clear maintains id and id attribute,braddunbar,closed,bug,"Model#clear removes all attributes, while maintaining `model.id`.  `attributes.id` should be maintained with `model.id` and the docs should reflect this.
+",https://api.github.com/repos/jashkenas/backbone/issues/565,https://github.com/jashkenas/backbone/pull/565,https://api.github.com/repos/jashkenas/backbone/pulls/565,2011-08-17T23:53:19Z,2014-06-15T14:56:15Z,2011-11-23T22:32:17Z,277133,2017-03-21 21:50:30,2017-03-21 21:54:21
+189,6,1385619,552,unset properties not being returned by changedAttributes,spmason,closed,bug,"Hi there,
+
+It more or less says it in the title - after calling unset the unset attributes are not returned from calls to changedAttributes.
+
+Attached are my two commits to test for & fix this bug.
+
+Thanks,
+Steve
+",https://api.github.com/repos/jashkenas/backbone/issues/552,https://github.com/jashkenas/backbone/pull/552,https://api.github.com/repos/jashkenas/backbone/pulls/552,2011-08-11T07:58:54Z,2014-06-30T21:15:11Z,2011-10-29T17:12:38Z,265932,2017-03-21 21:50:30,2017-03-21 21:54:21
+190,6,772670,320,Fix custom events on models inside collections,ncr,closed,bug,"Hey,
+
+Two commits: first adds failing test for issue #319, second makes it pass.
+
+Cheers, 
+Jacek
+",https://api.github.com/repos/jashkenas/backbone/issues/320,https://github.com/jashkenas/backbone/pull/320,https://api.github.com/repos/jashkenas/backbone/pulls/320,2011-04-15T07:45:27Z,2014-07-05T17:17:30Z,2011-04-18T14:43:20Z,118710,2017-03-21 21:50:30,2017-03-21 21:54:22
+191,6,683034,274,Comment fix,jimmydo,closed,bug,"Hello,
+
+I fixed a minor error in the Backbone comments. The original comment seemed to imply that `child.prototype.constructor` would influence the behavior of `instanceof`, but it does not. The result of `instanceof` is determined by the object stored in",https://api.github.com/repos/jashkenas/backbone/issues/274,https://github.com/jashkenas/backbone/pull/274,https://api.github.com/repos/jashkenas/backbone/pulls/274,2011-03-17T21:38:56Z,2014-07-05T17:21:02Z,2011-03-21T15:00:26Z,95615,2017-03-21 21:50:41,2017-03-21 21:54:22
+192,6,649915,262,Escape single quotes as well,alanhogan,closed,bug,"When single quotes are used for attribute values, user input containing unescaped single quotes cannot be trusted. 
+
+XSS Demo: http://jsfiddle.net/wEzNJ/
+
+[Previous comment on this topic](https://github.com/documentcloud/backbone/commit/0cdc525961d3fa98e8",https://api.github.com/repos/jashkenas/backbone/issues/262,https://github.com/jashkenas/backbone/pull/262,https://api.github.com/repos/jashkenas/backbone/pulls/262,2011-03-06T02:53:54Z,2014-07-05T16:41:05Z,2011-05-26T20:47:17Z,86667,2017-03-21 21:50:41,2017-03-21 21:54:23
+193,6,645280,258,Fixed up the documentation and tests cases for how isNew handles negative ids,twobitfool,closed,bug,"Note: I did not update the docco docs, but I'm more than happy to.
+",https://api.github.com/repos/jashkenas/backbone/issues/258,https://github.com/jashkenas/backbone/pull/258,https://api.github.com/repos/jashkenas/backbone/pulls/258,2011-03-03T22:48:23Z,2014-07-05T15:51:01Z,2011-07-05T13:42:19Z,85406,2017-03-21 21:50:41,2017-03-21 21:54:24
+194,6,638671,255,Fix for escapeHTML recognising &#***; and &#x***;,DmitryBaranovskiy,closed,bug,,https://api.github.com/repos/jashkenas/backbone/issues/255,https://github.com/jashkenas/backbone/pull/255,https://api.github.com/repos/jashkenas/backbone/pulls/255,2011-03-01T21:13:48Z,2014-07-05T17:27:36Z,2011-03-02T05:17:55Z,83682,2017-03-21 21:50:41,2017-03-21 21:54:24
+195,6,578149,216,Models created using Collection.create should be validated.,KrisJordan,closed,bug,"The documentation implies that `Collection.create` ""Returns the model, or false if a validation error prevented the model from being created."" (http://documentcloud.github.com/backbone/#Collection-create)
+
+This commit forces client-side validation in `Col",https://api.github.com/repos/jashkenas/backbone/issues/216,https://github.com/jashkenas/backbone/pull/216,https://api.github.com/repos/jashkenas/backbone/pulls/216,2011-02-06T06:19:54Z,2014-06-25T08:21:29Z,2011-02-06T13:49:52Z,67800,2017-03-21 21:50:41,2017-03-21 21:54:25
+196,6,576265,215,keep custom `sync` methods for a given model/collection scoped to `this`.,jed,closed,bug,,https://api.github.com/repos/jashkenas/backbone/issues/215,https://github.com/jashkenas/backbone/pull/215,https://api.github.com/repos/jashkenas/backbone/pulls/215,2011-02-04T23:17:46Z,2014-07-05T17:40:15Z,2011-02-07T23:19:32Z,67314,2017-03-21 21:50:41,2017-03-21 21:54:25
+197,6,564522,204,id should be url encoded in url prototype,jo,closed,bug,"closes https://github.com/documentcloud/backbone/issuesearch?state=open&q=id#issue/203
+",https://api.github.com/repos/jashkenas/backbone/issues/204,https://github.com/jashkenas/backbone/pull/204,https://api.github.com/repos/jashkenas/backbone/pulls/204,2011-01-31T16:13:43Z,2014-06-18T14:51:16Z,2011-02-08T04:02:54Z,64154,2017-03-21 21:50:41,2017-03-21 21:54:26
+198,6,504896,167,Fixes 166: Unsetting 'id' on a model should delete this.id attribute,reverie,closed,bug,"Pretty straightforward...
+",https://api.github.com/repos/jashkenas/backbone/issues/167,https://github.com/jashkenas/backbone/pull/167,https://api.github.com/repos/jashkenas/backbone/pulls/167,2011-01-04T02:36:01Z,2014-06-30T21:08:09Z,2011-02-07T23:34:50Z,49892,2017-03-21 21:50:41,2017-03-21 21:54:27
+199,6,480642,150,Closure scope,sstephenson,closed,bug,"Backbone uses `this` inside its closure to access jQuery or Zepto. If Backbone itself is wrapped inside another closure (say, a CommonJS module wrapper), it won't be able to access the global scope through `this`.
+
+Here's a patch that passes along the cur",https://api.github.com/repos/jashkenas/backbone/issues/150,https://github.com/jashkenas/backbone/pull/150,https://api.github.com/repos/jashkenas/backbone/pulls/150,2010-12-17T18:47:53Z,2014-07-05T17:52:23Z,2010-12-18T02:59:29Z,43973,2017-03-21 21:50:41,2017-03-21 21:54:27
+200,6,479360,145,Pass Collection#fetch options along to refresh,josh,closed,bug,"Super simple, passes Collection#fetch options along to refresh or add. Matches the behavior of Model#fetch.
+",https://api.github.com/repos/jashkenas/backbone/issues/145,https://github.com/jashkenas/backbone/pull/145,https://api.github.com/repos/jashkenas/backbone/pulls/145,2010-12-17T02:15:35Z,2014-06-15T20:16:12Z,2010-12-18T00:29:03Z,43678,2017-03-21 21:50:41,2017-03-21 21:54:28
+201,6,433899,89,Fix and test for recursion error when saving from within a change callback,mkelly12,closed,bug,"Unless you pass the silent option to model.save() from within a change callback you will always get a recursion error. 
+
+This is a small fix that avoids calling model.set() from within model.save() unless new attributes were actually passed to model.save(",https://api.github.com/repos/jashkenas/backbone/issues/89,https://github.com/jashkenas/backbone/pull/89,https://api.github.com/repos/jashkenas/backbone/pulls/89,2010-11-23T04:54:30Z,2014-07-05T18:19:41Z,2010-11-23T22:29:13Z,32630,2017-03-21 21:50:41,2017-03-21 21:54:28
+202,6,415427,70,Remove duplicate backbone.localStorage docs,jasondavies,closed,bug,"This file is essentially identical to `backbone-localstorage.html` except it has a `.` instead of a `-` in the name. The one with the `-` is the one linked to from the other pages, so this one ought to be deleted.
+",https://api.github.com/repos/jashkenas/backbone/issues/70,https://github.com/jashkenas/backbone/pull/70,https://api.github.com/repos/jashkenas/backbone/pulls/70,2010-11-12T17:25:06Z,2014-07-05T18:26:48Z,2010-11-12T17:28:20Z,28141,2017-03-21 21:50:41,2017-03-21 21:55:52
+203,6,369728,25,Use JSONP in the github demo,fitzgen,closed,bug,"I'm not sure how other browsers handle XHRs from `file:///`, but Chrome considers an XHR to `http://github.com` to be in violation of the Same Origin Policy. I had to change the demo to use JSONP to make it work.
+
+Cheers,
+
+Nick
+",https://api.github.com/repos/jashkenas/backbone/issues/25,https://github.com/jashkenas/backbone/pull/25,https://api.github.com/repos/jashkenas/backbone/pulls/25,2010-10-19T04:41:41Z,2014-07-05T18:48:05Z,2010-10-19T21:32:21Z,17236,2017-03-21 21:50:41,2017-03-21 21:55:53
+204,6,369565,23,added underscore to the dependencies,tmpvar,closed,bug,"forgot this the first time around, it was a bit late ;)
+
+To counter the point you made on my previous pull request: I have an honest to god use case for this on the server, which I'll be implementing this month and showing off at the next nyc.js if there ",https://api.github.com/repos/jashkenas/backbone/issues/23,https://github.com/jashkenas/backbone/pull/23,https://api.github.com/repos/jashkenas/backbone/pulls/23,2010-10-19T01:48:15Z,2014-07-05T18:47:35Z,2010-10-19T08:52:47Z,17189,2017-03-21 21:50:41,2017-03-21 21:55:54
+205,6,367414,20,Backbone.View.prototype.handleEvents missing var,fitzgen,closed,bug,"The title says it all ;)
+",https://api.github.com/repos/jashkenas/backbone/issues/20,https://github.com/jashkenas/backbone/pull/20,https://api.github.com/repos/jashkenas/backbone/pulls/20,2010-10-18T01:27:40Z,2014-06-27T17:39:51Z,2010-10-18T08:30:15Z,16700,2017-03-21 21:50:41,2017-03-21 21:55:54
+206,7,215485298,10039,Fix compile errors with Qt 5.3.2 and Boost 1.55.0,ryanofsky,closed,Bug,Both errors were introduced in #9974 and reported by @paveljanik,https://api.github.com/repos/bitcoin/bitcoin/issues/10039,https://github.com/bitcoin/bitcoin/pull/10039,https://api.github.com/repos/bitcoin/bitcoin/pulls/10039,2017-03-20T16:53:12Z,2017-03-21T10:47:34Z,2017-03-21T10:47:34Z,111599388,2017-03-22 21:17:35,2017-03-22 21:18:48
+207,7,209565220,9829,Fix importmulti returning rescan errors for wrong keys,ryanofsky,closed,Bug,Bug was a missing ++i line in a new range for loop added in #9773.,https://api.github.com/repos/bitcoin/bitcoin/issues/9829,https://github.com/bitcoin/bitcoin/pull/9829,https://api.github.com/repos/bitcoin/bitcoin/pulls/9829,2017-02-22T20:05:04Z,2017-02-28T12:53:16Z,2017-02-28T12:53:16Z,107487106,2017-03-22 21:17:35,2017-03-22 21:18:49
+208,7,208143928,9777,Handle unusual maxsigcachesize gracefully,jnewbery,closed,Bug,"belt-and-braces approach:
+
+- first commit fixes the bug where maxsigcachesize being zero causes segfault
+- second commit handles maxsigcachesize being negative by setting it to zero if a negative number is provided
+- third commit handles maxsigcachesi",https://api.github.com/repos/bitcoin/bitcoin/issues/9777,https://github.com/bitcoin/bitcoin/pull/9777,https://api.github.com/repos/bitcoin/bitcoin/pulls/9777,2017-02-16T14:55:16Z,2017-02-17T08:07:39Z,2017-02-17T08:07:39Z,106541521,2017-03-22 21:17:35,2017-03-22 21:18:49
+209,7,205238834,9679,Access WorkQueue::running only within the cs lock,TheBlueMatt,closed,Bug,"This removes a ""race"" between Interrupt() and Run(), though it
+should not effect any of our supported platforms.",https://api.github.com/repos/bitcoin/bitcoin/issues/9679,https://github.com/bitcoin/bitcoin/pull/9679,https://api.github.com/repos/bitcoin/bitcoin/pulls/9679,2017-02-03T18:50:29Z,2017-02-04T10:37:58Z,2017-02-04T10:37:58Z,104589948,2017-03-22 21:17:35,2017-03-22 21:18:50
+210,7,199945393,9511,Don't overwrite validation state with corruption check,morcos,closed,Bug,"AcceptToMemoryPool has several classes of return false statements.
+- return state.Invalid or state.DoS directly itself
+- return false and set fMissingInputs (state is valid)
+- return false and state is set by failed CheckTransaction
+- return false and",https://api.github.com/repos/bitcoin/bitcoin/issues/9511,https://github.com/bitcoin/bitcoin/pull/9511,https://api.github.com/repos/bitcoin/bitcoin/pulls/9511,2017-01-10T22:00:29Z,2017-01-23T12:18:49Z,2017-01-23T12:18:49Z,100962232,2017-03-22 21:17:35,2017-03-22 21:18:51
+211,7,194427476,9302,Return txid even if ATMP fails for new transaction,sipa,closed,Bug,,https://api.github.com/repos/bitcoin/bitcoin/issues/9302,https://github.com/bitcoin/bitcoin/pull/9302,https://api.github.com/repos/bitcoin/bitcoin/pulls/9302,2016-12-08T19:49:55Z,2016-12-14T12:09:43Z,2016-12-13T11:15:53Z,97188216,2017-03-22 21:17:35,2017-03-22 21:18:51
+212,7,193262477,9269,Align struct COrphan definition,sipa,closed,Bug,"Since #8179 the `struct COrphan` definition gained an extra field. The mirrored definition in DoS_tests was not updated, however. This violates the C++ one definition rule.
+
+Found using GCC 6.2.0, when compiling with `-flto`:
+```
+test/DoS_tests.cpp:29",https://api.github.com/repos/bitcoin/bitcoin/issues/9269,https://github.com/bitcoin/bitcoin/pull/9269,https://api.github.com/repos/bitcoin/bitcoin/pulls/9269,2016-12-03T03:29:41Z,2016-12-05T10:09:47Z,2016-12-05T10:09:47Z,96384761,2017-03-22 21:17:35,2017-03-22 21:18:52
+213,7,192742151,9253,Fix calculation of number of bound sockets to use,TheBlueMatt,closed,Bug,Pulled this out of #9243 because it is a logically separate change.,https://api.github.com/repos/bitcoin/bitcoin/issues/9253,https://github.com/bitcoin/bitcoin/pull/9253,https://api.github.com/repos/bitcoin/bitcoin/pulls/9253,2016-12-01T02:56:37Z,2016-12-19T12:05:06Z,2016-12-01T21:07:27Z,96017536,2017-03-22 21:17:35,2017-03-22 21:18:53
+214,7,186688956,9060,trivial: fix bloom filter init to isEmpty = true,robmcl4,closed,Bug,"Fixes newly initialized bloom filters being constructed with `isEmpty(false)`, which still _works_ but loses the possible speedup when checking for key membership in an empty filter.",https://api.github.com/repos/bitcoin/bitcoin/issues/9060,https://github.com/bitcoin/bitcoin/pull/9060,https://api.github.com/repos/bitcoin/bitcoin/pulls/9060,2016-11-02T01:12:57Z,2016-11-02T14:31:23Z,2016-11-02T14:31:23Z,91893639,2017-03-22 21:17:35,2017-03-22 21:18:54
+215,7,171923313,8540,qt: Fix random segfault when closing "Choose data directory" dialog,laanwj,closed,Bug,"The `pickDataDirectory()` function was calling `exit(0)` to quit the application when the user closes the dialog without choosing a data directory.
+
+This is a bad idea because a background thread is created (to check free space on the drive of the current",https://api.github.com/repos/bitcoin/bitcoin/issues/8540,https://github.com/bitcoin/bitcoin/pull/8540,https://api.github.com/repos/bitcoin/bitcoin/pulls/8540,2016-08-18T15:02:16Z,2016-09-09T10:18:01Z,2016-08-19T09:33:44Z,81831651,2017-03-22 21:17:35,2017-03-22 21:18:54
+216,7,162118732,8256,BUG: bitcoin-qt crash,fsb4000,closed,Bug,"How to reproduce bug:
+1. Run bitcoin-qt which doen't have transactions. (any mode, here testnet screenshot but same problem with mainnet)
+![Image of first step](http://i.imgur.com/Xeb6Bst.png)
+1. Press right mouse button at center:
+   ![Image of second st",https://api.github.com/repos/bitcoin/bitcoin/issues/8256,https://github.com/bitcoin/bitcoin/pull/8256,https://api.github.com/repos/bitcoin/bitcoin/pulls/8256,2016-06-24T10:24:02Z,2016-06-24T11:48:31Z,2016-06-24T11:48:31Z,75093998,2017-03-22 21:17:35,2017-03-22 21:18:55
+217,7,161253573,8230,Fix LogPrint to LogPrintf,thelazier,closed,Bug,"Printing Log without category defined should use LogPrintf
+",https://api.github.com/repos/bitcoin/bitcoin/issues/8230,https://github.com/bitcoin/bitcoin/pull/8230,https://api.github.com/repos/bitcoin/bitcoin/pulls/8230,2016-06-20T17:47:12Z,2016-06-21T08:29:43Z,2016-06-21T08:10:19Z,74483925,2017-03-22 21:17:35,2017-03-22 21:18:56
+218,7,153167297,8004,signal handling: fReopenDebugLog and fRequestShutdown should be type sig_atomic_t,catilac,closed,Bug,"This allows access as an atomic variable in the presence of async interrupts.
+
+See issue #7433 for more details
+fixes: #7433
+",https://api.github.com/repos/bitcoin/bitcoin/issues/8004,https://github.com/bitcoin/bitcoin/pull/8004,https://api.github.com/repos/bitcoin/bitcoin/pulls/8004,2016-05-05T04:47:56Z,2016-05-12T13:00:45Z,2016-05-12T09:46:24Z,68965952,2017-03-22 21:17:35,2017-03-22 21:18:56
+219,7,150666525,7933,Fix OOM when deserializing UTXO entries with invalid length,sipa,closed,Bug,"Thanks to @pstratem for finding this.
+
+The normal vector deserializer reads data in chunks of at most 5 MB, preventing OOM when insane vector lengths are encoded. This protection is not present in CScriptCompressor's specialized deserializer, however, res",https://api.github.com/repos/bitcoin/bitcoin/issues/7933,https://github.com/bitcoin/bitcoin/pull/7933,https://api.github.com/repos/bitcoin/bitcoin/pulls/7933,2016-04-24T14:32:34Z,2016-04-26T11:23:24Z,2016-04-26T11:23:24Z,67638963,2017-03-22 21:17:35,2017-03-22 21:18:57
+220,7,144997985,7780,[0.12] Disable bad-chain alert,btcdrak,closed,Bug,"Continuous false positives will lead to them being ignored entirely.
+Better to disable now until this can be fixed more thoroughly in the next release.
+
+Discussed at 2016-03-31 IRC meeting.
+
+Refs: #7568
+",https://api.github.com/repos/bitcoin/bitcoin/issues/7780,https://github.com/bitcoin/bitcoin/pull/7780,https://api.github.com/repos/bitcoin/bitcoin/pulls/7780,2016-03-31T19:40:34Z,2016-04-01T12:17:17Z,2016-04-01T12:16:59Z,64846617,2017-03-22 21:17:35,2017-03-22 21:18:58
+221,7,141155239,7696,Fix de-serialization bug where AddrMan is left corrupted,EthanHeilman,closed,Bug,"CAddrDB::Read is used to manage the loading of AddrMan from peers.dat. As shown in the code below, when CAddrDB::Read catches an exception from the de-serialization code it returns addrman ""as-is"", despite the fact that it failed to load correctly.
+
+``` C",https://api.github.com/repos/bitcoin/bitcoin/issues/7696,https://github.com/bitcoin/bitcoin/pull/7696,https://api.github.com/repos/bitcoin/bitcoin/pulls/7696,2016-03-16T02:40:40Z,2016-05-17T08:53:19Z,2016-05-17T08:53:19Z,63006646,2017-03-22 21:17:35,2017-03-22 21:18:59
+222,7,127634828,7381,[walletdb] Fix syntax error in key parser,MarcoFalke,closed,Bug,"This needs backport to all versions of bitcoin/altcoins after merge.
+
+A dump may look like:
+
+```
+VERSION=3
+format=bytevalue
+database=main
+type=btree
+db_pagesize=4096
+HEADER=END
+<{Data}>
+DATA=END
+```
+
+So the current parser gives us odd data like:
+
+`keyHex=",https://api.github.com/repos/bitcoin/bitcoin/issues/7381,https://github.com/bitcoin/bitcoin/pull/7381,https://api.github.com/repos/bitcoin/bitcoin/pulls/7381,2016-01-20T09:06:01Z,2016-01-20T21:05:11Z,2016-01-20T12:08:20Z,56580375,2017-03-22 21:17:35,2017-03-22 21:19:00
+223,7,119100927,7105,Keep track of explicit wallet conflicts instead of using mempool,sipa,closed,Bug,"This is an alternative approach for #7067. It stores the earlier block which conflicts (directly or indirectly) with transactions. The wallet relies on being told about conflicts, so this may need rescanning to discover conflicts with historical transacti",https://api.github.com/repos/bitcoin/bitcoin/issues/7105,https://github.com/bitcoin/bitcoin/pull/7105,https://api.github.com/repos/bitcoin/bitcoin/pulls/7105,2015-11-26T20:49:06Z,2015-12-01T08:22:23Z,2015-12-01T08:22:23Z,51944982,2017-03-22 21:17:35,2017-03-22 21:19:01
+224,7,119039067,7103,"[wallet, rpc tests] Fix settxfee, paytxfee",MarcoFalke,closed,Bug,"This comes without the GUI changes, so it should be easier to review and backport. GUI: #7096
+",https://api.github.com/repos/bitcoin/bitcoin/issues/7103,https://github.com/bitcoin/bitcoin/pull/7103,https://api.github.com/repos/bitcoin/bitcoin/pulls/7103,2015-11-26T12:51:51Z,2015-11-30T11:22:32Z,2015-11-30T11:18:31Z,51909002,2017-03-22 21:17:35,2017-03-22 21:19:01
+225,7,115823020,6970,Fix crash in validateaddress with -disablewallet,laanwj,closed,Bug,"Fix a null pointer dereference in validateaddress with -disablewallet. Also add a regression testcase.
+
+Problem reported here: https://github.com/bitcoin/bitcoin/issues/6963#issuecomment-154548880
+
+I think this needs to be backported to 0.11 as well.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6970,https://github.com/bitcoin/bitcoin/pull/6970,https://api.github.com/repos/bitcoin/bitcoin/pulls/6970,2015-11-09T07:45:08Z,2015-11-09T23:20:42Z,2015-11-09T10:57:49Z,50092974,2017-03-22 21:17:35,2017-03-22 21:19:03
+226,7,113360585,6889,fix locking issue with new mempool limiting,jonasschnelli,closed,Bug,"Current master crashes on OSX with an exception: ""boost: mutex lock failed in pthread_mutex_lock: Invalid argument"".
+
+`mempool` is a global object and gets initialized over `cxx_global_var_init()`. Calling `LOCK()` within constructor (of a object in globa",https://api.github.com/repos/bitcoin/bitcoin/issues/6889,https://github.com/bitcoin/bitcoin/pull/6889,https://api.github.com/repos/bitcoin/bitcoin/pulls/6889,2015-10-26T13:57:42Z,2015-10-27T22:28:03Z,2015-10-27T07:48:31Z,48741987,2017-03-22 21:17:35,2017-03-22 21:19:04
+227,7,110346023,6777,Unobfuscate chainstate data in CCoinsViewDB::GetStats,jamesob,closed,Bug,"Per the [thread on the mailing list](http://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-October/011474.html), we missed (at least) one use of `CLevelDBWrapper` when adding chainstate obfuscation.
+
+Preferably, this PR (or a followup) will also add",https://api.github.com/repos/bitcoin/bitcoin/issues/6777,https://github.com/bitcoin/bitcoin/pull/6777,https://api.github.com/repos/bitcoin/bitcoin/pulls/6777,2015-10-08T00:16:35Z,2015-10-13T10:24:04Z,2015-10-13T10:24:04Z,47098796,2017-03-22 21:17:35,2017-03-22 21:19:06
+228,7,107982251,6715,Fix mempool packages,sdaftuar,closed,Bug,"This fixes an edge case (introduced by #6654 and reported by @sipa here: https://github.com/bitcoin/bitcoin/pull/6654#issuecomment-142345556) in removing an entry from the mempool during the middle of a reorg, where the entry has an in-block ancestor whic",https://api.github.com/repos/bitcoin/bitcoin/issues/6715,https://github.com/bitcoin/bitcoin/pull/6715,https://api.github.com/repos/bitcoin/bitcoin/pulls/6715,2015-09-23T18:47:09Z,2015-09-24T10:26:33Z,2015-09-24T10:25:14Z,45816072,2017-03-22 21:17:35,2017-03-22 21:19:07
+229,7,107378427,6704,Backport bugfixes to 0.10,luke-jr,closed,Bug,,https://api.github.com/repos/bitcoin/bitcoin/issues/6704,https://github.com/bitcoin/bitcoin/pull/6704,https://api.github.com/repos/bitcoin/bitcoin/pulls/6704,2015-09-20T07:48:44Z,2015-09-22T16:07:05Z,2015-09-22T16:07:05Z,45491891,2017-03-22 21:17:35,2017-03-22 21:19:07
+230,7,107377844,6703,Backport bugfixes to 0.11,luke-jr,closed,Bug,"Travis is failing this weirdly, and I'm not sure why. Working on troubleshooting it, but I need to go to bed... so tomorrow I guess.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6703,https://github.com/bitcoin/bitcoin/pull/6703,https://api.github.com/repos/bitcoin/bitcoin/pulls/6703,2015-09-20T07:31:15Z,2015-09-23T12:12:58Z,2015-09-23T12:12:58Z,45491638,2017-03-22 21:17:35,2017-03-22 21:19:08
+231,7,107082365,6688,Fix locking in GetTransaction.,morcos,closed,Bug,"GetTransaction needs to lock cs_main until ReadBlockFromDisk completes because the data inside CBlockIndex's can change since pruning.  This lock was held by all calls to GetTransaction except rest_tx.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6688,https://github.com/bitcoin/bitcoin/pull/6688,https://api.github.com/repos/bitcoin/bitcoin/pulls/6688,2015-09-17T21:55:08Z,2015-09-23T14:53:59Z,2015-09-23T14:53:59Z,45346971,2017-03-22 21:17:35,2017-03-22 21:19:10
+232,7,103617301,6595,Fix removal of timelocked-txn from mempool during reorg,TheBlueMatt,closed,Bug,,https://api.github.com/repos/bitcoin/bitcoin/issues/6595,https://github.com/bitcoin/bitcoin/pull/6595,https://api.github.com/repos/bitcoin/bitcoin/pulls/6595,2015-08-27T23:43:11Z,2015-11-05T19:00:10Z,2015-11-05T19:00:10Z,43579840,2017-03-22 21:17:35,2017-03-22 21:19:10
+233,7,101711139,6571,libbitcoinconsensus: avoid a crash in multi-threaded environments,theuni,closed,Bug,"tl;dr: EC_KEY_new_by_curve_name() affects global state in some versions/configs of openssl, leading to crashes when called by multiple threads. Avoid the issue by only calling it once at startup and caching the resulting group.
+
+This is likely unnecessary",https://api.github.com/repos/bitcoin/bitcoin/issues/6571,https://github.com/bitcoin/bitcoin/pull/6571,https://api.github.com/repos/bitcoin/bitcoin/pulls/6571,2015-08-18T17:47:44Z,2015-08-20T22:35:51Z,2015-08-20T14:33:55Z,42727490,2017-03-22 21:17:35,2017-03-22 21:19:11
+234,7,101515041,6565,Make sure we re-acquire lock if a task throws,casey,closed,Bug,"This fixes #6394
+
+Pretty simple, it just makes sure to re-acquire the lock in case f throws, so that we don't touch nThreadsServicingQueue without the lock. The empty throw statement re-raises the current exception.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6565,https://github.com/bitcoin/bitcoin/pull/6565,https://api.github.com/repos/bitcoin/bitcoin/pulls/6565,2015-08-17T21:35:24Z,2015-08-31T16:59:26Z,2015-08-19T14:27:41Z,42637152,2017-03-22 21:17:35,2017-03-22 21:19:12
+235,7,101086592,6556,Fix masking of irrelevant bits in address groups.,morcos,closed,Bug,"If I'm reading this right, I believe the intent is to keep the high order nBits and mask away the others with 1's.  But before this fix it was keeping the high order (8 - nBits).   I don't think there was any effect, because the only time this was used wa",https://api.github.com/repos/bitcoin/bitcoin/issues/6556,https://github.com/bitcoin/bitcoin/pull/6556,https://api.github.com/repos/bitcoin/bitcoin/pulls/6556,2015-08-14T19:27:28Z,2015-08-20T14:46:07Z,2015-08-20T14:45:46Z,42489352,2017-03-22 21:17:35,2017-03-22 21:26:35
+236,7,100322020,6545,Do not store more than 200 timedata samples.,paveljanik,closed,Bug,"As reported in the issue #6490, Bitcoin Core keeps and extends `std::set` of `CNetAddr` for all peers during the whole server run. Even for peers that do not affect the adjusted time of the Core at all.
+
+This change makes it clear (do nothing after 200 ti",https://api.github.com/repos/bitcoin/bitcoin/issues/6545,https://github.com/bitcoin/bitcoin/pull/6545,https://api.github.com/repos/bitcoin/bitcoin/pulls/6545,2015-08-11T14:14:42Z,2015-08-20T15:15:47Z,2015-08-20T15:13:52Z,42133393,2017-03-22 21:17:35,2017-03-22 21:26:36
+237,7,96828140,6468,fix CBitcoinExtKeyBase template,jonasschnelli,closed,Bug,"- fix Decode call (req. only one param)
+- add constructor for base58c->CExtKey
+
+The current `Decode()` call with two parameters won't compile (not detected because the c++ temple never was evaluated).
+
+Also adds test coverage.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6468,https://github.com/bitcoin/bitcoin/pull/6468,https://api.github.com/repos/bitcoin/bitcoin/pulls/6468,2015-07-23T14:31:00Z,2015-07-27T11:21:06Z,2015-07-27T11:21:06Z,40678012,2017-03-22 21:17:35,2017-03-22 21:26:37
+238,7,95799832,6456,"rpc: Avoid unnecessary parsing roundtrip in number formatting, fix locale issue",laanwj,closed,Bug,"Three weakly related fixes to number handling after the `univalue` switch. These came to the surface while troubleshooting #6443.
+## Make ValueFromAmount always return 8 decimals
+
+This is the format that was always returned to JSON clients. The difference",https://api.github.com/repos/bitcoin/bitcoin/issues/6456,https://github.com/bitcoin/bitcoin/pull/6456,https://api.github.com/repos/bitcoin/bitcoin/pulls/6456,2015-07-18T07:25:43Z,2015-07-24T09:09:00Z,2015-07-24T09:09:00Z,40288297,2017-03-22 21:17:35,2017-03-22 21:26:37
+239,7,95053745,6438,openssl: avoid config file load/race,theuni,closed,Bug,"Should fix #6436. See [here](https://wiki.openssl.org/index.php/Library_Initialization#OPENSSL_config) for more info. Also [the source](https://github.com/openssl/openssl/blob/OpenSSL_1_0_0-stable/crypto/conf/conf_sap.c) is self-explanatory.
+
+Since we don",https://api.github.com/repos/bitcoin/bitcoin/issues/6438,https://github.com/bitcoin/bitcoin/pull/6438,https://api.github.com/repos/bitcoin/bitcoin/pulls/6438,2015-07-14T22:09:27Z,2015-07-17T07:33:11Z,2015-07-15T13:49:59Z,39968782,2017-03-22 21:17:35,2017-03-22 21:26:38
+240,7,94168117,6412,Test whether created sockets are select()able,sipa,closed,Bug,"This provides a belt-and-suspends check against file descriptor overflowing, to fix #6411.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6412,https://github.com/bitcoin/bitcoin/pull/6412,https://api.github.com/repos/bitcoin/bitcoin/pulls/6412,2015-07-09T22:38:21Z,2015-07-20T15:46:18Z,2015-07-20T14:54:37Z,39636036,2017-03-22 21:17:35,2017-03-22 21:26:39
+241,7,92421390,6361,"Use real number of cores for default -par, ignore virtual cores",laanwj,closed,Bug,"To determine the default for `-par`, the number of script verification threads, use [boost::thread::physical_concurrency()](http://www.boost.org/doc/libs/1_58_0/doc/html/thread/thread_management.html#thread.thread_management.thread.physical_concurrency) w",https://api.github.com/repos/bitcoin/bitcoin/issues/6361,https://github.com/bitcoin/bitcoin/pull/6361,https://api.github.com/repos/bitcoin/bitcoin/pulls/6361,2015-07-01T16:03:10Z,2015-07-09T23:13:28Z,2015-07-02T18:01:15Z,38997853,2017-03-22 21:17:35,2017-03-22 21:26:39
+242,7,89483385,6306,Prevent peer flooding inv request queue (redux),dgenr8,closed,Bug,"Removes a network attacker node's ability to indefinitely blind its peers to a block or transaction new to them, such as a double-spend generated by attacker.  The possible blinding interval is reduced to the getdata timeout (currently 2 minutes).
+
+This v",https://api.github.com/repos/bitcoin/bitcoin/issues/6306,https://github.com/bitcoin/bitcoin/pull/6306,https://api.github.com/repos/bitcoin/bitcoin/pulls/6306,2015-06-19T06:42:13Z,2015-11-24T09:53:11Z,2015-11-24T09:53:11Z,38080750,2017-03-22 21:17:35,2017-03-22 21:26:40
+243,7,89104177,6299,Bugfix: Don't check the genesis block header before accepting it,jtimon,closed,Bug,"This should fix an error that was introduced in #5975 , thanks @sdaftuar for reporting the error. 
+I will work on a more elegant solution: the genesis block should never be checked at all; it is valid by definition. But it seems that will be more work tha",https://api.github.com/repos/bitcoin/bitcoin/issues/6299,https://github.com/bitcoin/bitcoin/pull/6299,https://api.github.com/repos/bitcoin/bitcoin/pulls/6299,2015-06-17T19:30:17Z,2015-06-26T13:41:15Z,2015-06-26T13:41:10Z,37937482,2017-03-22 21:17:35,2017-03-22 21:26:41
+244,7,88460177,6284,Fix argument parsing oddity with -noX,laanwj,closed,Bug,"`bitcoind -X -noX` ends up, unintuitively, with `X` set.
+(for all boolean options X)
+
+This result is due to the odd two-pass processing of arguments. This patch fixes this oddity (by always taking the latter option setting) and simplifies the code at the ",https://api.github.com/repos/bitcoin/bitcoin/issues/6284,https://github.com/bitcoin/bitcoin/pull/6284,https://api.github.com/repos/bitcoin/bitcoin/pulls/6284,2015-06-15T15:30:21Z,2015-08-03T17:54:58Z,2015-08-03T17:54:58Z,37704107,2017-03-22 21:17:35,2017-03-22 21:26:41
+245,7,88326104,6282,fix crash on shutdown when e.g. changing -txindex and abort action,Diapolo,closed,Bug,"- fixes #3136
+- the problem is related to Boost path and a static initialized internal
+  pointer
+- using a std::string in CDBEnv::EnvShutdown() prevents the problem
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6282,https://github.com/bitcoin/bitcoin/pull/6282,https://api.github.com/repos/bitcoin/bitcoin/pulls/6282,2015-06-15T05:49:50Z,2015-06-23T08:45:08Z,2015-06-18T14:40:53Z,37660048,2017-03-22 21:17:35,2017-03-22 21:26:42
+246,7,86322277,6256,Use best header chain timestamps to detect partitioning,gavinandresen,closed,Bug,"The partition checking code was using chainActive timestamps
+to detect partitioning; with headers-first syncing, it should use
+(and with this pull request, does use) pIndexBestHeader timestamps.
+
+Fixes issue #6251
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6256,https://github.com/bitcoin/bitcoin/pull/6256,https://api.github.com/repos/bitcoin/bitcoin/pulls/6256,2015-06-08T20:38:41Z,2015-06-15T08:38:51Z,2015-06-12T14:44:49Z,37193410,2017-03-22 21:17:35,2017-03-22 21:26:43
+247,7,85240937,6233,Advance pindexLastCommonBlock for blocks in chainActive,sdaftuar,closed,Bug,"This prevents an edge case where a block downloaded and pruned
+in-between successive calls to FindNextBlocksToDownload could
+cause the block to be unnecessarily re-requested.
+
+The issue is that pindexLastCommonBlock is only updated on calls
+to FindNextBlo",https://api.github.com/repos/bitcoin/bitcoin/issues/6233,https://github.com/bitcoin/bitcoin/pull/6233,https://api.github.com/repos/bitcoin/bitcoin/pulls/6233,2015-06-04T19:26:55Z,2015-06-25T14:42:57Z,2015-06-25T14:37:02Z,36969116,2017-03-22 21:17:35,2017-03-22 21:26:44
+248,7,80828679,6186,Fix two problems in CSubnet parsing,laanwj,closed,Bug,"Fix two CSubNet constructor problems:
+- The use of `/x` where 8 does not divide x was broken, due to a bit-order issue
+- The use of e.g. `1.2.3.4/24` where the netmasked bits in the network are not 0 was broken. Fix this by explicitly normalizing the netw",https://api.github.com/repos/bitcoin/bitcoin/issues/6186,https://github.com/bitcoin/bitcoin/pull/6186,https://api.github.com/repos/bitcoin/bitcoin/pulls/6186,2015-05-26T07:02:57Z,2015-05-27T07:12:39Z,2015-05-27T07:08:54Z,36174311,2017-03-22 21:17:35,2017-03-22 21:26:44
+249,7,80400816,6183,Fix off-by-one error w/ nLockTime in the wallet,petertodd,closed,Bug,"Previously due to an off-by-one error the wallet ignored nLockTime-by-height transactions that would be valid in the next block even though they are accepted into the mempool. The transactions wouldn't show up until confirmed, nor would they be included i",https://api.github.com/repos/bitcoin/bitcoin/issues/6183,https://github.com/bitcoin/bitcoin/pull/6183,https://api.github.com/repos/bitcoin/bitcoin/pulls/6183,2015-05-25T05:34:57Z,2015-06-01T09:36:31Z,2015-06-01T09:33:43Z,36117898,2017-03-22 21:17:35,2017-03-22 21:26:45
+250,7,78114064,6159,Catch errors on datadir lock and pidfile delete,ajweiss,closed,Bug,"Prevents bad permissions (or other fs related problems) from resulting in hard crashes with cryptic messages on startup and shutdown.
+
+Fixes issues like: #6018 #4059 
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6159,https://github.com/bitcoin/bitcoin/pull/6159,https://api.github.com/repos/bitcoin/bitcoin/pulls/6159,2015-05-19T14:35:43Z,2015-05-24T08:57:37Z,2015-05-24T08:57:37Z,35736768,2017-03-22 21:17:35,2017-03-22 21:26:46
+251,7,77577627,6153,Parameter interaction: disable upnp if -proxy set,laanwj,closed,Bug,"To protect privacy, do not use UPNP when a proxy is set. The user may still specify `-listen=1` to listen locally (for a hidden service), so don't rely on this happening via the `-listen` case.
+
+Fixes #2927.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6153,https://github.com/bitcoin/bitcoin/pull/6153,https://api.github.com/repos/bitcoin/bitcoin/pulls/6153,2015-05-18T09:23:59Z,2015-05-27T07:33:12Z,2015-05-27T07:33:12Z,35615596,2017-03-22 21:17:35,2017-03-22 21:26:46
+252,7,76039079,6130,Do not inv old or missing blocks when pruning,sdaftuar,closed,Bug,"When responding to a getblocks message, only return inv's as
+long as we HAVE_DATA for blocks in the chain, and only for blocks
+that we are likely to not delete in the near future.
+
+This fixes the issue mentioned here https://github.com/bitcoin/bitcoin/pul",https://api.github.com/repos/bitcoin/bitcoin/issues/6130,https://github.com/bitcoin/bitcoin/pull/6130,https://api.github.com/repos/bitcoin/bitcoin/pulls/6130,2015-05-13T16:13:03Z,2015-06-16T15:12:13Z,2015-06-16T15:12:13Z,35343797,2017-03-22 21:17:35,2017-03-22 21:26:47
+253,7,75526140,6123,Avoid crash on start in TestBlockValidity with gen=1 (rework),laanwj,closed,Bug,"Replaces #6079.
+
+When the internal miner is enabled at the start of a new node, there is an near instant assert in TestBlockValidity because its attempting to mine a block before the top checkpoint.
+
+Also avoids a data race around vNodes.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6123,https://github.com/bitcoin/bitcoin/pull/6123,https://api.github.com/repos/bitcoin/bitcoin/pulls/6123,2015-05-12T08:57:45Z,2015-05-12T14:37:29Z,2015-05-12T14:37:29Z,35205459,2017-03-22 21:17:35,2017-03-22 21:26:48
+254,7,72413159,6093,fix WIN32 boost::filesystem::path issues when using special chars for datadir path,jonasschnelli,closed,Bug,"fixes https://github.com/bitcoin/bitcoin/issues/6078
+Meant for 0.11 branch.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6093,https://github.com/bitcoin/bitcoin/pull/6093,https://api.github.com/repos/bitcoin/bitcoin/pulls/6093,2015-05-01T11:32:45Z,2015-05-29T20:33:15Z,2015-05-10T12:23:05Z,34533047,2017-03-22 21:17:35,2017-03-22 21:26:48
+255,7,71740943,6079,Avoid crash on start in TestBlockValidity with gen=1.,gmaxwell,closed,Bug,"When the internal miner is enabled at the start of a new node, there
+ is an near instant assert in TestBlockValidity because its attempting
+ to mine a block before the top checkpoint.
+
+Also avoids a data race around vNodes.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/6079,https://github.com/bitcoin/bitcoin/pull/6079,https://api.github.com/repos/bitcoin/bitcoin/pulls/6079,2015-04-29T00:05:48Z,2015-05-18T15:14:58Z,2015-05-12T08:58:39Z,34323758,2017-03-22 21:17:35,2017-03-22 21:26:49
+256,7,67175715,5985,Fix removing of orphan transactions,morcos,closed,Bug,"The transaction thats being accepted can't be an orphan otherwise it would have previously been accepted, so doesn't need to be added to the erase queue.  We also don't want to erase orphans that still have missing inputs.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/5985,https://github.com/bitcoin/bitcoin/pull/5985,https://api.github.com/repos/bitcoin/bitcoin/pulls/5985,2015-04-08T17:10:43Z,2015-06-10T10:18:56Z,2015-06-10T10:15:28Z,32881407,2017-03-22 21:17:35,2017-03-22 21:26:50
+257,7,64325316,5945,Keep mempool consistent during block-reorgs,gavinandresen,closed,Bug,"This fixes a subtle bug involving block re-orgs and non-standard transactions.
+
+Start with a block containing a non-standard transaction, and
+one or more transactions spending it in the memory pool.
+
+Then re-org away from that block to another chain that ",https://api.github.com/repos/bitcoin/bitcoin/issues/5945,https://github.com/bitcoin/bitcoin/pull/5945,https://api.github.com/repos/bitcoin/bitcoin/pulls/5945,2015-03-25T17:22:03Z,2015-04-24T14:46:14Z,2015-04-06T07:48:27Z,31945138,2017-03-22 21:17:35,2017-03-22 21:26:50
+258,7,61144143,5890,Fix InvalidateBlock to add chainActive.Tip to setBlockIndexCandidates,morcos,closed,Bug,,https://api.github.com/repos/bitcoin/bitcoin/issues/5890,https://github.com/bitcoin/bitcoin/pull/5890,https://api.github.com/repos/bitcoin/bitcoin/pulls/5890,2015-03-13T17:17:04Z,2015-03-24T13:56:03Z,2015-03-24T13:51:04Z,31145575,2017-03-22 21:17:35,2017-03-22 21:26:51
+259,7,60695573,5879,Fix InvalidateBlock,morcos,closed,Bug,"There was a bug in InvalidateBlock that prevented setBlockIndexCandidates from being properly repopulated. This would prevent you from necessarily ending up on the best chain after calling invalidateblock.  I also added an RPC test.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/5879,https://github.com/bitcoin/bitcoin/pull/5879,https://api.github.com/repos/bitcoin/bitcoin/pulls/5879,2015-03-11T17:26:02Z,2015-03-12T16:54:24Z,2015-03-12T16:50:17Z,30965530,2017-03-22 21:17:35,2017-03-22 21:26:52
+260,7,60092539,5859,Add correct bool combiner for net signals,sipa,closed,Bug,"Extracted from #5843.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/5859,https://github.com/bitcoin/bitcoin/pull/5859,https://api.github.com/repos/bitcoin/bitcoin/pulls/5859,2015-03-06T11:49:40Z,2015-03-12T10:14:14Z,2015-03-12T10:14:14Z,30639158,2017-03-22 21:17:35,2017-03-22 21:26:53
+261,7,56945297,5770,Sanitize command strings before logging them.,gmaxwell,closed,Bug,"Normally bitcoin core does not display any network originated strings without
+ sanitizing or hex encoding.  This wasn't done for strcommand in many places.
+
+This could be used to play havoc with a terminal displaying the logs,
+ especially with printtocons",https://api.github.com/repos/bitcoin/bitcoin/issues/5770,https://github.com/bitcoin/bitcoin/pull/5770,https://api.github.com/repos/bitcoin/bitcoin/pulls/5770,2015-02-08T09:22:53Z,2015-02-09T09:44:10Z,2015-02-09T09:44:10Z,28877909,2017-03-22 21:17:35,2017-03-22 21:26:53
+262,7,55805810,5721,Acquire CCheckQueue's lock to avoid race condition,sdaftuar,closed,Bug,"This fixes a potential race condition in the CCheckQueueControl constructor,
+which was looking directly at data in CCheckQueue without acquiring its lock.
+
+Even though only one CCheckQueueControl exists at a time, one of the 
+CCheckQueue threads may have ",https://api.github.com/repos/bitcoin/bitcoin/issues/5721,https://github.com/bitcoin/bitcoin/pull/5721,https://api.github.com/repos/bitcoin/bitcoin/pulls/5721,2015-01-28T19:48:44Z,2015-02-06T15:51:52Z,2015-02-06T15:51:52Z,28223437,2017-03-22 21:17:50,2017-03-22 21:26:54
+263,7,55621073,5719,Avoid references to temporary implicitly converted CMutableTransactions,sipa,closed,Bug,,https://api.github.com/repos/bitcoin/bitcoin/issues/5719,https://github.com/bitcoin/bitcoin/pull/5719,https://api.github.com/repos/bitcoin/bitcoin/pulls/5719,2015-01-27T14:02:39Z,2015-02-03T07:55:31Z,2015-02-03T07:26:21Z,28110479,2017-03-22 21:17:50,2017-03-22 21:26:54
+264,7,55581763,5717,Avoid reference trap in SignatureChecker,laanwj,closed,Bug,"Fixes #5715. Keeping around references on a class is extremely dangerous, due to C++'s  behavior with regard to temporaries. This is a cruel trap for (unwary) programmers. I see two solutions:
+- a) change the argument (and property on SignatureChecker) to",https://api.github.com/repos/bitcoin/bitcoin/issues/5717,https://github.com/bitcoin/bitcoin/pull/5717,https://api.github.com/repos/bitcoin/bitcoin/pulls/5717,2015-01-27T06:36:22Z,2015-01-27T14:15:41Z,2015-01-27T14:15:41Z,28086937,2017-03-22 21:17:50,2017-03-23 00:06:14
+265,7,55413682,5706,fix crash: RPC "createmultisig" and "addmultisigaddress",fsb4000,closed,Bug,"Bug description:
+1) Open Bitcoin-Qt(or bitcoind)
+2) Open ""Debug window""
+3) Enter 
+
+```
+createmultisig 17 '[""0227d09df34a6eca0e2009663d2f0c6edc97314f78f308f53b7c8ffa7c552c1014"",""0227d09df34a6eca0e2009663d2f0c6edc97314f78f308f53b7c8ffa7c552c1014"",""0227d09df",https://api.github.com/repos/bitcoin/bitcoin/issues/5706,https://github.com/bitcoin/bitcoin/pull/5706,https://api.github.com/repos/bitcoin/bitcoin/pulls/5706,2015-01-25T12:31:27Z,2015-03-11T13:34:13Z,2015-02-20T08:51:53Z,27991442,2017-03-22 21:17:50,2017-03-23 00:06:14
+266,7,53765205,5621,Assert inside leveldbwrapper to avoid continuing after failure.,gmaxwell,closed,Bug,"Database failure due to faulty hardware could leave users on a fork where
+ they are vulnerable to opportunistic attack because they are rejecting
+ the longest chain.
+
+If there is a software fault in the OS or LevelDB that causes many nodes
+ to experience ",https://api.github.com/repos/bitcoin/bitcoin/issues/5621,https://github.com/bitcoin/bitcoin/pull/5621,https://api.github.com/repos/bitcoin/bitcoin/pulls/5621,2015-01-08T15:52:35Z,2015-01-12T16:14:53Z,2015-01-12T16:14:53Z,27037219,2017-03-22 21:17:50,2017-03-23 00:06:15
+267,7,53751814,5620,[Qt] Payment request expiration bug fix (re-done),Diapolo,closed,Bug,"- this is based on #4122 (which can be closed)
+
+Currently a payment request is only checked for expiration upon receipt.
+It should be checked again immediately before sending coins to prevent
+the user from paying to an expired invoice which would then req",https://api.github.com/repos/bitcoin/bitcoin/issues/5620,https://github.com/bitcoin/bitcoin/pull/5620,https://api.github.com/repos/bitcoin/bitcoin/pulls/5620,2015-01-08T13:47:02Z,2015-01-30T15:55:14Z,2015-01-29T11:48:40Z,27028960,2017-03-22 21:17:50,2017-03-23 00:06:16
+268,7,53751229,5619,Catch UTXO set read errors and shutdown,sipa,closed,Bug,"This is a minimally invasive patch to shutdown on LevelDB read errors from the chainstate. The block index does not need similar protection, as it's only read at startup.
+
+Should apply cleanly to 0.10 as well.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/5619,https://github.com/bitcoin/bitcoin/pull/5619,https://api.github.com/repos/bitcoin/bitcoin/pulls/5619,2015-01-08T13:40:22Z,2015-01-12T16:14:19Z,2015-01-12T10:26:51Z,27028600,2017-03-22 21:17:50,2017-03-23 00:06:16
+269,7,53070455,5565,rpcserver: attempt to fix uncaught exception.,theuni,closed,Bug,"Addresses #5560.
+
+`asio::ip::address::to_string()` can throw in some cases, which I believe winxp may be hitting.
+
+I've simulated the case locally by adding:
+
+```
+            if (bindAddress.is_v6())
+            {
+                boost::system::error_code",https://api.github.com/repos/bitcoin/bitcoin/issues/5565,https://github.com/bitcoin/bitcoin/pull/5565,https://api.github.com/repos/bitcoin/bitcoin/pulls/5565,2014-12-29T20:47:31Z,2014-12-30T16:36:44Z,2014-12-30T16:36:44Z,26660931,2017-03-22 21:17:50,2017-03-23 00:06:17
+270,7,51697149,5461,signrawtransaction: validate private key.,paveljanik,closed,Bug,"Fix issue #5454. Validate private key is inside allowed range.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/5461,https://github.com/bitcoin/bitcoin/pull/5461,https://api.github.com/repos/bitcoin/bitcoin/pulls/5461,2014-12-11T15:09:02Z,2014-12-13T21:27:03Z,2014-12-12T10:52:19Z,25906045,2017-03-22 21:17:50,2017-03-23 00:06:18
+271,7,50229527,5382,Make -printblocktree compatible with headers first,sipa,closed,Bug,"Alternative: delete -printblocktree. I didn't even know it still existed.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/5382,https://github.com/bitcoin/bitcoin/pull/5382,https://api.github.com/repos/bitcoin/bitcoin/pulls/5382,2014-11-26T21:34:46Z,2014-11-27T10:20:03Z,2014-11-27T10:20:03Z,25115375,2017-03-22 21:17:50,2017-03-23 00:06:19
+272,7,48610991,5270,Check block header when accepting headers from peers.,domob1812,closed,Bug,"Actually check block headers received from peers.  If a peer sends headers with invalid PoW, they were accepted and added to the disk block index previously.  This would then lead to a failure in checking the PoW
+during the next startup while loading the ",https://api.github.com/repos/bitcoin/bitcoin/issues/5270,https://github.com/bitcoin/bitcoin/pull/5270,https://api.github.com/repos/bitcoin/bitcoin/pulls/5270,2014-11-13T08:46:14Z,2014-11-20T15:10:28Z,2014-11-20T14:42:14Z,24353341,2017-03-22 21:17:50,2017-03-23 00:06:19
+273,7,48573296,5267,Fix coinbase-spend mempool inconsistency after reorgs,TheBlueMatt,closed,Bug,We were previously not removing transactions from mempool during reorg if they spent a coinbase. While this broke the mempool-invariant of safe-to-put-in-next-block it doesnt matter as mining code double-checks anyway (unless you're running with -debug or,https://api.github.com/repos/bitcoin/bitcoin/issues/5267,https://github.com/bitcoin/bitcoin/pull/5267,https://api.github.com/repos/bitcoin/bitcoin/pulls/5267,2014-11-12T22:43:11Z,2014-12-12T00:10:04Z,2014-12-11T14:24:12Z,24331584,2017-03-22 21:17:50,2017-03-23 00:06:20
+274,7,48158884,5243,Sleep-wait on genesis block during init with -reindex,TheBlueMatt,closed,Bug,"This is an alternative to #5078...instead of throwing when chainActive.Tip() is missing (breaking what has otherwise traditionally been a global assumption) we just wait until at least genesis has been imported (its always first).
+",https://api.github.com/repos/bitcoin/bitcoin/issues/5243,https://github.com/bitcoin/bitcoin/pull/5243,https://api.github.com/repos/bitcoin/bitcoin/pulls/5243,2014-11-08T07:28:19Z,2015-01-26T11:33:15Z,2015-01-26T11:29:24Z,24098427,2017-03-22 21:17:50,2017-03-23 00:06:21
+275,7,47518378,5194,Reset setBlockIndexCandidates once block index db loaded,21E14,closed,Bug,"Delete all entries in setBlockIndexCandidates that are worse than our new current block upon completion of the initial LoadBlockIndexDB.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/5194,https://github.com/bitcoin/bitcoin/pull/5194,https://api.github.com/repos/bitcoin/bitcoin/pulls/5194,2014-11-01T21:53:34Z,2014-11-26T12:23:55Z,2014-11-26T12:23:55Z,23724775,2017-03-22 21:17:50,2017-03-23 00:06:21
+276,7,47226160,5173,Fix -loadblock after partial IBD and init after kill -9,TheBlueMatt,closed,Bug,"You can currently kill -9 during IBD and will not be able to restart.
+Also, if you let IBD start and then try to -loadblock afterwards it will not connect any of the blocks.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/5173,https://github.com/bitcoin/bitcoin/pull/5173,https://api.github.com/repos/bitcoin/bitcoin/pulls/5173,2014-10-30T02:13:26Z,2014-11-05T10:20:05Z,2014-11-05T08:40:24Z,23578750,2017-03-22 21:17:50,2017-03-23 00:06:22
+277,7,47065931,5158,Fix IsInitialBlockDownload which was broken by headers first.,rdponticelli,closed,Bug,,https://api.github.com/repos/bitcoin/bitcoin/issues/5158,https://github.com/bitcoin/bitcoin/pull/5158,https://api.github.com/repos/bitcoin/bitcoin/pulls/5158,2014-10-28T18:50:26Z,2014-11-26T14:09:23Z,2014-11-26T14:09:23Z,23480819,2017-03-22 21:17:50,2017-03-23 00:06:23
+278,7,47048901,5157,Introduce preferred download peers,sipa,closed,Bug,"Keep track of whether we have peers that are preferred candidates for downloading blocks from, but if there are none, also use others.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/5157,https://github.com/bitcoin/bitcoin/pull/5157,https://api.github.com/repos/bitcoin/bitcoin/pulls/5157,2014-10-28T16:34:40Z,2014-11-03T15:40:37Z,2014-11-03T15:40:37Z,23470165,2017-03-22 21:17:50,2017-03-23 00:06:23
+279,7,46985387,5154,Check pindexBestForkBase for null,21E14,closed,Bug,"This addresses an edge case where pindexBestForkBase is not previously set. Longer term, the logic further upstream in ActivateBestChainStep needs to be reworked.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/5154,https://github.com/bitcoin/bitcoin/pull/5154,https://api.github.com/repos/bitcoin/bitcoin/pulls/5154,2014-10-28T03:17:35Z,2014-11-24T14:30:04Z,2014-11-24T14:30:04Z,23432146,2017-03-22 21:17:50,2017-03-23 00:06:24
+280,7,43126329,4942,Write fee estimate and peers files only when initialized,laanwj,closed,Bug,"Fixes #4669 (see discussion there).
+
+Also move the loading of addresses to StartNode() to make it more self-contained.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/4942,https://github.com/bitcoin/bitcoin/pull/4942,https://api.github.com/repos/bitcoin/bitcoin/pulls/4942,2014-09-18T12:21:59Z,2014-10-14T09:35:32Z,2014-10-14T09:35:32Z,21429414,2017-03-22 21:17:50,2017-03-23 00:06:25
+281,7,40617076,4730,"UniValue: fix major bug, add unit tests",jgarzik,closed,Bug,"All numbers were broken, due to lack of an underscore.  No wonder my all-tree conversion to UniValue was failing its tests.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/4730,https://github.com/bitcoin/bitcoin/pull/4730,https://api.github.com/repos/bitcoin/bitcoin/pulls/4730,2014-08-19T17:44:00Z,2014-08-24T04:21:36Z,2014-08-21T02:48:09Z,19996590,2017-03-22 21:17:50,2017-03-23 00:06:26
+282,7,40027308,4682,"Don't poll showmyip.com, it doesn't exist anymore",laanwj,closed,Bug,"This was bound to happen someday. That leaves us with only one candidate, checkip.dyndns.org.
+GetMyExternalIP should be phased out as soon as possible (resurrect #3461 / #3088).
+
+This should also go into 0.9.3.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/4682,https://github.com/bitcoin/bitcoin/pull/4682,https://api.github.com/repos/bitcoin/bitcoin/pulls/4682,2014-08-12T06:11:55Z,2014-08-13T10:01:16Z,2014-08-13T10:01:16Z,19644208,2017-03-22 21:17:50,2017-03-23 00:06:27
+283,7,39510152,4635,CCoinsKeyHasher::operator() should return size_t,laanwj,closed,Bug,"It currently returns uint64_t, which on older boost (at least 1.46) causes failures on 32-bit systems. This problem was introduced in bc42503.
+
+Fixes #4634.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/4635,https://github.com/bitcoin/bitcoin/pull/4635,https://api.github.com/repos/bitcoin/bitcoin/pulls/4635,2014-08-05T11:36:12Z,2014-08-08T09:28:31Z,2014-08-08T09:28:31Z,19336564,2017-03-22 21:17:50,2017-03-23 00:06:28
+284,7,39000260,4602,script.h: set_vch() should shift a >32 bit value,jgarzik,closed,Bug,"Source: http://www.viva64.com/en/b/0268/
+",https://api.github.com/repos/bitcoin/bitcoin/issues/4602,https://github.com/bitcoin/bitcoin/pull/4602,https://api.github.com/repos/bitcoin/bitcoin/pulls/4602,2014-07-29T15:25:47Z,2014-08-24T04:22:01Z,2014-08-03T15:09:29Z,19033726,2017-03-22 21:17:50,2017-03-23 00:06:29
+285,7,38898482,4598,Fix feeestimate,morcos,closed,Bug,"-Fix bug where we were checking index value against the wrong vector size. This could cause the wrong value to be returned or to return an out of bounds value.
+-Move the clearing of the sorted sample vectors to before the debug logging. The debug logging ",https://api.github.com/repos/bitcoin/bitcoin/issues/4598,https://github.com/bitcoin/bitcoin/pull/4598,https://api.github.com/repos/bitcoin/bitcoin/pulls/4598,2014-07-28T14:59:13Z,2014-11-12T22:08:24Z,2014-08-04T14:45:32Z,18972095,2017-03-22 21:17:50,2017-03-23 00:06:29
+286,7,36934295,4450,Check signatures before double-spend relay,dgenr8,closed,Bug,"After it passes anti-DoS checks, mark a respend as relayable, but do not actually relay it until after the inputs are completely checked (for valid signatures especially).
+
+This fixes a problem with #3883.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/4450,https://github.com/bitcoin/bitcoin/pull/4450,https://api.github.com/repos/bitcoin/bitcoin/pulls/4450,2014-07-01T21:42:47Z,2014-07-15T23:20:12Z,2014-07-04T03:51:03Z,17856736,2017-03-22 21:17:50,2017-03-23 00:06:30
+287,7,33436630,4184,Fix incorrect checkpoint data for testnet3,dajohi,closed,Bug,,https://api.github.com/repos/bitcoin/bitcoin/issues/4184,https://github.com/bitcoin/bitcoin/pull/4184,https://api.github.com/repos/bitcoin/bitcoin/pulls/4184,2014-05-13T20:40:38Z,2014-06-13T05:57:32Z,2014-05-28T08:12:06Z,15845924,2017-03-22 21:17:50,2017-03-23 00:06:31
+288,7,13900381,2608,clear path cache after getting a proper config file (fixes #2605),jonasschnelli,closed,Bug,"should fix #2605, retest please.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/2608,https://github.com/bitcoin/bitcoin/pull/2608,https://api.github.com/repos/bitcoin/bitcoin/pulls/2608,2013-05-02T16:58:50Z,2014-07-12T15:53:33Z,2013-05-03T11:52:04Z,5497577,2017-03-22 21:17:58,2017-03-23 00:06:31
+289,7,5368528,1543,Increase the size of adressbookpage.ui in order to fix issue #1062,cardpuncher,closed,Bug,"The buttons at the bottom of the window are too small for the text they contain if the French locale is used, as discussed on issue #1062. This resizing seems to fix the problem, a screenshot showing the result follows:
+
+![Desktop screenshot with the main",https://api.github.com/repos/bitcoin/bitcoin/issues/1543,https://github.com/bitcoin/bitcoin/pull/1543,https://api.github.com/repos/bitcoin/bitcoin/pulls/1543,2012-06-30T16:31:40Z,2014-06-14T06:39:26Z,2012-07-19T11:36:57Z,1689963,2017-03-22 21:18:05,2017-03-23 00:06:32
+290,7,5367704,1542,new splash screen image (fix for #1064),Diapolo,closed,Bug,"I consider this a proposal to fix #1064 to not have the bad resize quality, when resizing the current splash screen image. I know we want to get rid of the splash screen in the future, but perhaps this is worth a quick discussion.
+
+I was not too sure abou",https://api.github.com/repos/bitcoin/bitcoin/issues/1542,https://github.com/bitcoin/bitcoin/pull/1542,https://api.github.com/repos/bitcoin/bitcoin/pulls/1542,2012-06-30T14:06:23Z,2014-07-12T23:12:17Z,2012-07-08T10:16:24Z,1689716,2017-03-22 21:18:05,2017-03-23 00:06:33
+291,7,4126177,1106,Fix many sign-comparison warnings found in bitcoin codebase,jgarzik,closed,Bug,"Sign comparison warnings are the largest class of warnings remaining.  These commits fix many of the warnings -- which were indeed valid.
+
+The commits were broken up to make reviewing easier.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/1106,https://github.com/bitcoin/bitcoin/pull/1106,https://api.github.com/repos/bitcoin/bitcoin/pulls/1106,2012-04-15T21:01:59Z,2014-07-13T02:40:07Z,2012-04-17T17:55:56Z,1167478,2017-03-22 21:18:05,2017-03-23 00:06:34
+292,7,4113498,1094,Locking fix for AlreadyHave(),jgarzik,closed,Bug,"Access to mapTransactions[] must be guarded by cs_mapTransactions lock.
+
+Also, reformat long lines to make the switch statement more readable.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/1094,https://github.com/bitcoin/bitcoin/pull/1094,https://api.github.com/repos/bitcoin/bitcoin/pulls/1094,2012-04-13T22:26:50Z,2014-08-24T04:18:35Z,2012-04-17T16:23:50Z,1163228,2017-03-22 21:18:05,2017-03-23 00:06:35
+293,7,2217039,633,RPC: do not launch Shutdown in a new thread in case we are running the UI,laanwj,closed,Bug,"This leads to the bitcoin core being shut down while the UI is accessing it, and generally results in a segmentation fault or crash. In case it is desirable to make it possible to shutdown the GUI from its RPC server, we'll need to implement a signal for ",https://api.github.com/repos/bitcoin/bitcoin/issues/633,https://github.com/bitcoin/bitcoin/pull/633,https://api.github.com/repos/bitcoin/bitcoin/pulls/633,2011-11-12T13:07:39Z,2014-07-13T06:19:00Z,2011-11-14T14:56:57Z,488702,2017-03-22 21:18:23,2017-03-23 09:30:59
+294,7,1924041,586,Added a workaround for an Ubuntu bug which causes -fstack-protector-all t,cjdelisle,closed,Bug,"Added a workaround for an Ubuntu bug which causes -fstack-protector-all to be disregarded.
+this causes some functions not to be protected and leads to a warning:
+""warning: not protecting function: no buffer at least 8 bytes long""
+The bug which this is wor",https://api.github.com/repos/bitcoin/bitcoin/issues/586,https://github.com/bitcoin/bitcoin/pull/586,https://api.github.com/repos/bitcoin/bitcoin/pulls/586,2011-10-17T00:33:16Z,2014-07-15T05:25:36Z,2011-10-24T18:29:32Z,406856,2017-03-22 21:18:23,2017-03-23 09:31:00
+295,7,1835664,573,Bugfix: getmemorypool "bits" should be a hex-string,luke-jr,closed,Bug,"Bugfix: ""bits"" should be a hex-string, not a number (that just doesn't make sense)
+
+(suggest waiting for ACK from original getmemorypool author)
+",https://api.github.com/repos/bitcoin/bitcoin/issues/573,https://github.com/bitcoin/bitcoin/pull/573,https://api.github.com/repos/bitcoin/bitcoin/pulls/573,2011-10-06T16:48:52Z,2014-07-15T05:39:53Z,2011-10-09T17:32:22Z,382813,2017-03-22 21:18:23,2017-03-23 09:31:01
+296,7,1572677,491,Optimize database writes for transactions with lots of TxIns.,gavinandresen,closed,Bug,"Patch from ArtForz, who discovered the problem.
+
+The problem was chaining large transactions (transactions with lots of ins and outs) would make the berkeley db transaction log get very big, as the dependencies (TxIns) of a transaction might be re-written",https://api.github.com/repos/bitcoin/bitcoin/issues/491,https://github.com/bitcoin/bitcoin/pull/491,https://api.github.com/repos/bitcoin/bitcoin/pulls/491,2011-09-05T18:48:30Z,2014-06-13T22:44:29Z,2011-09-06T17:47:28Z,310115,2017-03-22 21:18:23,2017-03-23 09:31:01
+297,7,1171964,385,resource leak fix,somebadger,closed,Bug,"Fixed 2 Resource Leaks
+
+http://forum.bitcoin.org/index.php?topic=22585.msg330333#msg330333
+",https://api.github.com/repos/bitcoin/bitcoin/issues/385,https://github.com/bitcoin/bitcoin/pull/385,https://api.github.com/repos/bitcoin/bitcoin/pulls/385,2011-07-06T05:02:11Z,2014-06-15T12:23:48Z,2011-09-19T11:05:04Z,210727,2017-03-22 21:18:23,2017-03-23 09:31:02
+298,7,1125209,358,Address Book related Fixes,sgimenez,closed,Bug,"This is a rebased series of patches from pull request #335
+
+1) Fix the synchronization of sending addresses between a CWallet and its associated CWalletDB (this was reported independently in Issue #350).
+
+2) Add a check for validity of sending addresses (",https://api.github.com/repos/bitcoin/bitcoin/issues/358,https://github.com/bitcoin/bitcoin/pull/358,https://api.github.com/repos/bitcoin/bitcoin/pulls/358,2011-06-27T21:46:04Z,2014-07-13T05:23:55Z,2012-01-13T14:26:40Z,199827,2017-03-22 21:18:23,2017-03-23 09:31:03
+299,7,1117618,350,CWallet: fix mapAddress book update,laanwj,closed,Bug,"Fix update of internal data structure (mapAddressBook) after changes to the address book, and add convenience methods EraseAddressBookName, GetDefaultAddress, SetDefaultAddress to be used from UI.
+
+The problem was introduced in the new CWallet class; mapA",https://api.github.com/repos/bitcoin/bitcoin/issues/350,https://github.com/bitcoin/bitcoin/pull/350,https://api.github.com/repos/bitcoin/bitcoin/pulls/350,2011-06-26T17:30:01Z,2014-07-13T05:59:44Z,2011-10-05T15:43:46Z,198287,2017-03-22 21:18:23,2017-03-23 09:31:04
+300,7,1012026,304,Fix CPU Usage bug when using -nolisten and have no connections.,TheBlueMatt,closed,Bug,"1/2 known Windows CPU Usage bugs fixed
+",https://api.github.com/repos/bitcoin/bitcoin/issues/304,https://github.com/bitcoin/bitcoin/pull/304,https://api.github.com/repos/bitcoin/bitcoin/pulls/304,2011-06-06T23:01:35Z,2014-07-15T07:29:00Z,2011-06-10T05:42:30Z,173108,2017-03-22 21:18:23,2017-03-23 09:31:04
+301,7,1006610,300,non-blocking connect (by phantomcircuit),sipa,closed,Bug,"Use non-blocking connects, and a select() call to wait a predefined
+time (5s by default, but configurable with -timeout) for either
+success or failure. This allows much more connections to be tried
+per time unit.
+
+Based on a patch by phantomcircuit.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/300,https://github.com/bitcoin/bitcoin/pull/300,https://api.github.com/repos/bitcoin/bitcoin/pulls/300,2011-06-05T22:17:59Z,2014-07-07T20:31:39Z,2011-06-11T23:17:14Z,171875,2017-03-22 21:18:23,2017-03-23 09:31:05
+302,7,953908,264,Fix for small change outputs,sipa,closed,Bug,"With the separation of CENT and MIN_TX_FEE, it is now reasonable
+to create change outputs between 0.01 and 0.0005, as these are
+spendable according to the policy, even though they require a fee
+to be paid.
+
+Also, when enough fee was already present, every",https://api.github.com/repos/bitcoin/bitcoin/issues/264,https://github.com/bitcoin/bitcoin/pull/264,https://api.github.com/repos/bitcoin/bitcoin/pulls/264,2011-05-25T16:42:50Z,2014-07-15T07:35:06Z,2011-06-05T14:32:58Z,159482,2017-03-22 21:18:23,2017-03-23 09:31:06
+303,7,937379,253,Remove send to IP address and IP transactions support,laanwj,closed,Bug,"Remove send to IP transaction support, as it is insecure and would confuse users when used. 
+
+An IP is a terrible identifier as it does not identify a person or organization. Furthermore, man-in-the-middle attacks are trivial as the internet has no ""proof",https://api.github.com/repos/bitcoin/bitcoin/issues/253,https://github.com/bitcoin/bitcoin/pull/253,https://api.github.com/repos/bitcoin/bitcoin/pulls/253,2011-05-22T08:58:41Z,2014-06-12T10:23:09Z,2011-09-18T10:48:30Z,155301,2017-03-22 21:18:23,2017-03-23 09:31:06
+304,7,517989,27,listaccounts with minconf param was broken!,gavinandresen,closed,Bug,"Dumb bug:  listaccounts N ignores the N.
+
+My only excuse is that this is a hard feature to test, because transactions confirmations just keep happening, at unpredictable times...
+",https://api.github.com/repos/bitcoin/bitcoin/issues/27,https://github.com/bitcoin/bitcoin/pull/27,https://api.github.com/repos/bitcoin/bitcoin/pulls/27,2011-01-10T18:58:12Z,2014-09-11T05:04:53Z,2011-01-18T19:36:06Z,52977,2017-03-22 21:18:32,2017-03-23 09:31:07
+305,7,508115,21,Add time to category:move transactions,gavinandresen,closed,Bug,"Simple oversight.
+",https://api.github.com/repos/bitcoin/bitcoin/issues/21,https://github.com/bitcoin/bitcoin/pull/21,https://api.github.com/repos/bitcoin/bitcoin/pulls/21,2011-01-05T14:54:04Z,2014-09-11T05:04:53Z,2011-01-06T21:59:02Z,50615,2017-03-22 21:18:32,2017-03-23 09:31:07

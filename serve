@@ -1,0 +1,14 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: omitobisam
+ * Date: 20/03/2017
+ * Time: 12:41
+ */
+
+$port = escapeshellarg($argv[1]);
+$message = "Started server on ".  $_SERVER['REMOTE_ADDR']."/{$port}";
+$comm = system("php -S localhost:{$port} -t ./public 2>&1", $output);
+print_r ($output);
+
+exit($comm);

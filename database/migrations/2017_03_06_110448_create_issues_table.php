@@ -22,7 +22,7 @@ class CreateIssuesTable extends Migration
             $table->string('reporter_name');
             $table->string('state', 10)->nullable(true);
             $table->string('type', 10)->nullable(true);
-            $table->string('description')->nullable(true);
+            $table->text('description')->nullable(true);
             $table->string('api_url');
             $table->string('web_url');
             $table->string('pr_url')->nullable(true);
