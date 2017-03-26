@@ -13,6 +13,8 @@ use App\Project;
 use App\Utilities\Utility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use GuzzleHttp\Psr7;
+
 
 class CommitsController extends Utility
 {
@@ -31,9 +33,10 @@ class CommitsController extends Utility
 
         $_query = http_build_query(array_except($request->all(), ['project_name']));
         $_commits_url = substr($project->commits_url, 0, -6);
-        $_commits_query_url = $this->concat($this->concat($_commits_url, $_query, '?'));
 
-        $this->headers['headers']['If-Modified-Since'] = 'Thu, 25 Mar 2017 15:31:30 GMT+2';
+        $_commits_query_url = $this->concat($this->concat($_commits_url), $_query, '&');
+
+//        $this->headers['headers']['If-Modified-Since'] = 'Thu, 25 Mar 2017 15:31:30 GMT+2';
         $ping = $this->ping($_commits_query_url, $this->headers, ['body', 'head'] );
 
         $_next =[];
@@ -45,6 +48,7 @@ class CommitsController extends Utility
 
             $links = explode(',', $header_[0]);
 
+//            return $parsed = Psr7\parse_header($ping->getHeader('Link'));
             if (($_fs = strpos($links[0], '<')) === 0)
                 $_next['page'] =  substr($links[0], $_fs+1, strpos($links[0],'>')-1);
 
@@ -52,10 +56,11 @@ class CommitsController extends Utility
                 $_next['last'] =  substr($links[1], $_ls+1, strpos($links[1],'>')-2);
 
             if (($_fsn = strpos($links[0], "&page=")) > 0)
-                $_next['next_page'] = substr($links[0], $_fsn+6, -13);
+                $_next['next_page'] = substr($links[0], $_fsn + 6, -13);
 
             if (($_lsn = strpos($links[1], "&page=")) > 0)
                 $_next['last_page'] = substr($links[1], $_lsn+6, -13);
+
         }
 
         $_commits = $this->jsonToObject($ping->getBody());
