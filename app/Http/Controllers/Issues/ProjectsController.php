@@ -45,7 +45,7 @@ class ProjectsController extends Utility
         }
         $project['identifier'] = $res->id;
         $project['name'] = $res->name;
-        $project['organization_name'] = (isset($res->organization)) ? $res->organization->login: 'Unknown';
+        $project['organization_name'] = (isset($res->organization)) ? $res->organization->login: $res->owner->login;
         $project['type'] = 'framework';
         $project['private'] = $res->private;
         $project['language'] = $res->language;
