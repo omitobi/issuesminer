@@ -75,14 +75,15 @@ class CommitsController extends Utility
             $error = ["You need to wait $diff seconds before making another request"];
             return $this->respond($error, 503);
         }
-        $_SESSION['timeout'] = time() + 71;
+        $_SESSION['timeout'] = time() + 5;
 
         $_errors = [];
         foreach ($_commits as $_commit)
         {
             $commits_['project_id'] = $project->id;
             $commits_['commit_sha'] = $_commit->sha;
-//            $commits_['author_id'] = $_commit->committer->id; //from issues
+//            $commits_['author_id'] =
+//                ($_commit->committer->id) ? $_commit->committer->id : $_commit->author->id; //from issuesCommit
             $commits_['author_name'] = $_commit->commit->author->name;
             $commits_['api_url'] = $_commit->url; //*
             $commits_['web_url'] = $_commit->html_url;
@@ -116,6 +117,9 @@ class CommitsController extends Utility
                 "extra" => (!$_record_count || !is_numeric($_next['next_page']) ) ? 'covered' : '',
                 'next' => (isset($_next['next_page'])) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
                 'params' => http_build_query($requests),
+                'notes' => [
+                    array_except($_next, ['last','page'])
+                ]
             ];
             return $this->respond($msg, 201);
         }
@@ -127,6 +131,9 @@ class CommitsController extends Utility
                 "message" => "Something went wrong",
                 "extra" => '',
                 'next' => (isset($_next['next_page'])) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
+                'notes' => [
+                    array_except($_next, ['last','page'])
+                ],
             ],
             500
         );

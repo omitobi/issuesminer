@@ -13,7 +13,7 @@
 * Then pick the process_id, and use 'kill [:process_id]'
 */
 $port = escapeshellarg($argv[1]);
-$message = "Started server on ".  $_SERVER['REMOTE_ADDR']."/{$port}";
+$message = "Started server on localhost:{$port}";
 $comm = system("php -S localhost:{$port} -t ./public 2>&1", $output);
 print_r ("Started app on localhost:{$port} at ".time());
 print_r ($output);
