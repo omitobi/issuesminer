@@ -1,0 +1,651 @@
+1,1,1,1,f86655fdddb519f59ab70043d0c065aca807b94f,331997,Gavin Andresen,https://api.github.com/repos/bitcoin/bitcoin/commits/f86655fdddb519f59ab70043d0c065aca807b94f,https://github.com/bitcoin/bitcoin/commit/f86655fdddb519f59ab70043d0c065aca807b94f,Add time to category:move transactions.,1,,520921972ff649f75f461bb3ecc86979a01aa1dd,2017-03-25 01:53:56,2017-03-25 02:31:13
+2,1,2,2,80be6e69a92130175da623fbb75552a04d3ff4f8,331997,Gavin Andresen,https://api.github.com/repos/bitcoin/bitcoin/commits/80be6e69a92130175da623fbb75552a04d3ff4f8,https://github.com/bitcoin/bitcoin/commit/80be6e69a92130175da623fbb75552a04d3ff4f8,Add account/address details to gettransaction output,1,,fa9bda773cfcca4069dac253cca8e3cde8396739,2017-03-25 01:53:56,2017-03-25 02:31:14
+3,1,2,2,2eb09b66efba479acd6a7043ac42456c8733dce9,331997,Gavin Andresen,https://api.github.com/repos/bitcoin/bitcoin/commits/2eb09b66efba479acd6a7043ac42456c8733dce9,https://github.com/bitcoin/bitcoin/commit/2eb09b66efba479acd6a7043ac42456c8733dce9,Fix so listaccounts with minconf works.,1,,a020ee9bc533ffe3546e588282a368282ef8ccbd,2017-03-25 01:53:56,2017-03-25 02:31:14
+4,1,4,4,ca253d591190255227e8c649b271503fdd1caf42,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/ca253d591190255227e8c649b271503fdd1caf42,https://github.com/bitcoin/bitcoin/commit/ca253d591190255227e8c649b271503fdd1caf42,"Fix for small change outputs
+
+With the separation of CENT and MIN_TX_FEE, it is now reasonable
+to create change outputs between 0.01 and 0.0005, as these are
+spendable according to the policy, even though they require a fee
+to be paid.
+
+Also, when enough fee was already present, everything can go into
+a change output, without further increasing the fee.",1,,bd8f29c09b4cd45539ab3058504fafea267adf8e,2017-03-25 01:53:57,2017-03-25 02:31:15
+5,1,5,5,76d660ebd336d3dd47dd555ebbaa721a4cc978b2,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/76d660ebd336d3dd47dd555ebbaa721a4cc978b2,https://github.com/bitcoin/bitcoin/commit/76d660ebd336d3dd47dd555ebbaa721a4cc978b2,"Faster timeout when connecting
+
+Use non-blocking connects, and a select() call to wait a predefined
+time (5s by default, but configurable with -timeout) for either
+success or failure. This allows much more connections to be tried
+per time unit.
+
+Based on a patch by phantomcircuit.",5,,cd0761ee3926b843c5d1f2f75e597f2f0bce1d49,2017-03-25 01:53:58,2017-03-25 02:31:15
+6,1,6,6,c6710c7a70658536ab0217dff18a45622ea08680,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/c6710c7a70658536ab0217dff18a45622ea08680,https://github.com/bitcoin/bitcoin/commit/c6710c7a70658536ab0217dff18a45622ea08680,Fix CPU Usage bug when using -nolisten and have no connections.,1,,c884e8d5e7452b027da555f06eaf99741ec9cfe8,2017-03-25 01:55:09,2017-03-25 02:32:26
+7,1,7,7,4552bcb9eb00f4b613ab707b12a7b08d5d3aa0e9,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/4552bcb9eb00f4b613ab707b12a7b08d5d3aa0e9,https://github.com/bitcoin/bitcoin/commit/4552bcb9eb00f4b613ab707b12a7b08d5d3aa0e9,"Fix update of internal data structure (mapAddressBook) and add methods EraseAddressBookName, GetDefaultAddress, SetDefaultAddress",2,,69110a4afa9018e980e0daf666d2ce57b7fff019,2017-03-25 01:55:09,2017-03-25 02:32:27
+8,1,8,8,c613990c389249fcb755faefe5c1076b7c15614e,858993,Stéphane Gimenez,https://api.github.com/repos/bitcoin/bitcoin/commits/c613990c389249fcb755faefe5c1076b7c15614e,https://github.com/bitcoin/bitcoin/commit/c613990c389249fcb755faefe5c1076b7c15614e,Fix for setaccount related Issue #329,1,,1a72c7979c04df7ca335715ac1141f0dee4e4295,2017-03-25 01:55:10,2017-03-25 02:32:27
+9,1,8,8,c41d05b081d28616b0ef11dffac5f7d35d8fa8c4,858993,Stéphane Gimenez,https://api.github.com/repos/bitcoin/bitcoin/commits/c41d05b081d28616b0ef11dffac5f7d35d8fa8c4,https://github.com/bitcoin/bitcoin/commit/c41d05b081d28616b0ef11dffac5f7d35d8fa8c4,Add a check for validity of sending addresses (Issue #328),2,,cb0f29539173091fb7c19a6ec11f74c8bdde74bb,2017-03-25 01:55:10,2017-03-25 02:32:28
+10,1,8,8,21b31e1761ed06e07d898dc75013135da5b657a9,858993,Stéphane Gimenez,https://api.github.com/repos/bitcoin/bitcoin/commits/21b31e1761ed06e07d898dc75013135da5b657a9,https://github.com/bitcoin/bitcoin/commit/21b31e1761ed06e07d898dc75013135da5b657a9,Avoid propagation of unnecessary updates to CWalletDB,1,,c81537bafa9177b76e041e4946d4c80d17b6543c,2017-03-25 01:55:10,2017-03-25 02:32:28
+11,1,9,9,32cea448ce48f37594f2b4bc25bf51421bec0c42,863728,somebadger,https://api.github.com/repos/bitcoin/bitcoin/commits/32cea448ce48f37594f2b4bc25bf51421bec0c42,https://github.com/bitcoin/bitcoin/commit/32cea448ce48f37594f2b4bc25bf51421bec0c42,resource leak fix,1,,c6a65cea094c3ea718ace3ace52dc8b557faec80,2017-03-25 01:55:10,2017-03-25 02:33:40
+12,1,9,9,177130a7ceaef5477bc09dbae369ddd1dd8da55a,863728,somebadger,https://api.github.com/repos/bitcoin/bitcoin/commits/177130a7ceaef5477bc09dbae369ddd1dd8da55a,https://github.com/bitcoin/bitcoin/commit/177130a7ceaef5477bc09dbae369ddd1dd8da55a,Resource Leak Fix,1,,5831c129c6db4b92801f4321ec79abd315817de8,2017-03-25 01:55:10,2017-03-25 02:33:40
+13,1,10,10,e077cce6179f499468b1c30583a529a7560c87cc,331997,Gavin Andresen,https://api.github.com/repos/bitcoin/bitcoin/commits/e077cce6179f499468b1c30583a529a7560c87cc,https://github.com/bitcoin/bitcoin/commit/e077cce6179f499468b1c30583a529a7560c87cc,"Optimize database writes for transactions with lots of TxIns.
+Patch from ArtForz, who discovered the problem.",1,,dce26d3599332ff93a1b757ab85c9359ac64daae,2017-03-25 01:56:22,2017-03-25 02:33:41
+14,1,11,11,903a25583604b73e8b139c591b1e4a8a5402cbba,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/903a25583604b73e8b139c591b1e4a8a5402cbba,https://github.com/bitcoin/bitcoin/commit/903a25583604b73e8b139c591b1e4a8a5402cbba,"Bugfix: ""bits"" should be a hex-string, not a number (that just doesn't make sense)",1,,6e2eac5a7ef45d6febf9312fa5409326e29aee74,2017-03-25 01:56:22,2017-03-25 02:33:41
+15,1,12,12,1e5f9393818cdc2264e7e44ed17291366da3dcb9,509047,cjdelisle,https://api.github.com/repos/bitcoin/bitcoin/commits/1e5f9393818cdc2264e7e44ed17291366da3dcb9,https://github.com/bitcoin/bitcoin/commit/1e5f9393818cdc2264e7e44ed17291366da3dcb9,Added a workaround for an Ubuntu bug which causes -fstack-protector-all to be disregarded.,1,,5f841ea0feacde03628700024bcdd1501621f59a,2017-03-25 01:56:23,2017-03-25 02:33:41
+16,1,13,13,19197d5e2973785e37b8b0eeefc3d6af0b2bb1fc,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/19197d5e2973785e37b8b0eeefc3d6af0b2bb1fc,https://github.com/bitcoin/bitcoin/commit/19197d5e2973785e37b8b0eeefc3d6af0b2bb1fc,"Do not launch Shutdown in a new thread in case we are running the UI.
+
+This leads to the bitcoin core being shut down while the UI is accessing it, and generally results in a segmentation fault or crash. In case it is desirable to make it possible to shutdown the GUI from its RPC server, we'll need to implement a signal for it. For the mean time, this is a safe stopgap.",1,,24864030c1b1ab78a398baac99a1e2f6ceeaa932,2017-03-25 01:56:24,2017-03-25 02:34:52
+17,1,14,14,8deb9822e41602001b399944d8a182f48bc9d088,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/8deb9822e41602001b399944d8a182f48bc9d088,https://github.com/bitcoin/bitcoin/commit/8deb9822e41602001b399944d8a182f48bc9d088,"Locking fix for AlreadyHave()
+
+Access to mapTransactions[] must be guarded by cs_mapTransactions lock.
+
+Also, reformat long lines to make the switch statement more readable.",1,,c9368cf7ffac5c84967e348bb572219ae28aad4d,2017-03-25 01:57:35,2017-03-25 02:34:53
+18,1,15,15,ab9dc75a183c7a46e38e957ee3192d5febcccb3c,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/ab9dc75a183c7a46e38e957ee3192d5febcccb3c,https://github.com/bitcoin/bitcoin/commit/ab9dc75a183c7a46e38e957ee3192d5febcccb3c,"The string class returns string::npos, when find() fails.
+
+Noticed when sign-comparison warnings were enabled.",3,,fb88891ad2bb792e3b169b3aa1f9ec81af547217,2017-03-25 01:57:35,2017-03-25 02:34:53
+19,1,15,15,c376ac359ec8551823b4ee14c85d85a49f2d3436,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/c376ac359ec8551823b4ee14c85d85a49f2d3436,https://github.com/bitcoin/bitcoin/commit/c376ac359ec8551823b4ee14c85d85a49f2d3436,"Fix loop index var types, fixing many minor sign comparison warnings
+
+foo.size() typically returns an unsigned integral type; make loop variables
+match those types' signedness.",10,,b1ee40ab905f953babab0eae88c3a63b692dc351,2017-03-25 01:57:35,2017-03-25 02:34:54
+20,1,15,15,3a78f82a783af22b82646365acc56d297a33e2b5,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/3a78f82a783af22b82646365acc56d297a33e2b5,https://github.com/bitcoin/bitcoin/commit/3a78f82a783af22b82646365acc56d297a33e2b5,Fix sign-compare warnings: netbase's Lookup* max-solutions may be unsigned,2,,6a257cf9fa5fb853a1351d4881830c0a521c96dd,2017-03-25 01:57:35,2017-03-25 02:34:54
+21,1,15,15,c3fad8350b5d2596be62399e1ffefc808f328083,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/c3fad8350b5d2596be62399e1ffefc808f328083,https://github.com/bitcoin/bitcoin/commit/c3fad8350b5d2596be62399e1ffefc808f328083,serialize.h: CAutoFile's read and write may take size_t nSize,1,,5fb3aa688840c0acb709cbdd9d062d1b79119ecd,2017-03-25 01:57:35,2017-03-25 02:36:06
+22,1,15,15,0dd710acb6ae14bb88b33a9f86c549bdbb4b6975,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/0dd710acb6ae14bb88b33a9f86c549bdbb4b6975,https://github.com/bitcoin/bitcoin/commit/0dd710acb6ae14bb88b33a9f86c549bdbb4b6975,"CNode's nHeaderStart may be negative, so change its type",1,,343e77a7827150fd0794c3d9bc5d9287d6f2a866,2017-03-25 01:57:35,2017-03-25 02:36:06
+23,1,15,15,9fb89c26f3a3991d197b207f44ef79b1d16c26fc,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/9fb89c26f3a3991d197b207f44ef79b1d16c26fc,https://github.com/bitcoin/bitcoin/commit/9fb89c26f3a3991d197b207f44ef79b1d16c26fc,Fix misc. minor sign-comparison warnings,3,,8f220f1c753d7766ebd8290fbaca6440e6776eb9,2017-03-25 01:57:35,2017-03-25 02:36:06
+24,1,16,16,806b030c5127a2670f62ce2bfc63e9623a1bb9f6,1419649,Philip Kaufmann,https://api.github.com/repos/bitcoin/bitcoin/commits/806b030c5127a2670f62ce2bfc63e9623a1bb9f6,https://github.com/bitcoin/bitcoin/commit/806b030c5127a2670f62ce2bfc63e9623a1bb9f6,new splash screen image (fix for #1064),2,,912257e494b6b6446209c18284a6b19b29dc8c59,2017-03-25 01:57:36,2017-03-25 02:36:07
+25,1,17,17,35dd1ed587bf39bf593947865e819f33e80428cb,1606235,cardpuncher,https://api.github.com/repos/bitcoin/bitcoin/commits/35dd1ed587bf39bf593947865e819f33e80428cb,https://github.com/bitcoin/bitcoin/commit/35dd1ed587bf39bf593947865e819f33e80428cb,Increase the size of adressbookpage.ui in order to fix issue #1062,1,,8f2908aecc7203d17002dbfc29d05b65a0540a03,2017-03-25 01:57:36,2017-03-25 02:36:07
+26,1,18,18,b357a71cfaf99dd2e7d203a12edfcc5df4a93386,178464,Jonas Schnelli,https://api.github.com/repos/bitcoin/bitcoin/commits/b357a71cfaf99dd2e7d203a12edfcc5df4a93386,https://github.com/bitcoin/bitcoin/commit/b357a71cfaf99dd2e7d203a12edfcc5df4a93386,"clear path cache after getting a proper config file (fixes #2605)
+
+Signed-off-by: Jonas Schnelli <jonas.schnelli@include7.ch>",1,,4c9b897f5752311c333e0f141f122a09b8c6a1a0,2017-03-25 01:58:48,2017-03-25 02:37:18
+27,1,19,19,122549f6dee5f4d4daf7091d6302c38ba13ffb01,3308193,David Hill,https://api.github.com/repos/bitcoin/bitcoin/commits/122549f6dee5f4d4daf7091d6302c38ba13ffb01,https://github.com/bitcoin/bitcoin/commit/122549f6dee5f4d4daf7091d6302c38ba13ffb01,Fix incorrect checkpoint data for testnet3,1,,926949e06a3c2ffbccfec6d46df1ec76539dbc86,2017-03-25 01:58:48,2017-03-25 02:37:19
+28,1,20,20,88dd3598d22197a22565e524cecdc08107cf76ac,4284124,Tom Harding,https://api.github.com/repos/bitcoin/bitcoin/commits/88dd3598d22197a22565e524cecdc08107cf76ac,https://github.com/bitcoin/bitcoin/commit/88dd3598d22197a22565e524cecdc08107cf76ac,"Check signatures before respend relay
+
+Check that all inputs are completely valid before actually
+relaying a double-spend.",1,,1294e5b2ed8bfa3c75acc811b4ad1528604dea59,2017-03-25 01:58:49,2017-03-25 02:37:19
+29,1,20,20,0da6b3fd187da3aa810aaa584d8bd197ad4fa2b9,4284124,Tom Harding,https://api.github.com/repos/bitcoin/bitcoin/commits/0da6b3fd187da3aa810aaa584d8bd197ad4fa2b9,https://github.com/bitcoin/bitcoin/commit/0da6b3fd187da3aa810aaa584d8bd197ad4fa2b9,"Remove signal DoubleSpendDetected, use function
+
+Also removes the need for forward reference to RelayableRespend.",3,,26450bb7212c5fd7705eb66f63d1c926dd1e3d2a,2017-03-25 01:58:49,2017-03-25 02:37:20
+30,1,21,21,17f15678d399275a093be496914c59b463929fe4,4360349,Alex Morcos,https://api.github.com/repos/bitcoin/bitcoin/commits/17f15678d399275a093be496914c59b463929fe4,https://github.com/bitcoin/bitcoin/commit/17f15678d399275a093be496914c59b463929fe4,Fixed a bug with index bounds checking,1,,0725441fba3fe58c72f8a6c6e19294b15971f6d0,2017-03-25 01:58:49,2017-03-25 02:37:20
+31,1,21,21,961ae93c85cee96c5dca3d44fbfb829243607f65,4360349,Alex Morcos,https://api.github.com/repos/bitcoin/bitcoin/commits/961ae93c85cee96c5dca3d44fbfb829243607f65,https://github.com/bitcoin/bitcoin/commit/961ae93c85cee96c5dca3d44fbfb829243607f65,Fix minor bug which only affected log messages.,1,,a06de7a947380ac1836fd379cd971e27b95bad37,2017-03-25 01:58:49,2017-03-25 02:38:32
+32,1,21,21,e59441f0863d20c6f205c4854a37507267183863,4360349,Alex Morcos,https://api.github.com/repos/bitcoin/bitcoin/commits/e59441f0863d20c6f205c4854a37507267183863,https://github.com/bitcoin/bitcoin/commit/e59441f0863d20c6f205c4854a37507267183863,Process fee estimate file into temporary vector first to let sanity checking complete.,1,,29924fff09c24abfbc1df7f845fdb13cb26cf1d6,2017-03-25 01:58:49,2017-03-25 02:38:32
+33,1,22,22,6fd59ee897e9dc9b021440cbb738186dbf3a3e98,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/6fd59ee897e9dc9b021440cbb738186dbf3a3e98,https://github.com/bitcoin/bitcoin/commit/6fd59ee897e9dc9b021440cbb738186dbf3a3e98,"script.h: set_vch() should shift a >32 bit value
+
+Source: http://www.viva64.com/en/b/0268/",1,,c74ae37598027551451e54d276034c7e8581c33a,2017-03-25 02:00:01,2017-03-25 02:38:33
+34,1,23,23,6c23b082033b627f31170166c07ab35fa6be9343,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/6c23b082033b627f31170166c07ab35fa6be9343,https://github.com/bitcoin/bitcoin/commit/6c23b082033b627f31170166c07ab35fa6be9343,"CCoinsKeyHasher::operator() should return size_t
+
+It currently returns uint64_t, which on older boost (at least 1.46) causes
+test failures on 32-bit systems.
+
+This problem was introduced in bc42503.
+
+Fixes #4634.",1,,ff60288163b222255b2a6474fb454a1ed16d8b0b,2017-03-25 02:00:02,2017-03-25 02:38:33
+35,1,24,24,c33b983903c64d88a2aef24da1827b86aadce596,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/c33b983903c64d88a2aef24da1827b86aadce596,https://github.com/bitcoin/bitcoin/commit/c33b983903c64d88a2aef24da1827b86aadce596,"Don't poll showmyip.com, it doesn't exist anymore
+
+Fixes #4679.
+
+This leaves us with only one candidate, checkip.dyndns.org.
+GetMyExternalIP should be phased out as soon as possible.",1,,ec58f84b06870efe13638833a70692cbf2aa16e8,2017-03-25 02:00:03,2017-03-25 02:38:34
+36,1,25,25,42642c96950f50bec0866483876a6eef27318fec,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/42642c96950f50bec0866483876a6eef27318fec,https://github.com/bitcoin/bitcoin/commit/42642c96950f50bec0866483876a6eef27318fec,"UniValue: use correct setNumStr() input val, when setting number values",1,,b0171e48c41d5b4f871298dcfa49f7cdd6675030,2017-03-25 02:00:03,2017-03-25 02:39:44
+37,1,25,25,dee9324a0bdbf92a0764213f9b24424a7600f47b,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/dee9324a0bdbf92a0764213f9b24424a7600f47b,https://github.com/bitcoin/bitcoin/commit/dee9324a0bdbf92a0764213f9b24424a7600f47b,UniValue: compact (!pretty) output should not include extra whitespace,1,,042091a8274ae34dfd877004c01295bec72291fd,2017-03-25 02:00:03,2017-03-25 02:39:45
+38,1,25,25,e85267be6306a54a0cfe0055c88b0b753f7d68cd,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/e85267be6306a54a0cfe0055c88b0b753f7d68cd,https://github.com/bitcoin/bitcoin/commit/e85267be6306a54a0cfe0055c88b0b753f7d68cd,UniValue: add unit tests,2,,25d1df34314f4f54c23471fc3b687edc607c3dd5,2017-03-25 02:00:03,2017-03-25 02:39:45
+39,1,25,25,dc271fc025d219c18428a4d36dbc372c8e457908,494411,Jeff Garzik,https://api.github.com/repos/bitcoin/bitcoin/commits/dc271fc025d219c18428a4d36dbc372c8e457908,https://github.com/bitcoin/bitcoin/commit/dc271fc025d219c18428a4d36dbc372c8e457908,UniValue tests: use more BOOST_CHECK(),1,,23bc5f6b1265b35284f0e2a2665046afffa895b0,2017-03-25 02:00:03,2017-03-25 02:39:46
+40,1,26,26,94064710b9123dfb3df8cfd6c32efae349aec281,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/94064710b9123dfb3df8cfd6c32efae349aec281,https://github.com/bitcoin/bitcoin/commit/94064710b9123dfb3df8cfd6c32efae349aec281,"Write fee estimate and peers files only when initialized
+
+Fixes #4669.
+
+Move the loading of addresses to StartNode() to make it more
+self-contained.",2,,ebb103b6362d8f07bb064274f0b83edecd90b7d7,2017-03-25 02:01:15,2017-03-25 02:39:46
+41,1,27,27,730b1ed1a0d2b2b0f278ee808e7e266a50fac94b,8286077,21E14,https://api.github.com/repos/bitcoin/bitcoin/commits/730b1ed1a0d2b2b0f278ee808e7e266a50fac94b,https://github.com/bitcoin/bitcoin/commit/730b1ed1a0d2b2b0f278ee808e7e266a50fac94b,Check pindexBestForkBase for null,1,,cd4bfbfb924583a0c2c855f458ab66c9301460cb,2017-03-25 02:01:15,2017-03-25 02:40:57
+42,1,28,28,b4ee0bddad94cb580c1b56c592021bb102ed7b1a,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/b4ee0bddad94cb580c1b56c592021bb102ed7b1a,https://github.com/bitcoin/bitcoin/commit/b4ee0bddad94cb580c1b56c592021bb102ed7b1a,Introduce preferred download peers,1,,36af1c28277c99798b389ecd4e884691234feee7,2017-03-25 02:01:16,2017-03-25 02:40:58
+43,1,29,29,a2d0fc658a7b21d2d41ef2a6c657d24114b6c49e,1192483,Ruben Dario Ponticelli,https://api.github.com/repos/bitcoin/bitcoin/commits/a2d0fc658a7b21d2d41ef2a6c657d24114b6c49e,https://github.com/bitcoin/bitcoin/commit/a2d0fc658a7b21d2d41ef2a6c657d24114b6c49e,Fix IsInitialBlockDownload which was broken by headers first.,1,,bf487df39f3e8204b0c84d2753cde9f631824f3e,2017-03-25 02:01:16,2017-03-25 02:40:58
+44,1,29,29,9ec75c5ef4182a38e261beaafdc94325785cc7c5,1192483,Ruben Dario Ponticelli,https://api.github.com/repos/bitcoin/bitcoin/commits/9ec75c5ef4182a38e261beaafdc94325785cc7c5,https://github.com/bitcoin/bitcoin/commit/9ec75c5ef4182a38e261beaafdc94325785cc7c5,Add a locking mechanism to IsInitialBlockDownload to ensure it never goes from false to true.,1,,0fd8065342e13612c92f88416cb4e88c239d80e5,2017-03-25 02:01:16,2017-03-25 02:40:59
+45,1,30,30,4ead850fe54ae0bdfb4b3724cbefb3425a16b74a,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/4ead850fe54ae0bdfb4b3724cbefb3425a16b74a,https://github.com/bitcoin/bitcoin/commit/4ead850fe54ae0bdfb4b3724cbefb3425a16b74a,Fix for crash during block download,1,,0506a7f598c37b91b65cbe477483804de590648a,2017-03-25 02:02:28,2017-03-25 02:40:59
+46,1,30,30,8375e2215f24ff4b92c634d2dc56898e9cda437b,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/8375e2215f24ff4b92c634d2dc56898e9cda437b,https://github.com/bitcoin/bitcoin/commit/8375e2215f24ff4b92c634d2dc56898e9cda437b,Fix -loadblock after shutdown during IBD,1,,238b0400ea0ec9c1c162f429db019f07e47aa7f6,2017-03-25 02:02:28,2017-03-25 02:42:11
+47,1,30,30,50b43fda08afeeaf22e0ad991a9885ee078a7c78,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/50b43fda08afeeaf22e0ad991a9885ee078a7c78,https://github.com/bitcoin/bitcoin/commit/50b43fda08afeeaf22e0ad991a9885ee078a7c78,Be a bit more verbose during -loadblock if we already have blocks,1,,5302f0bcb4575cf758b29ae39e88ab85279c7736,2017-03-25 02:02:28,2017-03-25 02:42:11
+48,1,31,31,cca48f69b04462c5c9bfefd34443e0b8401dbd6c,8286077,21E14,https://api.github.com/repos/bitcoin/bitcoin/commits/cca48f69b04462c5c9bfefd34443e0b8401dbd6c,https://github.com/bitcoin/bitcoin/commit/cca48f69b04462c5c9bfefd34443e0b8401dbd6c,Reset setBlockIndexCandidates once block index db loaded,1,,1ba17614df19e341f77d9bd6d9ad33f1d93fa6c9,2017-03-25 02:02:28,2017-03-25 02:42:11
+49,1,32,32,ff09e31a51dcee404c9c037c7c5f50c522e67ea8,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/ff09e31a51dcee404c9c037c7c5f50c522e67ea8,https://github.com/bitcoin/bitcoin/commit/ff09e31a51dcee404c9c037c7c5f50c522e67ea8,sleep-wait on genesis block during init with -reindex,1,,afcfdb0621363f5db2c4186f6e6731529a0b58a8,2017-03-25 02:02:29,2017-03-25 02:42:12
+50,1,33,33,868d041622e2f589ab4535c30ce683534b6d4f71,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/868d041622e2f589ab4535c30ce683534b6d4f71,https://github.com/bitcoin/bitcoin/commit/868d041622e2f589ab4535c30ce683534b6d4f71,"Remove coinbase-dependant transactions during reorg.
+
+This still leaves transactions in mempool that are potentially
+invalid if the maturity period has been reorged out of, but at
+least they're not missing inputs entirely.",1,,3a2c167e805e0a0863eeca1fef628567b7bb07f4,2017-03-25 02:02:29,2017-03-25 02:42:12
+51,1,33,33,723d12c098456e7682e641076e76468a9fb0cec0,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/723d12c098456e7682e641076e76468a9fb0cec0,https://github.com/bitcoin/bitcoin/commit/723d12c098456e7682e641076e76468a9fb0cec0,Remove txn which are invalidated by coinbase maturity during reorg,3,,f671352b58552d68c68f787bf787f27b91bee77f,2017-03-25 02:02:29,2017-03-25 02:43:23
+52,1,33,33,b7b4318f3a65d6e55d44bff5da1091ec0b3a26d2,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/b7b4318f3a65d6e55d44bff5da1091ec0b3a26d2,https://github.com/bitcoin/bitcoin/commit/b7b4318f3a65d6e55d44bff5da1091ec0b3a26d2,Make CTxMemPool::check more thourough by using CheckInputs,1,,6ecd64636b4968835c7aeb33e2cb1d36e235474c,2017-03-25 02:02:29,2017-03-25 02:43:24
+53,1,33,33,7fd6219af7006fddc4b675236bcd43dd7a9eb553,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/7fd6219af7006fddc4b675236bcd43dd7a9eb553,https://github.com/bitcoin/bitcoin/commit/7fd6219af7006fddc4b675236bcd43dd7a9eb553,Make CTxMemPool::remove more effecient by avoiding recursion,1,,840eb536baa01157010dc88d10bcd78570cf0d2a,2017-03-25 02:02:29,2017-03-25 02:43:24
+54,1,33,33,34318d7fad7922ce56ff47908ff70e2c8a42ee56,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/34318d7fad7922ce56ff47908ff70e2c8a42ee56,https://github.com/bitcoin/bitcoin/commit/34318d7fad7922ce56ff47908ff70e2c8a42ee56,RPC-test based on invalidateblock for mempool coinbase spends,2,,7b43712768bf6eca4f309eb40030f019f729b463,2017-03-25 02:02:29,2017-03-25 02:43:25
+55,1,34,34,57425a24255c5af439241d59ad5a878b7a3771a7,4943644,Daniel Kraft,https://api.github.com/repos/bitcoin/bitcoin/commits/57425a24255c5af439241d59ad5a878b7a3771a7,https://github.com/bitcoin/bitcoin/commit/57425a24255c5af439241d59ad5a878b7a3771a7,"Check block header before accepting it.
+
+Previously, AcceptBlockHeader did not check the header (in particular
+PoW).  This made the client accept invalid-PoW-headers from peers in
+headers-first sync.",1,,ac5d42d5fcc291eb309e8d8f480c61e06fa926bc,2017-03-25 02:03:41,2017-03-25 02:43:25
+56,1,35,35,e3f5a4fef7bc4aeaa8d097a7f045942157353bc2,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/e3f5a4fef7bc4aeaa8d097a7f045942157353bc2,https://github.com/bitcoin/bitcoin/commit/e3f5a4fef7bc4aeaa8d097a7f045942157353bc2,Make -printblocktree compatible with headers first,1,,db8ba3e37b5c890e665471a9c34f805da69e23d3,2017-03-25 02:03:41,2017-03-25 02:44:36
+57,1,36,36,aa768f1848b00e0fd615016598d3fb1f1da240ed,6848764,Pavel Janík,https://api.github.com/repos/bitcoin/bitcoin/commits/aa768f1848b00e0fd615016598d3fb1f1da240ed,https://github.com/bitcoin/bitcoin/commit/aa768f1848b00e0fd615016598d3fb1f1da240ed,signrawtransaction: validate private key.,1,,4a1af2207a29d398ecb021bc5d4af364b9df2c5e,2017-03-25 02:03:43,2017-03-25 02:44:37
+58,1,37,37,8db17607510eb250f3faf7963affa337eb7039d5,417043,Cory Fields,https://api.github.com/repos/bitcoin/bitcoin/commits/8db17607510eb250f3faf7963affa337eb7039d5,https://github.com/bitcoin/bitcoin/commit/8db17607510eb250f3faf7963affa337eb7039d5,rpcserver: attempt to fix uncaught exception.,1,,210c7fe9733a7f877ea8eb221bdf63f34fc38f8d,2017-03-25 02:03:43,2017-03-25 02:44:37
+59,1,38,38,13cdce4336818d0f6cefe6b3e61c45762d97d7c6,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/13cdce4336818d0f6cefe6b3e61c45762d97d7c6,https://github.com/bitcoin/bitcoin/commit/13cdce4336818d0f6cefe6b3e61c45762d97d7c6,Catch UTXO set read errors and shutdown,1,,d6f1e1cb9f9a8d34d06a6ce665bd6552115b7b00,2017-03-25 02:04:55,2017-03-25 02:44:38
+60,1,39,39,6715efb9ca5cabeb07ae4ba8390a6e1b7638f66c,1419649,Philip Kaufmann,https://api.github.com/repos/bitcoin/bitcoin/commits/6715efb9ca5cabeb07ae4ba8390a6e1b7638f66c,https://github.com/bitcoin/bitcoin/commit/6715efb9ca5cabeb07ae4ba8390a6e1b7638f66c,"[Qt] Payment request expiration bug fix (re-done)
+
+- this is based on #4122 (which can be closed)
+
+Currently a payment request is only checked for expiration upon receipt.
+It should be checked again immediately before sending coins to prevent
+the user from paying to an expired invoice which would then require a
+customer service interaction.
+
+- add static verifyExpired() function to PaymentServer to be able to use
+  the same validation code in GUI and unit-testing code
+- extend unit tests to use that function and also add an unit test which
+  overflows, because payment requests allow expires as uint64, whereas we
+  use int64_t for verification of expired payment requests",7,,9916d11f93995175632ad456db4400e2088a6102,2017-03-25 02:04:56,2017-03-25 02:44:38
+61,1,40,40,513fc67cd6a7fed3353063011bf204e97051fd6f,858454,Gregory Maxwell,https://api.github.com/repos/bitcoin/bitcoin/commits/513fc67cd6a7fed3353063011bf204e97051fd6f,https://github.com/bitcoin/bitcoin/commit/513fc67cd6a7fed3353063011bf204e97051fd6f,"Assert inside leveldbwrapper to avoid continuing after failure.
+
+Database failure due to faulty hardware could leave users on a fork where
+ they are vulnerable to opportunistic attack because they are rejecting
+ the longest chain.
+
+If there is a software fault in the OS or LevelDB that causes many nodes
+ to experience database failure at once its also important for overall
+ consensus stability that the failing nodes shut down and not continue
+ operating.
+
+In theory, the exceptions in leveldbwrapper should cause shutdowns but
+ in practice the software calls into that database from many places, some
+ of which throw away all exceptions.
+
+A more organized approach to errors should be used in the long-term,
+ but this works for the moment.",1,,7690023fdda7e06549c94f14f417c5078435cda7,2017-03-25 02:04:56,2017-03-25 02:45:49
+62,1,41,41,e5d9d77df2de715d24638e3bab78750b7ad3e1fd,4289847,fsb4000,https://api.github.com/repos/bitcoin/bitcoin/commits/e5d9d77df2de715d24638e3bab78750b7ad3e1fd,https://github.com/bitcoin/bitcoin/commit/e5d9d77df2de715d24638e3bab78750b7ad3e1fd,fix crash: createmultisig and addmultisigaddress,1,,c54b92cc962780b7625e0639c89ca14de8ff46b9,2017-03-25 02:04:56,2017-03-25 02:45:50
+63,1,42,42,cff5af98154ef33ad547579978fa3516ed11656b,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/cff5af98154ef33ad547579978fa3516ed11656b,https://github.com/bitcoin/bitcoin/commit/cff5af98154ef33ad547579978fa3516ed11656b,Avoid reference trap in SignatureChecker,1,,ce2badb8524d54c5ab840e7830dd480f84696305,2017-03-25 02:06:08,2017-03-25 02:45:50
+64,1,43,43,858809a33e4f690c4ad213f44a6c4465fc2ef025,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/858809a33e4f690c4ad213f44a6c4465fc2ef025,https://github.com/bitcoin/bitcoin/commit/858809a33e4f690c4ad213f44a6c4465fc2ef025,Use separate SignatureChecker for CMutableTransaction,13,,04a79caf02083a84be2f67c5260307333d4ccc31,2017-03-25 02:06:08,2017-03-25 02:45:51
+65,1,43,43,9fddceda44fb5592be179d783f0e5ac616c51c0d,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/9fddceda44fb5592be179d783f0e5ac616c51c0d,https://github.com/bitcoin/bitcoin/commit/9fddceda44fb5592be179d783f0e5ac616c51c0d,Avoid storing a reference passed to SignatureChecker constructors,12,,5a109cabca860313f75f714f9fc7f58a46a2ce59,2017-03-25 02:06:08,2017-03-25 02:45:51
+66,1,44,44,cf008ac8c3c5d582562d88ad89020daef3e64dcb,7463573,Suhas Daftuar,https://api.github.com/repos/bitcoin/bitcoin/commits/cf008ac8c3c5d582562d88ad89020daef3e64dcb,https://github.com/bitcoin/bitcoin/commit/cf008ac8c3c5d582562d88ad89020daef3e64dcb,"Acquire CCheckQueue's lock to avoid race condition
+
+This fixes a potential race condition in the CCheckQueueControl constructor,
+which was looking directly at data in CCheckQueue without acquiring its lock.
+
+Remove the now-unnecessary friendship for CCheckQueueControl",1,,7f6eae6509a3205f309036af933ea4ed98fa444b,2017-03-25 02:06:09,2017-03-25 02:47:02
+67,1,45,45,28d4cff0ed2d4438da4bbf2d4ca0465715603af5,858454,Gregory Maxwell,https://api.github.com/repos/bitcoin/bitcoin/commits/28d4cff0ed2d4438da4bbf2d4ca0465715603af5,https://github.com/bitcoin/bitcoin/commit/28d4cff0ed2d4438da4bbf2d4ca0465715603af5,"Sanitize command strings before logging them.
+
+Normally bitcoin core does not display any network originated strings without
+ sanitizing or hex encoding.  This wasn't done for strcommand in many places.
+
+This could be used to play havoc with a terminal displaying the logs,
+ especially with printtoconsole in use.
+
+Thanks to Evil-Knievel for reporting this issue.",3,,20e9252d7ee8dfb63cba099e265a0782660e33b9,2017-03-25 02:06:09,2017-03-25 02:47:03
+68,1,46,46,9519a9a4202cd5fcaaad6d4cf0bf6bad38a27369,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/9519a9a4202cd5fcaaad6d4cf0bf6bad38a27369,https://github.com/bitcoin/bitcoin/commit/9519a9a4202cd5fcaaad6d4cf0bf6bad38a27369,Add correct bool combiner for net signals,2,,5e968c26fff90f4ed6c629666e0d9e7e91402f4a,2017-03-25 02:07:21,2017-03-25 02:47:03
+69,1,47,47,a9af415887f03cb2565895bc55be72748549e527,4360349,Alex Morcos,https://api.github.com/repos/bitcoin/bitcoin/commits/a9af415887f03cb2565895bc55be72748549e527,https://github.com/bitcoin/bitcoin/commit/a9af415887f03cb2565895bc55be72748549e527,fix InvalidateBlock to repopulate setBlockIndexCandidates,1,,9b4bb431283dee97de6a8a9e167f4f7ca62c60e8,2017-03-25 02:07:21,2017-03-25 02:47:04
+70,1,47,47,88f6c8c3657cba81c65da34a7161c860c8a23c5f,4360349,Alex Morcos,https://api.github.com/repos/bitcoin/bitcoin/commits/88f6c8c3657cba81c65da34a7161c860c8a23c5f,https://github.com/bitcoin/bitcoin/commit/88f6c8c3657cba81c65da34a7161c860c8a23c5f,add RPC test for InvalidateBlock,1,,a8bfbe6e6c7f2ca1e3fb0acfc9933ab840dc4934,2017-03-25 02:07:21,2017-03-25 02:47:04
+71,1,48,48,cd3d67cf3b0d573d2c387c2ec35e8b52129863d9,4360349,Alex Morcos,https://api.github.com/repos/bitcoin/bitcoin/commits/cd3d67cf3b0d573d2c387c2ec35e8b52129863d9,https://github.com/bitcoin/bitcoin/commit/cd3d67cf3b0d573d2c387c2ec35e8b52129863d9,Fix InvalidateBlock to add chainActive.Tip to setBlockIndexCandidates,2,,5207f608969831d289fefe85d34d4bdb6bec4367,2017-03-25 02:07:22,2017-03-25 02:48:15
+72,1,49,49,ad9e86dca11dce023d827d342e966f3806c39d27,331997,Gavin Andresen,https://api.github.com/repos/bitcoin/bitcoin/commits/ad9e86dca11dce023d827d342e966f3806c39d27,https://github.com/bitcoin/bitcoin/commit/ad9e86dca11dce023d827d342e966f3806c39d27,"Keep mempool consistent during block-reorgs
+
+This fixes a subtle bug involving block re-orgs and non-standard transactions.
+
+Start with a block containing a non-standard transaction, and
+one or more transactions spending it in the memory pool.
+
+Then re-org away from that block to another chain that does
+not contain the non-standard transaction.
+
+Result before this fix: the dependent transactions get stuck
+in the mempool without their parent, putting the mempool
+in an inconsistent state.
+
+Tested with a new unit test.",3,,85ea3f77b5106439d4263420b7cfa39f5f84c8b4,2017-03-25 02:07:22,2017-03-25 02:48:16
+73,1,50,50,14d4eef79931318cb5968f9154cf458d9f8d27fa,4360349,Alex Morcos,https://api.github.com/repos/bitcoin/bitcoin/commits/14d4eef79931318cb5968f9154cf458d9f8d27fa,https://github.com/bitcoin/bitcoin/commit/14d4eef79931318cb5968f9154cf458d9f8d27fa,"Fix removing of orphan transactions
+
+We don't want to erase orphans that still have missing inputs, they should still be tracked as orphans.  Also, the transaction thats being accepted can't be an orphan otherwise it would have previously been accepted, so doesn't need to be added to the erase queue.",1,,b04274fa2181c169b67c7c295d7323347574cbed,2017-03-25 02:08:34,2017-03-25 02:48:16
+74,1,51,51,504e9bb9af76605caa3e7f7fe158c56eb5e82b51,858454,Gregory Maxwell,https://api.github.com/repos/bitcoin/bitcoin/commits/504e9bb9af76605caa3e7f7fe158c56eb5e82b51,https://github.com/bitcoin/bitcoin/commit/504e9bb9af76605caa3e7f7fe158c56eb5e82b51,"Avoid crash on start in TestBlockValidity with gen=1.
+
+When the internal miner is enabled at the start of a new node, there
+ is an near instant assert in TestBlockValidity because its attempting
+ to mine a block before the top checkpoint.
+
+Also avoids a data race around vNodes.",1,,9060d5cc4b24b803ba5f7e4a483989a745d1200f,2017-03-25 02:08:34,2017-03-25 02:48:17
+75,1,52,52,b3ffcdf91608d4435acfb9b0a6266a4073ffaf7f,178464,Jonas Schnelli,https://api.github.com/repos/bitcoin/bitcoin/commits/b3ffcdf91608d4435acfb9b0a6266a4073ffaf7f,https://github.com/bitcoin/bitcoin/commit/b3ffcdf91608d4435acfb9b0a6266a4073ffaf7f,"don't imbue boost::filesystem::path with locale ""C"" on windows
+
+fixes https://github.com/bitcoin/bitcoin/issues/6078",1,,37fd326f27ab058f5d56b684ec60edf9436fa31f,2017-03-25 02:08:35,2017-03-25 02:48:17
+76,1,52,52,3da78490073b04f52f0136e17b07246cc37bedf1,178464,Jonas Schnelli,https://api.github.com/repos/bitcoin/bitcoin/commits/3da78490073b04f52f0136e17b07246cc37bedf1,https://github.com/bitcoin/bitcoin/commit/3da78490073b04f52f0136e17b07246cc37bedf1,[squashme] simplify SetupEnvironment() (by dexX7),1,,da5b259aeecb1109f846246353c930bcd75c9639,2017-03-25 02:08:35,2017-03-25 02:49:28
+77,1,53,53,bba7c249296a9a2f444e1035fef8f8b593ba2aaf,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/bba7c249296a9a2f444e1035fef8f8b593ba2aaf,https://github.com/bitcoin/bitcoin/commit/bba7c249296a9a2f444e1035fef8f8b593ba2aaf,"Avoid crash on start in TestBlockValidity with gen=1.
+
+When the internal miner is enabled at the start of a new node, there
+ is an near instant assert in TestBlockValidity because its attempting
+ to mine a block before the top checkpoint.
+
+Also avoids a data race around vNodes.",1,,4bceb7d7b431f9f37e76af214e91521c78eec36b,2017-03-25 02:08:35,2017-03-25 02:49:29
+78,1,54,54,4a0d11a783599504f8d38f8749f899702822f88d,7463573,Suhas Daftuar,https://api.github.com/repos/bitcoin/bitcoin/commits/4a0d11a783599504f8d38f8749f899702822f88d,https://github.com/bitcoin/bitcoin/commit/4a0d11a783599504f8d38f8749f899702822f88d,"Do not inv old or missing blocks when pruning
+
+When responding to a getblocks message, only return inv's as
+long as we HAVE_DATA for blocks in the chain, and only for blocks
+that we aren't likely to delete in the near future.",1,,f6c14dd201e807819d3079854de765aef7c4e491,2017-03-25 02:09:47,2017-03-25 02:49:29
+79,1,55,55,8c35b6f3be218101630101806300cfd75be23f58,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/8c35b6f3be218101630101806300cfd75be23f58,https://github.com/bitcoin/bitcoin/commit/8c35b6f3be218101630101806300cfd75be23f58,"Parameter interaction: disable upnp if -proxy set
+
+To protect privacy, do not use UPNP when a proxy is set. The user may
+still specify -listen=1 to listen locally (for a hidden service), so
+don't rely on this happening through -listen.
+
+Fixes #2927.",1,,d0ce3094a5fb284be69abde900f1c3f358de1aa8,2017-03-25 02:09:47,2017-03-25 02:49:30
+80,1,56,56,ffdda4e8a7987de85221d3ca3137593a77d8f5f5,430315,Adam Weiss,https://api.github.com/repos/bitcoin/bitcoin/commits/ffdda4e8a7987de85221d3ca3137593a77d8f5f5,https://github.com/bitcoin/bitcoin/commit/ffdda4e8a7987de85221d3ca3137593a77d8f5f5,"Catch errors on datadir lock and pidfile delete
+
+Prevents bad permissions (or other fs related problems) from resulting
+in hard crashes with cryptic messages on startup and shutdown.",1,,87e989f16863b39aaf00614f453980efb8e6c77b,2017-03-25 02:09:48,2017-03-25 02:49:30
+81,1,57,57,28bf06236d3b385e95fe26a7a742395b30efd6ee,7042,Peter Todd,https://api.github.com/repos/bitcoin/bitcoin/commits/28bf06236d3b385e95fe26a7a742395b30efd6ee,https://github.com/bitcoin/bitcoin/commit/28bf06236d3b385e95fe26a7a742395b30efd6ee,"Fix off-by-one error w/ nLockTime in the wallet
+
+Previously due to an off-by-one error the wallet ignored
+nLockTime-by-height transactions that would be valid in the next block
+even though they are accepted into the mempool. The transactions
+wouldn't show up until confirmed, nor would they be included in the
+unconfirmed balance. Similar to the mempool behavior fix in 665bdd3b,
+the wallet code was calling IsFinalTx() directly without taking into
+account the fact that doing so tells you if the transaction could have
+been mined in the *current* block, rather than the next block.
+
+To fix this we strip IsFinalTx() of non-consensus-critical
+functionality, removing the default arguments, and add CheckFinalTx() to
+check if a transaction will be final in the next block.",8,,94687d289fa02f1a9b0d27a546c34bddffbbafe3,2017-03-25 02:09:48,2017-03-25 02:50:41
+82,1,58,58,19e8d7be42039724b4893515ec6457d0187024a9,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/19e8d7be42039724b4893515ec6457d0187024a9,https://github.com/bitcoin/bitcoin/commit/19e8d7be42039724b4893515ec6457d0187024a9,"Simplify code for CSubnet
+
+Simplify the code by using CAddress.ip directly, instead of the reversed
+GetByte() semantics.",2,,1f2957116e3ed561cc420f879a2df1ab780357c0,2017-03-25 02:11:00,2017-03-25 02:50:42
+83,1,58,58,b45c50ce511dbf541ea086ae40a3ad16ff06de0c,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/b45c50ce511dbf541ea086ae40a3ad16ff06de0c,https://github.com/bitcoin/bitcoin/commit/b45c50ce511dbf541ea086ae40a3ad16ff06de0c,"Fix two problems in CSubNet parsing
+
+Fix two CSubNet constructor problems:
+
+- The use of `/x` where 8 does not divide x was broken, due to a
+  bit-order issue
+
+- The use of e.g. `1.2.3.4/24` where the netmasked bits in the network
+  are not 0 was broken. Fix this by explicitly normalizing the netwok
+  according to the bitmask.
+
+Also add tests for these cases.
+
+Fixes #6179. Thanks to @jonasschnelli for reporting and initial fix.",2,,0f5e1615c63359f2452fc182502e877bea0955fb,2017-03-25 02:11:00,2017-03-25 02:50:42
+84,1,59,59,3e9143386a90e508c8d41719294db11264f5f0a0,7463573,Suhas Daftuar,https://api.github.com/repos/bitcoin/bitcoin/commits/3e9143386a90e508c8d41719294db11264f5f0a0,https://github.com/bitcoin/bitcoin/commit/3e9143386a90e508c8d41719294db11264f5f0a0,"Advance pindexLastCommonBlock for blocks in chainActive
+
+This prevents an edge case where a block downloaded and pruned
+in-between successive calls to FindNextBlocksToDownload could
+cause the block to be unnecessarily re-requested.",1,,dc9585b021a00ca722a1a231d971f328e3097f6f,2017-03-25 02:11:01,2017-03-25 02:50:43
+85,1,60,60,65b94545036ae6e38e79e9c7166a3ba1ddb83f66,331997,Gavin Andresen,https://api.github.com/repos/bitcoin/bitcoin/commits/65b94545036ae6e38e79e9c7166a3ba1ddb83f66,https://github.com/bitcoin/bitcoin/commit/65b94545036ae6e38e79e9c7166a3ba1ddb83f66,"Use best header chain timestamps to detect partitioning
+
+The partition checking code was using chainActive timestamps
+to detect partitioning; with headers-first syncing, it should use
+(and with this pull request, does use) pIndexBestHeader timestamps.
+
+Fixes issue #6251",4,,38dcc6023c1969d538e9e297dde491a1bdee93b9,2017-03-25 02:11:02,2017-03-25 02:50:43
+86,1,61,61,0ce30eaa36295447c6e7f8d16a05798c746fe28a,1419649,Philip Kaufmann,https://api.github.com/repos/bitcoin/bitcoin/commits/0ce30eaa36295447c6e7f8d16a05798c746fe28a,https://github.com/bitcoin/bitcoin/commit/0ce30eaa36295447c6e7f8d16a05798c746fe28a,"fix crash on shutdown when e.g. changing -txindex and abort action
+
+- fixes #3136
+- the problem is related to Boost path and a static initialized internal
+  pointer
+- using a std::string in CDBEnv::EnvShutdown() prevents the problem
+- this removes the boost::filesystem::path path field from CDBEnv",2,,64071caa3a21efd2b7de4bf79a0cf3e579d781a2,2017-03-25 02:11:02,2017-03-25 02:51:54
+87,1,62,62,c38c49d0b708cf948eb46e0857eb743cda09980c,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/c38c49d0b708cf948eb46e0857eb743cda09980c,https://github.com/bitcoin/bitcoin/commit/c38c49d0b708cf948eb46e0857eb743cda09980c,"Fix argument parsing oddity with -noX
+
+`bitcoind -X -noX` ends up, unintuitively, with `X` set.
+(for all boolean options X)
+
+This result is due to the odd two-pass processing of arguments. This
+patch fixes this oddity and simplifies the code at the same time.",2,,a7ec740de8c86922540b2a2d170a788ad79bdf8e,2017-03-25 02:12:14,2017-03-25 02:51:55
+88,1,62,62,c6455c77ab90910bf4c03005fb0a7dfe785e7087,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/c6455c77ab90910bf4c03005fb0a7dfe785e7087,https://github.com/bitcoin/bitcoin/commit/c6455c77ab90910bf4c03005fb0a7dfe785e7087,doc: mention change to option parsing behavior in release notes,1,,db6c28972d8ec4a9c532f65af7ae75612fd5296c,2017-03-25 02:12:14,2017-03-25 02:51:55
+89,1,63,63,36c97b4e5dbf233734bd1882f8b6822a3bdcee97,1008458,Jorge Timón,https://api.github.com/repos/bitcoin/bitcoin/commits/36c97b4e5dbf233734bd1882f8b6822a3bdcee97,https://github.com/bitcoin/bitcoin/commit/36c97b4e5dbf233734bd1882f8b6822a3bdcee97,"Bugfix: Don't check the genesis block header before accepting it
+
+This fixes an error triggered when running with -reindex after #5975",1,,a4cbe43d3bcf9e90a840a1562bfeb03eabfed4be,2017-03-25 02:12:14,2017-03-25 02:51:56
+90,1,63,63,4f40716dcb61f492f93a781751bfa25f712cba8b,1008458,Jorge Timón,https://api.github.com/repos/bitcoin/bitcoin/commits/4f40716dcb61f492f93a781751bfa25f712cba8b,https://github.com/bitcoin/bitcoin/commit/4f40716dcb61f492f93a781751bfa25f712cba8b,"test: Move reindex test to standard tests
+
+This test finishes very quickly, so it should be part of the default set
+of tests in rpc-tests.",1,,0f394094c720345221854b14dd946f49f2bdef05,2017-03-25 02:12:14,2017-03-25 02:51:56
+91,1,64,64,66a7146ac231aabbbdd4c9c8f717786501971dae,4284124,Tom Harding,https://api.github.com/repos/bitcoin/bitcoin/commits/66a7146ac231aabbbdd4c9c8f717786501971dae,https://github.com/bitcoin/bitcoin/commit/66a7146ac231aabbbdd4c9c8f717786501971dae,"Prevent peer flooding inv request queue (redux)
+
+This is a lighter implementation of dcd7ef782bd8105c3427f932206e33fa07ddeded
+from @kazcw.  The effect is the same.  Here is the original description:
+
+mapAlreadyAskedFor does not keep track of which peer has a request queued for a
+particular tx. As a result, a peer can blind a node to a tx indefinitely by
+sending many invs for the same tx, and then never replying to getdatas for it.
+Each inv received will be placed 2 minutes farther back in mapAlreadyAskedFor,
+so a short message containing 10 invs would render that tx unavailable for 20
+minutes.
+
+This is fixed by disallowing a peer from having more than one entry for a
+particular inv in mapAlreadyAskedFor at a time.",3,,042d78d2df6f73c40f1983975d6384b3441eee92,2017-03-25 02:12:15,2017-03-25 02:53:07
+92,1,65,65,47162673c79c757a9c038c4ddc41fb3022223bde,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/47162673c79c757a9c038c4ddc41fb3022223bde,https://github.com/bitcoin/bitcoin/commit/47162673c79c757a9c038c4ddc41fb3022223bde,"Use real number of cores for default -par, ignore virtual cores
+
+To determine the default for `-par`, the number of script verification
+threads, use [boost::thread::physical_concurrency()](http://www.boost.org/doc/libs/1_58_0/doc/html/thread/thread_management.html#thread.thread_management.thread.physical_concurrency)
+which counts only physical cores, not virtual cores.
+
+Virtual cores are roughly a set of cached registers to avoid context
+switches while threading, they cannot actually perform work, so spawning
+a verification thread for them could even reduce efficiency and will put
+undue load on the system.
+
+Should fix issue #6358, as well as some other reported system overload
+issues, especially on Intel processors.
+
+The function was only introduced in boost 1.56, so provide a utility
+function `GetNumCores` to fall back for older Boost versions.",5,,6019e25015147887c5c55cc7a3890acb88aa1de9,2017-03-25 02:12:15,2017-03-25 02:53:08
+93,1,66,66,d422f9b1fdb42a51aadaa1bbc157542dca2feb17,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/d422f9b1fdb42a51aadaa1bbc157542dca2feb17,https://github.com/bitcoin/bitcoin/commit/d422f9b1fdb42a51aadaa1bbc157542dca2feb17,Test whether created sockets are select()able,3,,b7e2e57917bb1ee39dbc1689f2ee95d6273aa1fd,2017-03-25 02:13:27,2017-03-25 02:53:08
+94,1,67,67,d4b1d5a8baf18e4c8d62846360c0c1c0c9331d70,417043,Cory Fields,https://api.github.com/repos/bitcoin/bitcoin/commits/d4b1d5a8baf18e4c8d62846360c0c1c0c9331d70,https://github.com/bitcoin/bitcoin/commit/d4b1d5a8baf18e4c8d62846360c0c1c0c9331d70,openssl: avoid config file load/race,1,,00d0f3a00dc9965913a8e3709e68c96af0d61750,2017-03-25 02:13:27,2017-03-25 02:53:09
+95,1,68,68,e061e2778d592826970483e0844308c4e9a12626,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/e061e2778d592826970483e0844308c4e9a12626,https://github.com/bitcoin/bitcoin/commit/e061e2778d592826970483e0844308c4e9a12626,"rpc: Make ValueFromAmount always return 8 decimals
+
+This is the format that was always returned to JSON clients.
+The difference was not noticed before, because VREAL values
+are post-processed by univalue.
+
+By implementing the functionality directly it breaks the dependency
+of rpcserver on utilmoneystr. FormatMoney is now only used for debugging
+purposes.
+
+To test, port over the formatting tests from util_tests.cpp to
+rpc_tests.cpp.",2,,7946b02855d38837d04c9cec390abcf18aa86be8,2017-03-25 02:13:28,2017-03-25 02:53:09
+96,1,68,68,7650449a6777710cf818d41862626164da0cd412,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/7650449a6777710cf818d41862626164da0cd412,https://github.com/bitcoin/bitcoin/commit/7650449a6777710cf818d41862626164da0cd412,"univalue: Avoid unnecessary roundtrip through double for numbers
+
+JSON makes no distinction between numbers and reals, and our code
+doesn't need to do so either.
+
+This removes VREAL, as well as its specific post-processing in
+`UniValue::write`. Non-monetary amounts do not need to be forcibly
+formatted with 8 decimals, so the extra roundtrip was unnecessary
+(and potentially loses precision).",6,,bce3997af77c404f563c2414ecc27ebf10e77171,2017-03-25 02:13:28,2017-03-25 02:54:20
+97,1,68,68,ec249d4a1d572a17dd010464fe3ead532a8b1b70,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/ec249d4a1d572a17dd010464fe3ead532a8b1b70,https://github.com/bitcoin/bitcoin/commit/ec249d4a1d572a17dd010464fe3ead532a8b1b70,"util: use locale-independent parsing in ParseDouble
+
+Use locale-indepent C++ based parsing instead of C's strtod,
+which checks for different input based on the user's locale.
+Fixes #6443.",1,,1f7a2cae2ced7a2e70314c6367b53ffeae8ac81f,2017-03-25 02:13:28,2017-03-25 02:54:21
+98,1,69,69,7cb1f9f7eb8162a792b4b87bba99fa21c682582e,178464,Jonas Schnelli,https://api.github.com/repos/bitcoin/bitcoin/commits/7cb1f9f7eb8162a792b4b87bba99fa21c682582e,https://github.com/bitcoin/bitcoin/commit/7cb1f9f7eb8162a792b4b87bba99fa21c682582e,"fix and extend CBitcoinExtKeyBase template
+
+- fix Decode call (req. only one param)
+- add constructor for base58c->CExtKey",1,,d535491bb01c2807ff7ca69f23a7a4e08c012ae7,2017-03-25 02:13:29,2017-03-25 02:54:21
+99,1,69,69,8d2af54eccda83bfe86bb14069ad54d0e4ba357c,178464,Jonas Schnelli,https://api.github.com/repos/bitcoin/bitcoin/commits/8d2af54eccda83bfe86bb14069ad54d0e4ba357c,https://github.com/bitcoin/bitcoin/commit/8d2af54eccda83bfe86bb14069ad54d0e4ba357c,extend bip32 tests to cover Base58c/CExtKey decode,1,,69084213a2d4464dd018dcd518487996c7f97046,2017-03-25 02:13:29,2017-03-25 02:54:22
+100,1,69,69,6f8b6d339bf6d6f7fe5a23180e668f7734755d91,178464,Jonas Schnelli,https://api.github.com/repos/bitcoin/bitcoin/commits/6f8b6d339bf6d6f7fe5a23180e668f7734755d91,https://github.com/bitcoin/bitcoin/commit/6f8b6d339bf6d6f7fe5a23180e668f7734755d91,don't try to decode invalid encoded ext keys,1,,90014b9496a8f887cdeee0017edaa3c5aba03d5d,2017-03-25 02:13:29,2017-03-25 02:54:22
+101,1,70,70,8be371db340b03dc03142c1bb3390fdfc84f56b4,6848764,Pavel Janík,https://api.github.com/repos/bitcoin/bitcoin/commits/8be371db340b03dc03142c1bb3390fdfc84f56b4,https://github.com/bitcoin/bitcoin/commit/8be371db340b03dc03142c1bb3390fdfc84f56b4,Do not store more than 200 timedata samples.,1,,a14d69c11664b10da8165db28cc523e14d6a87ea,2017-03-25 02:14:41,2017-03-25 02:55:33
+102,1,71,71,bba3db1a40c2125c23a657e5f2d89e334037f792,4360349,Alex Morcos,https://api.github.com/repos/bitcoin/bitcoin/commits/bba3db1a40c2125c23a657e5f2d89e334037f792,https://github.com/bitcoin/bitcoin/commit/bba3db1a40c2125c23a657e5f2d89e334037f792,Fix masking of irrelevant bits in address groups.,1,,259e5c14a3eb1d8884c6fdfdd27dba4a5a2d4134,2017-03-25 02:14:41,2017-03-25 02:55:34
+103,1,71,71,1123cdbf4d9f4fbc131da48ed4e798be93f3c967,4360349,Alex Morcos,https://api.github.com/repos/bitcoin/bitcoin/commits/1123cdbf4d9f4fbc131da48ed4e798be93f3c967,https://github.com/bitcoin/bitcoin/commit/1123cdbf4d9f4fbc131da48ed4e798be93f3c967,add unit test for CNetAddr::GetGroup.,1,,3f99dc98d931bfdde12f65b8084cd9c8114e66ad,2017-03-25 02:14:41,2017-03-25 02:55:34
+104,1,72,72,fb08d92312312c6c896327d264a8e9915fdafae7,1945,Casey Rodarmor,https://api.github.com/repos/bitcoin/bitcoin/commits/fb08d92312312c6c896327d264a8e9915fdafae7,https://github.com/bitcoin/bitcoin/commit/fb08d92312312c6c896327d264a8e9915fdafae7,Make sure we re-acquire lock if a task throws,1,,06115f5619753178f47f7e5a41f0208678f3f543,2017-03-25 02:14:42,2017-03-25 02:55:35
+105,1,73,73,1d1073c2d3231a9de4adbc2bc46846fc20b34f9e,417043,Cory Fields,https://api.github.com/repos/bitcoin/bitcoin/commits/1d1073c2d3231a9de4adbc2bc46846fc20b34f9e,https://github.com/bitcoin/bitcoin/commit/1d1073c2d3231a9de4adbc2bc46846fc20b34f9e,consensus: cache the openssl EC_GROUP to avoid a race condition for each CECKey instantiation,1,,f94bc954fd124c3a3428759b8b61ad9b14d77d9e,2017-03-25 02:14:42,2017-03-25 02:55:35
+106,1,74,74,85871dd5a11a8e8af4c9124ab487e4b0a0de99e7,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/85871dd5a11a8e8af4c9124ab487e4b0a0de99e7,https://github.com/bitcoin/bitcoin/commit/85871dd5a11a8e8af4c9124ab487e4b0a0de99e7,Add failing test checking timelocked-txn removal during reorg,2,,fdbaf689ad5b223a82b632ed9af34010de0f1fb3,2017-03-25 02:15:54,2017-03-25 02:56:46
+107,1,74,74,2276af1501931e05979d11921d1f9104f0013e9f,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/2276af1501931e05979d11921d1f9104f0013e9f,https://github.com/bitcoin/bitcoin/commit/2276af1501931e05979d11921d1f9104f0013e9f,Fix removal of time-locked transactions during reorg,3,,bd8452dbe045193d487fee406781ba48592952c5,2017-03-25 02:15:54,2017-03-25 02:56:47
+108,1,74,74,b394d266def649088c08619cd32b923ed8ab3c89,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/b394d266def649088c08619cd32b923ed8ab3c89,https://github.com/bitcoin/bitcoin/commit/b394d266def649088c08619cd32b923ed8ab3c89,Fix comment in removeForReorg,1,,d7ad8d1049462a3c3dd5db16c0522c7f75d0fc72,2017-03-25 02:15:54,2017-03-25 02:56:47
+109,1,75,75,131c23d02733c547975844226c1fe0dd4c87211c,4360349,Alex Morcos,https://api.github.com/repos/bitcoin/bitcoin/commits/131c23d02733c547975844226c1fe0dd4c87211c,https://github.com/bitcoin/bitcoin/commit/131c23d02733c547975844226c1fe0dd4c87211c,"Fix locking in GetTransaction.
+
+GetTransaction needs to lock cs_main until ReadBlockFromDisk completes, the data inside CBlockIndex's can change since pruning.  This lock was held by all calls to GetTransaction except rest_tx.",1,,0b5b52b4999b58b1a1f862b9596f6e5db8b24223,2017-03-25 02:15:55,2017-03-25 02:56:48
+110,1,76,76,1f4d7cf20b2569988b4d62d2d413454eff0765bb,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/1f4d7cf20b2569988b4d62d2d413454eff0765bb,https://github.com/bitcoin/bitcoin/commit/1f4d7cf20b2569988b4d62d2d413454eff0765bb,travis: for travis generating an extra build,1,,0537d69a46a15f357d8bf04d917274ffe006af73,2017-03-25 02:15:55,2017-03-25 02:56:48
+111,1,76,76,60457d3c2f3f38d4cc3e524a5d4030bf4034b7aa,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/60457d3c2f3f38d4cc3e524a5d4030bf4034b7aa,https://github.com/bitcoin/bitcoin/commit/60457d3c2f3f38d4cc3e524a5d4030bf4034b7aa,"locking: fix a few small issues uncovered by -Wthread-safety
+
+- rpcwallet: No need to lock twice here
+- openssl: Clang doesn't understand selective lock/unlock here. Ignore it.
+- CNode: Fix a legitimate (though very unlikely) locking bug.",3,,bfaaaeb4c8db8922e0d6e35dd7ca151a3cfe3356,2017-03-25 02:15:55,2017-03-25 02:57:59
+112,1,76,76,a37567dd4428d38388f25756ab7e2d61a3585f7e,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/a37567dd4428d38388f25756ab7e2d61a3585f7e,https://github.com/bitcoin/bitcoin/commit/a37567dd4428d38388f25756ab7e2d61a3585f7e,Add autogen.sh to source tarball.,1,,ab68d8fa6d96269d630f4771bb7757060b558c9f,2017-03-25 02:15:55,2017-03-25 02:58:00
+113,1,76,76,49c6a642023f6dfe20c2aeabba2ff4cb4b717518,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/49c6a642023f6dfe20c2aeabba2ff4cb4b717518,https://github.com/bitcoin/bitcoin/commit/49c6a642023f6dfe20c2aeabba2ff4cb4b717518,"tests: Remove old sh-based test framework
+
+This removes the `conflictedbalance.sh` test as well, but that test has
+been broken for a long time and isn't part of any scripts.
+What it does is, IMO, sufficiently tested by other tests.",3,,c2b7004308094ce0362fa61ae8f81250753ce20a,2017-03-25 02:15:55,2017-03-25 02:58:01
+114,1,76,76,a496e11d7cf827d69c309faf0da9a724d98916c5,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/a496e11d7cf827d69c309faf0da9a724d98916c5,https://github.com/bitcoin/bitcoin/commit/a496e11d7cf827d69c309faf0da9a724d98916c5,Remove bash test note from rpc-tests readme,1,,08c67c4ef189b00969c0764311e7f0ace63e1257,2017-03-25 02:15:55,2017-03-25 02:58:01
+115,1,76,76,f6355e69183f20c3d1fd1b9adbb4f3a00ad680ac,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/f6355e69183f20c3d1fd1b9adbb4f3a00ad680ac,https://github.com/bitcoin/bitcoin/commit/f6355e69183f20c3d1fd1b9adbb4f3a00ad680ac,"Avoid leaking file descriptors in RegisterLoad
+
+This is pretty trivial, but if there's an error here we'll leak a file
+descriptor. Changed it to always close the file.",1,,40b4a38e417b6fe9c77c4931ee9b14907f0d1d0e,2017-03-25 02:15:55,2017-03-25 02:58:02
+116,1,76,76,7ff9d122e4c3b4076146631893194b01642c58e2,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/7ff9d122e4c3b4076146631893194b01642c58e2,https://github.com/bitcoin/bitcoin/commit/7ff9d122e4c3b4076146631893194b01642c58e2,"Make sure LogPrintf strings are line-terminated
+
+Fix the cases where LogPrint[f] was accidentally called without line
+terminator, which resulted in concatenated log lines.
+
+(see e.g. #6492)",6,,f412e471e256b373b793f7c240474781169b5213,2017-03-25 02:15:55,2017-03-25 02:59:12
+117,1,76,76,5a3913361d0c045db69932ac5f152c4cf76e13cb,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/5a3913361d0c045db69932ac5f152c4cf76e13cb,https://github.com/bitcoin/bitcoin/commit/5a3913361d0c045db69932ac5f152c4cf76e13cb,"build: fix libressl detection
+
+Checking libcrypto for a function after we've already found a (possibly
+different) libcrypto is not what we want to do here.
+
+pkg-config might've found a cross lib while AC_CHECK_LIB may find a different
+or native one.
+
+Run a link-test against the lib that's already been found instead.",1,,7e493c704b7f66cd7df90981fdc431a5c83c642e,2017-03-25 02:15:55,2017-03-25 02:59:13
+118,1,76,76,e0020d4c44039b50564a0539af028fa18efe5b63,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/e0020d4c44039b50564a0539af028fa18efe5b63,https://github.com/bitcoin/bitcoin/commit/e0020d4c44039b50564a0539af028fa18efe5b63,Make sure LogPrint strings are line-terminated,1,,99e0ca9f75949813b6718ba50c2669f93ea32829,2017-03-25 02:15:55,2017-03-25 02:59:13
+119,1,76,76,e6adac7b3f971f04f883211d2c1f385c55d6718b,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/e6adac7b3f971f04f883211d2c1f385c55d6718b,https://github.com/bitcoin/bitcoin/commit/e6adac7b3f971f04f883211d2c1f385c55d6718b,"Delay initial pruning until after wallet init
+
+Don't prune until any wallet rescanning has taken place to avoid
+potentially pruning blocks that the wallet rescan may need.",1,,e352d58ec4ea4cfcd7340e52180580c3d3025c15,2017-03-25 02:15:55,2017-03-25 02:59:14
+120,1,76,76,4a3741028e53a79dfffcafb8933c5bd256cd60b7,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/4a3741028e53a79dfffcafb8933c5bd256cd60b7,https://github.com/bitcoin/bitcoin/commit/4a3741028e53a79dfffcafb8933c5bd256cd60b7,"Handle no chain tip available in InvalidChainFound()
+
+Handle the case where no chain tip is available, in InvalidChainFound(). This fixes a null pointer deference when running unit tests, if the genesis block or block validation code is broken.",1,,092bbe2e65270837eaa1301b7c9490149d6ae6f7,2017-03-25 02:15:55,2017-03-25 02:59:14
+121,1,76,76,c5b89fe44e73e9b1e33f7a5ce829d8d9b15eb690,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/c5b89fe44e73e9b1e33f7a5ce829d8d9b15eb690,https://github.com/bitcoin/bitcoin/commit/c5b89fe44e73e9b1e33f7a5ce829d8d9b15eb690,Fix race condition on test node shutdown,1,,307563e96c4f4e07439efd65bf19edcb4f831c24,2017-03-25 02:15:55,2017-03-25 03:00:25
+122,1,76,76,f6d29a6ca8e91d9f3dabe5fde53a336fdb5473c1,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/f6d29a6ca8e91d9f3dabe5fde53a336fdb5473c1,https://github.com/bitcoin/bitcoin/commit/f6d29a6ca8e91d9f3dabe5fde53a336fdb5473c1,Use unique name for AlertNotify tempfile,1,,73481dd802d471b2b6455bd5bc958c9065e046b9,2017-03-25 02:15:55,2017-03-25 03:00:26
+123,1,76,76,f171fee035ab4465d8466607af5f54247e14b237,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/f171fee035ab4465d8466607af5f54247e14b237,https://github.com/bitcoin/bitcoin/commit/f171fee035ab4465d8466607af5f54247e14b237,"Handle leveldb::DestroyDB() errors on wipe failure
+
+Add error checking to CLevelDBWrapper for errors from
+leveldb::DestroyDB().  Without it, if unlink() or DeleteFileW() fail to
+delete files, they will fail silent.  If they fail to delete any files,
+CLevelDBWrapper will silently open and read the existing database.
+
+Typically any permissions issues would be caught by leveldb as it churns
+through many files as part of its compaction process, but it is
+conceivable that this could cause problems on Windows with anti-virus
+and indexing software.",1,,26cacf95ae91909642f2babf208d8fc468d5d11b,2017-03-25 02:15:55,2017-03-25 03:00:26
+124,1,76,76,48770534a6826ad3426ec83ce3de8868b22db8a6,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/48770534a6826ad3426ec83ce3de8868b22db8a6,https://github.com/bitcoin/bitcoin/commit/48770534a6826ad3426ec83ce3de8868b22db8a6,"Add missing files to files.md
+
+typo",1,,ec767e0486da43e8a6b1f2ea17df061fe2ecf0f0,2017-03-25 02:15:55,2017-03-25 03:00:27
+125,1,76,76,626c5e69360aabb766e139c7ea19963fb8edf226,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/626c5e69360aabb766e139c7ea19963fb8edf226,https://github.com/bitcoin/bitcoin/commit/626c5e69360aabb766e139c7ea19963fb8edf226,Make sure we re-acquire lock if a task throws,1,,06115f5619753178f47f7e5a41f0208678f3f543,2017-03-25 02:15:55,2017-03-25 03:00:27
+126,1,76,76,6b51b9b195a73df2b706bcd5a5cd4cd49f9ebec3,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/6b51b9b195a73df2b706bcd5a5cd4cd49f9ebec3,https://github.com/bitcoin/bitcoin/commit/6b51b9b195a73df2b706bcd5a5cd4cd49f9ebec3,Replace boost::reverse_lock with our own.,5,,e7e627ae0f24eb072e1461891ef281006bf0146c,2017-03-25 02:15:55,2017-03-25 03:01:39
+127,1,76,76,13642a50eb7714f0765401c3cb35f5df19d12de3,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/13642a50eb7714f0765401c3cb35f5df19d12de3,https://github.com/bitcoin/bitcoin/commit/13642a50eb7714f0765401c3cb35f5df19d12de3,Fix masking of irrelevant bits in address groups.,1,,3fd779910a435c98b563cd0ffc63e1578469d435,2017-03-25 02:15:55,2017-03-25 03:01:39
+128,1,76,76,1f6772e9f0aa23650f0168723fc84f247756dbc3,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/1f6772e9f0aa23650f0168723fc84f247756dbc3,https://github.com/bitcoin/bitcoin/commit/1f6772e9f0aa23650f0168723fc84f247756dbc3,add unit test for CNetAddr::GetGroup.,1,,40b32a7b3783774cbfe665499418052819c5563d,2017-03-25 02:15:55,2017-03-25 03:01:40
+129,1,76,76,ccc4ad6c4d34b7f42b048f8c73dfb2d2c9dbcd99,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/ccc4ad6c4d34b7f42b048f8c73dfb2d2c9dbcd99,https://github.com/bitcoin/bitcoin/commit/ccc4ad6c4d34b7f42b048f8c73dfb2d2c9dbcd99,"net: Set SO_REUSEADDR for Windows too
+
+When running the rpc tests in Wine, nodes often fail to listen on localhost
+due to a stale socket from a previous run. This aligns the behavior with other
+platforms.",1,,d42c28141a017156e3f5b3334a22d87ec0419d09,2017-03-25 02:15:55,2017-03-25 03:01:40
+130,1,76,76,13bd5a75b5b9b7b91e9bd40be1bcc394154107bd,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/13bd5a75b5b9b7b91e9bd40be1bcc394154107bd,https://github.com/bitcoin/bitcoin/commit/13bd5a75b5b9b7b91e9bd40be1bcc394154107bd,rpc-tests: re-enable rpc-tests for Windows,1,,97aecc5e3cb590fcece21cabf22e7ae13ea6f4e2,2017-03-25 02:15:55,2017-03-25 03:01:41
+131,1,76,76,45bfa137efe84d772e58512630a2ae7a1b5fd55a,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/45bfa137efe84d772e58512630a2ae7a1b5fd55a,https://github.com/bitcoin/bitcoin/commit/45bfa137efe84d772e58512630a2ae7a1b5fd55a,"PARTIAL: typofixes (found by misspell_fixer)
+
+Upstream: 9f68ed6b6d1a9c6436ce37913666165f2b180ee3 (PR #6539)",16,,626997160a0baf51d0c248c731952143c4256273,2017-03-25 02:15:55,2017-03-25 03:02:53
+132,1,76,76,21c406eda0e936d8575715068b050ff9124e6b2e,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/21c406eda0e936d8575715068b050ff9124e6b2e,https://github.com/bitcoin/bitcoin/commit/21c406eda0e936d8575715068b050ff9124e6b2e,"add support for miniupnpc api version 14
+
+The value of new arg ttl is set to 2 as it's recommended default.",1,,57efa3f79d512b92c508e5961b03c39426c149ba,2017-03-25 02:15:55,2017-03-25 03:02:53
+133,1,77,77,8b59079b8d7eda6f44988649d9c716fec3aad397,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/8b59079b8d7eda6f44988649d9c716fec3aad397,https://github.com/bitcoin/bitcoin/commit/8b59079b8d7eda6f44988649d9c716fec3aad397,Add autogen.sh to source tarball.,1,,470d0574cc62769ab33b6f167e99a98413c8e544,2017-03-25 02:15:56,2017-03-25 03:02:53
+134,1,77,77,04507de3b7af34c2fcb1b90f405b2e8a9c35ebe9,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/04507de3b7af34c2fcb1b90f405b2e8a9c35ebe9,https://github.com/bitcoin/bitcoin/commit/04507de3b7af34c2fcb1b90f405b2e8a9c35ebe9,"Avoid leaking file descriptors in RegisterLoad
+
+This is pretty trivial, but if there's an error here we'll leak a file
+descriptor. Changed it to always close the file.",1,,3aa2211f978b85bb821e795ea7be81503061c118,2017-03-25 02:15:56,2017-03-25 03:02:54
+135,1,77,77,3861f0fa21c5ecb39e0b89377bf55e7bd5a387ef,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/3861f0fa21c5ecb39e0b89377bf55e7bd5a387ef,https://github.com/bitcoin/bitcoin/commit/3861f0fa21c5ecb39e0b89377bf55e7bd5a387ef,"build: fix libressl detection
+
+Checking libcrypto for a function after we've already found a (possibly
+different) libcrypto is not what we want to do here.
+
+pkg-config might've found a cross lib while AC_CHECK_LIB may find a different
+or native one.
+
+Run a link-test against the lib that's already been found instead.",1,,4c247a8a30c22b5190a34f81553fe9838f57099a,2017-03-25 02:15:56,2017-03-25 03:02:54
+136,1,77,77,843469ee15be64070eaf01c34b4590185be18db3,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/843469ee15be64070eaf01c34b4590185be18db3,https://github.com/bitcoin/bitcoin/commit/843469ee15be64070eaf01c34b4590185be18db3,Use unique name for AlertNotify tempfile,1,,2febbcd757182ceed6b5f20a85cbd1cb50900742,2017-03-25 02:15:56,2017-03-25 03:04:05
+137,1,77,77,28d76d2aea6508e26def7e59a6ff006d0cad6b86,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/28d76d2aea6508e26def7e59a6ff006d0cad6b86,https://github.com/bitcoin/bitcoin/commit/28d76d2aea6508e26def7e59a6ff006d0cad6b86,"Handle leveldb::DestroyDB() errors on wipe failure
+
+Add error checking to CLevelDBWrapper for errors from
+leveldb::DestroyDB().  Without it, if unlink() or DeleteFileW() fail to
+delete files, they will fail silent.  If they fail to delete any files,
+CLevelDBWrapper will silently open and read the existing database.
+
+Typically any permissions issues would be caught by leveldb as it churns
+through many files as part of its compaction process, but it is
+conceivable that this could cause problems on Windows with anti-virus
+and indexing software.",1,,1f674a91df02c7189f6ace5ba7989d27b7c4a7b5,2017-03-25 02:15:56,2017-03-25 03:04:06
+138,1,77,77,4e5ea71bd513ba1a5d19afbdfb545ed36560c546,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/4e5ea71bd513ba1a5d19afbdfb545ed36560c546,https://github.com/bitcoin/bitcoin/commit/4e5ea71bd513ba1a5d19afbdfb545ed36560c546,Make sure LogPrint strings are line-terminated,1,,f18c903aea6822691750c05c0ff3c590d1406ca1,2017-03-25 02:15:56,2017-03-25 03:04:06
+139,1,77,77,65426acb4dfdbcda03337cb68e8fa8854bc76e17,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/65426acb4dfdbcda03337cb68e8fa8854bc76e17,https://github.com/bitcoin/bitcoin/commit/65426acb4dfdbcda03337cb68e8fa8854bc76e17,"Add missing files to files.md
+
+typo",1,,ec767e0486da43e8a6b1f2ea17df061fe2ecf0f0,2017-03-25 02:15:56,2017-03-25 03:04:07
+140,1,77,77,bdf2542787314bce0c5cc39f03df0a0b27eb31cb,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/bdf2542787314bce0c5cc39f03df0a0b27eb31cb,https://github.com/bitcoin/bitcoin/commit/bdf2542787314bce0c5cc39f03df0a0b27eb31cb,Fix masking of irrelevant bits in address groups.,1,,6465ca61a21e6f4b93eb235013df73352712aed5,2017-03-25 02:15:56,2017-03-25 03:04:07
+141,1,77,77,0194bddde48cffe21d8ed57777e576e9187e2cbe,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/0194bddde48cffe21d8ed57777e576e9187e2cbe,https://github.com/bitcoin/bitcoin/commit/0194bddde48cffe21d8ed57777e576e9187e2cbe,add unit test for CNetAddr::GetGroup.,1,,fc8954ce75b2ac4b7b525633ac806260fc71a150,2017-03-25 02:15:56,2017-03-25 03:05:18
+142,1,77,77,c9ad65e5fafc47ea74399e8057e445e0e0435101,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/c9ad65e5fafc47ea74399e8057e445e0e0435101,https://github.com/bitcoin/bitcoin/commit/c9ad65e5fafc47ea74399e8057e445e0e0435101,"net: Set SO_REUSEADDR for Windows too
+
+When running the rpc tests in Wine, nodes often fail to listen on localhost
+due to a stale socket from a previous run. This aligns the behavior with other
+platforms.",1,,80cecd072474679b603c3b7bc2bc0cdb2f447f31,2017-03-25 02:15:56,2017-03-25 03:05:19
+143,1,77,77,ceba0f8c7e0b62c16c15ec507da721be6e2c7dee,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/ceba0f8c7e0b62c16c15ec507da721be6e2c7dee,https://github.com/bitcoin/bitcoin/commit/ceba0f8c7e0b62c16c15ec507da721be6e2c7dee,"PARTIAL: typofixes (found by misspell_fixer)
+
+Upstream: 9f68ed6b6d1a9c6436ce37913666165f2b180ee3 (PR #6539)",10,,93d72f84a4fee8b5bff229c1a8986f08c0ae98da,2017-03-25 02:15:56,2017-03-25 03:05:19
+144,1,77,77,2ede6b7142cb57c422126722f845b36da7d3c4ef,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/2ede6b7142cb57c422126722f845b36da7d3c4ef,https://github.com/bitcoin/bitcoin/commit/2ede6b7142cb57c422126722f845b36da7d3c4ef,"add support for miniupnpc api version 14
+
+The value of new arg ttl is set to 2 as it's recommended default.",1,,5b79812def3e5f3c0b123e8737d32a8acc2cc52d,2017-03-25 02:15:56,2017-03-25 03:05:20
+145,1,77,77,0dfcdd41ebf82aa409ec203deeabc900d996c413,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/0dfcdd41ebf82aa409ec203deeabc900d996c413,https://github.com/bitcoin/bitcoin/commit/0dfcdd41ebf82aa409ec203deeabc900d996c413,rpc-tests: re-enable rpc-tests for Windows,1,,2a7fbff143f3c1e6a15e7b908182f5d776f2cb1c,2017-03-25 02:15:56,2017-03-25 03:05:20
+146,1,77,77,5e6d8936505da29d60b88eed7fd9aa6abdae5d92,1095675,Luke Dashjr,https://api.github.com/repos/bitcoin/bitcoin/commits/5e6d8936505da29d60b88eed7fd9aa6abdae5d92,https://github.com/bitcoin/bitcoin/commit/5e6d8936505da29d60b88eed7fd9aa6abdae5d92,travis: for travis generating an extra build,1,,06dd4c6aaabf1139d68a7c3c12f11adb2a8f208d,2017-03-25 02:15:56,2017-03-25 03:06:31
+147,1,78,78,598b25d5ee9c08947a52824f47531208943a3c65,7463573,Suhas Daftuar,https://api.github.com/repos/bitcoin/bitcoin/commits/598b25d5ee9c08947a52824f47531208943a3c65,https://github.com/bitcoin/bitcoin/commit/598b25d5ee9c08947a52824f47531208943a3c65,Add test showing bug in mempool packages,1,,6bc6e43f0b4369c05a841fa7efd72f41875217a8,2017-03-25 02:17:07,2017-03-25 03:06:32
+148,1,78,78,60de0d5826f1b848a43ec989ff712f002eddc3dc,7463573,Suhas Daftuar,https://api.github.com/repos/bitcoin/bitcoin/commits/60de0d5826f1b848a43ec989ff712f002eddc3dc,https://github.com/bitcoin/bitcoin/commit/60de0d5826f1b848a43ec989ff712f002eddc3dc,"Fix mempool package tracking edge case
+
+CalculateMemPoolAncestors was always looping over a transaction's inputs
+to find in-mempool parents.  When adding a new transaction, this is the
+correct behavior, but when removing a transaction, we want to use the
+ancestor set that would be calculated by walking mapLinks (which should
+in general be the same set, except during a reorg when the mempool is
+in an inconsistent state, and the mapLinks-based calculation would be the
+correct one).",2,,c0eef0dd222aef31d19cd554b9c99ccfba62057e,2017-03-25 02:17:07,2017-03-25 03:06:32
+149,1,79,79,3499ce1e1ad87a86598d00b7124072c91ddad833,73197,James O'Beirne,https://api.github.com/repos/bitcoin/bitcoin/commits/3499ce1e1ad87a86598d00b7124072c91ddad833,https://github.com/bitcoin/bitcoin/commit/3499ce1e1ad87a86598d00b7124072c91ddad833,"Encapsulate CLevelDB iterators cleanly
+
+Conflicts:
+	src/leveldb.cpp
+	src/leveldb.h
+	src/txdb.cpp",3,,3d20508912ea1dea8ed8b2ee6c7ca0444e0d2109,2017-03-25 02:17:08,2017-03-25 03:06:33
+150,1,79,79,0fdf8c80ee322ab747321d61faf9c72af4a51445,73197,James O'Beirne,https://api.github.com/repos/bitcoin/bitcoin/commits/0fdf8c80ee322ab747321d61faf9c72af4a51445,https://github.com/bitcoin/bitcoin/commit/0fdf8c80ee322ab747321d61faf9c72af4a51445,Handle obfuscation in CLevelDBIterator,3,,4d7ec27aaec5454590ab453c210f9d5ca6de96ac,2017-03-25 02:17:08,2017-03-25 03:06:33
+151,1,79,79,14885068726a8e0dc73ffa127225ab80be3e3612,73197,James O'Beirne,https://api.github.com/repos/bitcoin/bitcoin/commits/14885068726a8e0dc73ffa127225ab80be3e3612,https://github.com/bitcoin/bitcoin/commit/14885068726a8e0dc73ffa127225ab80be3e3612,"Add tests for gettxoutsetinfo, CLevelDBBatch, CLevelDBIterator
+
+Thanks @dexX7.",3,,36975548c2119bc662203660c2180ec083968ebb,2017-03-25 02:17:08,2017-03-25 03:07:44
+152,1,79,79,dcd8e27c65de0d2cb972588a6e811ca7ccd1b3bd,73197,James O'Beirne,https://api.github.com/repos/bitcoin/bitcoin/commits/dcd8e27c65de0d2cb972588a6e811ca7ccd1b3bd,https://github.com/bitcoin/bitcoin/commit/dcd8e27c65de0d2cb972588a6e811ca7ccd1b3bd,"Refer to obfuscate_key via pointer in peripheral CLevelDB classes
+
+cc @sipa",3,,5723c92440196a43447975e8537605428c4be7ca,2017-03-25 02:17:08,2017-03-25 03:07:45
+153,1,80,80,0d699fc821048ab9316b0004e6552c8f1dc5e5f4,178464,Jonas Schnelli,https://api.github.com/repos/bitcoin/bitcoin/commits/0d699fc821048ab9316b0004e6552c8f1dc5e5f4,https://github.com/bitcoin/bitcoin/commit/0d699fc821048ab9316b0004e6552c8f1dc5e5f4,"fix locking issue with new mempool limiting
+
+Current master crashes on OSX with an exception: ""boost: mutex lock failed in pthread_mutex_lock: Invalid argument""",2,,dedc7ba72c567c938e5023a59ccf35da9f6b8f80,2017-03-25 02:17:08,2017-03-25 03:07:45
+154,1,81,81,2980a18572dbe6173c41afc037b0cefe367d935c,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/2980a18572dbe6173c41afc037b0cefe367d935c,https://github.com/bitcoin/bitcoin/commit/2980a18572dbe6173c41afc037b0cefe367d935c,"Fix crash in validateaddress with -disablewallet
+
+Fix a null pointer dereference in validateaddress with -disablewallet. Also add a regression testcase.",3,,0c656d5cf15483863215091e630109997cb5f6ab,2017-03-25 02:17:09,2017-03-25 03:07:46
+155,1,82,82,4b89f01d727433f02cc8ff72799e0d0a7e6ceafe,6399679,MarcoFalke,https://api.github.com/repos/bitcoin/bitcoin/commits/4b89f01d727433f02cc8ff72799e0d0a7e6ceafe,https://github.com/bitcoin/bitcoin/commit/4b89f01d727433f02cc8ff72799e0d0a7e6ceafe,"Default fPayAtLeastCustomFee to false
+
+This allows for much finer control of the transaction fees per kilobyte
+as it prevent small transactions using a fee that is more appropriate
+for one that is of a kilobyte.
+
+This also allows controlling the fee per kilobyte over rpc such that:
+
+bitcoin-cli settxfee `bitcoin-cli estimatefee 2`
+
+would make sense, while currently it grossly fails often by a factor of x3",1,,b062226dd9cf0c1b895a8308e06cc37bba684b46,2017-03-25 02:18:20,2017-03-25 03:07:46
+156,1,82,82,fa506c0c9b3928843704c666909c0b0c5af2f9a0,6399679,MarcoFalke,https://api.github.com/repos/bitcoin/bitcoin/commits/fa506c0c9b3928843704c666909c0b0c5af2f9a0,https://github.com/bitcoin/bitcoin/commit/fa506c0c9b3928843704c666909c0b0c5af2f9a0,[wallet] Add rpc tests to verify fee calculations,2,,6f6bc3189527e667b56c4e66cc776e6e5311fd77,2017-03-25 02:18:20,2017-03-25 03:08:57
+157,1,83,83,9ac63d6d3056600c1b784da0e6b98f679fa98b6e,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/9ac63d6d3056600c1b784da0e6b98f679fa98b6e,https://github.com/bitcoin/bitcoin/commit/9ac63d6d3056600c1b784da0e6b98f679fa98b6e,Keep track of explicit wallet conflicts instead of using mempool,6,,bc6e40ab98760e8b66b8dd63670dd644a2da3cb3,2017-03-25 02:18:20,2017-03-25 03:08:58
+158,1,84,84,fa6d4cc09575de30386bfbc5c8c3858cd7a2f42a,6399679,MarcoFalke,https://api.github.com/repos/bitcoin/bitcoin/commits/fa6d4cc09575de30386bfbc5c8c3858cd7a2f42a,https://github.com/bitcoin/bitcoin/commit/fa6d4cc09575de30386bfbc5c8c3858cd7a2f42a,[walletdb] Fix syntax error in key parser,1,,50b0f40a6aefd342bd818fee40c2ecf4881246e6,2017-03-25 02:18:21,2017-03-25 03:08:58
+159,1,85,85,1475ecf61141e03f63a79d59831c411e0e8a5c0a,274814,Ethan Heilman,https://api.github.com/repos/bitcoin/bitcoin/commits/1475ecf61141e03f63a79d59831c411e0e8a5c0a,https://github.com/bitcoin/bitcoin/commit/1475ecf61141e03f63a79d59831c411e0e8a5c0a,"Fix de-serialization bug where AddrMan is corrupted after exception
+* CAddrDB modified so that when de-serialization code throws an exception Addrman is reset to a clean state
+* CAddrDB modified to make unit tests possible
+* Regression test created to ensure bug is fixed
+* StartNode modifed to clear adrman if CAddrDB::Read returns an error code.",4,,6debf6ac5e168eb6d95853689ccb059cf981a04e,2017-03-25 02:18:22,2017-03-25 03:08:59
+160,1,86,86,869262605f21973910640676858f4c4a3baa6da8,7275704,BtcDrak,https://api.github.com/repos/bitcoin/bitcoin/commits/869262605f21973910640676858f4c4a3baa6da8,https://github.com/bitcoin/bitcoin/commit/869262605f21973910640676858f4c4a3baa6da8,"Disable bad chain alerts
+
+Continuous false positives lead to them being ignored entirely
+so it's better to disable now until this can be fixed more
+thoroughly.",1,,a712ffcac648b244192ba3b167271ae711161c61,2017-03-25 02:19:33,2017-03-25 03:09:00
+161,1,87,87,f8e6fb1800fbac87e76cdddc074d8f4af585f050,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/f8e6fb1800fbac87e76cdddc074d8f4af585f050,https://github.com/bitcoin/bitcoin/commit/f8e6fb1800fbac87e76cdddc074d8f4af585f050,Introduce constant for maximum CScript length,2,,68cde03e34543ad35957cacf0beb4224772ae4bd,2017-03-25 02:19:33,2017-03-25 03:10:11
+162,1,87,87,4f87af6fc7580912726f9bf833c21e6e1b478e1d,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/4f87af6fc7580912726f9bf833c21e6e1b478e1d,https://github.com/bitcoin/bitcoin/commit/4f87af6fc7580912726f9bf833c21e6e1b478e1d,Treat overly long scriptPubKeys as unspendable,1,,2a338d6f5ccbf10eeda54fc7b8c7ada060d4ab86,2017-03-25 02:19:33,2017-03-25 03:10:12
+163,1,87,87,5d0434d13d0145a110c0c93e59edfd7d062f8531,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/5d0434d13d0145a110c0c93e59edfd7d062f8531,https://github.com/bitcoin/bitcoin/commit/5d0434d13d0145a110c0c93e59edfd7d062f8531,Fix OOM bug: UTXO entries with invalid script length,2,,ed14f3f4121727c57c4ab0f3e6366f20c493d4f5,2017-03-25 02:19:33,2017-03-25 03:10:12
+164,1,87,87,4bf631e5e48cd4c14c825cdaf7a1bee81e15493d,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/4bf631e5e48cd4c14c825cdaf7a1bee81e15493d,https://github.com/bitcoin/bitcoin/commit/4bf631e5e48cd4c14c825cdaf7a1bee81e15493d,"CDataStream::ignore Throw exception instead of assert on negative nSize.
+
+Previously disk corruption would cause an assert instead of an exception.",1,,a50fe4e859d7720f675b749e43f37aa8653174ca,2017-03-25 02:19:33,2017-03-25 03:10:13
+165,1,87,87,1e44169f0e0c334a86b14a22ebc8fec45cec7354,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/1e44169f0e0c334a86b14a22ebc8fec45cec7354,https://github.com/bitcoin/bitcoin/commit/1e44169f0e0c334a86b14a22ebc8fec45cec7354,Add tests for CCoins deserialization,1,,129ce04e0bca18cd0c19e65b4c92eec7a30fccc3,2017-03-25 02:19:33,2017-03-25 03:10:13
+166,1,88,88,326231611bda6808b579ab7286e471c36f62e98c,15107,Chirag Davé,https://api.github.com/repos/bitcoin/bitcoin/commits/326231611bda6808b579ab7286e471c36f62e98c,https://github.com/bitcoin/bitcoin/commit/326231611bda6808b579ab7286e471c36f62e98c,"fReopenDebugLog and fRequestShutdown should be type sig_atomic_t
+
+This allows access as an atomic variable in the presence
+of async interrupts.
+
+See issue #7433 for more details
+fixes: #7433",3,,33db0f9e4acda333d83cdbeca4ceaa1fa39db228,2017-03-25 02:19:34,2017-03-25 03:11:24
+167,1,89,89,ba6194928a03a474b442744511da4c753441469d,10759339,GitHub,https://api.github.com/repos/bitcoin/bitcoin/commits/ba6194928a03a474b442744511da4c753441469d,https://github.com/bitcoin/bitcoin/commit/ba6194928a03a474b442744511da4c753441469d,"Fix LogPrint to LogPrintf
+
+Printing Log without category defined should use LogPrintf",1,,a11da50588262149ac10b4a1104ef47538d7102a,2017-03-25 02:19:34,2017-03-25 03:11:25
+168,1,90,90,d7828abd5b08ae17a42a7b8efe3b546fe2d09f4b,4289847,fsb4000,https://api.github.com/repos/bitcoin/bitcoin/commits/d7828abd5b08ae17a42a7b8efe3b546fe2d09f4b,https://github.com/bitcoin/bitcoin/commit/d7828abd5b08ae17a42a7b8efe3b546fe2d09f4b,check that transactionView->selectionModel()->selectedRows(0) exists,1,,48cf94050297baa4a18c20da0d95f850b61fe239,2017-03-25 02:20:46,2017-03-25 03:11:25
+169,1,91,91,b4a9aa511c95a1bd0da8ae363b3b9c0b3b7afe4e,126646,Wladimir J. van der Laan,https://api.github.com/repos/bitcoin/bitcoin/commits/b4a9aa511c95a1bd0da8ae363b3b9c0b3b7afe4e,https://github.com/bitcoin/bitcoin/commit/b4a9aa511c95a1bd0da8ae363b3b9c0b3b7afe4e,"qt: Fix random segfault when closing ""Choose data directory"" dialog
+
+The `pickDataDirectory()` function was calling `exit(0)` to quit
+the application when the user closes the dialog without choosing
+a data directory.
+
+This is a bad idea because a background thread is created (to
+check free space on the drive of the currently selected datadir).
+The thread is not stopped and unwound properly, resulting in a potential
+race condition somewhere deep in Qt.
+
+So replace the `exit()` by a boolean return value, and let the
+stack unwind normally.",3,,ee768a7ad8d1df3049839e2673d9b2583854780f,2017-03-25 02:20:46,2017-03-25 03:11:26
+170,1,92,92,cccf73db0483cc3945bf8389ce197df35e931e16,884115,Robert McLaughlin,https://api.github.com/repos/bitcoin/bitcoin/commits/cccf73db0483cc3945bf8389ce197df35e931e16,https://github.com/bitcoin/bitcoin/commit/cccf73db0483cc3945bf8389ce197df35e931e16,"trivial: fix bloom filter init to isEmpty = true
+
+Fixes newly initialized bloom filters being
+constructed with isEmpty(false), which still
+works but loses the possible speedup when
+checking for key membership in an empty filter.",1,,d00befc61ca686528cfbba282f2bceb25773887b,2017-03-25 02:20:47,2017-03-25 03:11:26
+171,1,93,93,9e1f46821d5bb69e2cbf25738eefa7c6cb99c838,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/9e1f46821d5bb69e2cbf25738eefa7c6cb99c838,https://github.com/bitcoin/bitcoin/commit/9e1f46821d5bb69e2cbf25738eefa7c6cb99c838,Fix calculation of number of bound sockets to use,1,,377d196f2b8744f9deb0e6bc190a502d41b1ac54,2017-03-25 02:20:47,2017-03-25 03:12:37
+172,1,94,94,2efc43874cedde7e022ac8f1051c7984331543fa,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/2efc43874cedde7e022ac8f1051c7984331543fa,https://github.com/bitcoin/bitcoin/commit/2efc43874cedde7e022ac8f1051c7984331543fa,Align struct COrphan definition,2,,a8c3c4ebb9c3299d0a378c48a7f72a3a4f73b36c,2017-03-25 02:21:59,2017-03-25 03:12:38
+173,1,95,95,b3a74100b86423c553ac327f3ea6fdbc2c50890a,548488,Pieter Wuille,https://api.github.com/repos/bitcoin/bitcoin/commits/b3a74100b86423c553ac327f3ea6fdbc2c50890a,https://github.com/bitcoin/bitcoin/commit/b3a74100b86423c553ac327f3ea6fdbc2c50890a,Return txid even if ATMP fails for new transaction,1,,11ce06c99dad60c19dab1f055a54c315b8290096,2017-03-25 02:21:59,2017-03-25 03:12:38
+174,1,96,96,116419e58dddef8fe3ff9806a1d8ceebe64ae3e6,4360349,Alex Morcos,https://api.github.com/repos/bitcoin/bitcoin/commits/116419e58dddef8fe3ff9806a1d8ceebe64ae3e6,https://github.com/bitcoin/bitcoin/commit/116419e58dddef8fe3ff9806a1d8ceebe64ae3e6,"Don't overwrite validation state with corruption check
+
+AcceptToMemoryPool has several classes of return false statements.
+- return state.Invalid or state.DoS directly itself
+- return false and set fMissingInputs (state is valid)
+- return false and state is set by failed CheckTransaction
+- return false and state is set by failed CheckInputs.
+
+This commit patches the last case where the state variable was reused for additional calls to CheckInputs to identify witness stripping as cause of validation failure.  After this commit, it should be the case that if !fMissingInputs, state is always Invalid if AcceptToMemoryPool returns false.",1,,9c06a3d9401591c900f9187d802c179002d53e00,2017-03-25 02:22:00,2017-03-25 03:12:39
+175,1,97,97,7b2d96b634f9fd283480caf3bece56138d0587e3,649246,Matt Corallo,https://api.github.com/repos/bitcoin/bitcoin/commits/7b2d96b634f9fd283480caf3bece56138d0587e3,https://github.com/bitcoin/bitcoin/commit/7b2d96b634f9fd283480caf3bece56138d0587e3,"Access WorkQueue::running only within the cs lock.
+
+This removes a ""race"" between Interrupt() and Run(), though it
+should not effect any of our supported platforms.",1,,e1763c6ad276ca3b00b4a707f7b8a8af2d90bbc4,2017-03-25 02:22:00,2017-03-25 03:12:39
+176,1,98,98,d72fe44fc1989575ff5de98c882c0010d1de26e7,1063656,John Newbery,https://api.github.com/repos/bitcoin/bitcoin/commits/d72fe44fc1989575ff5de98c882c0010d1de26e7,https://github.com/bitcoin/bitcoin/commit/d72fe44fc1989575ff5de98c882c0010d1de26e7,"Allow maxsigcachesize to be zero
+
+If the -maxsigcachesize parameter is set to zero, setup a minimum sized
+sigcache (2 elements) rather than segfaulting.",1,,ce296940617b687d9c75d55e6519388ec7e589e1,2017-03-25 02:23:12,2017-03-25 03:13:50
+177,1,98,98,7796d2ea25c502f9affd23b125a5a7aa78683068,1063656,John Newbery,https://api.github.com/repos/bitcoin/bitcoin/commits/7796d2ea25c502f9affd23b125a5a7aa78683068,https://github.com/bitcoin/bitcoin/commit/7796d2ea25c502f9affd23b125a5a7aa78683068,Handle maxsigcachesize being negative,1,,657584fa85c7e9f65f21cd4b8928ec2ac7d091d0,2017-03-25 02:23:12,2017-03-25 03:13:51
+178,1,98,98,e6374a03b9869362595acd5cc5e5b8994b244af1,1063656,John Newbery,https://api.github.com/repos/bitcoin/bitcoin/commits/e6374a03b9869362595acd5cc5e5b8994b244af1,https://github.com/bitcoin/bitcoin/commit/e6374a03b9869362595acd5cc5e5b8994b244af1,handle maxsigcachesize being too large,2,,238952bb954df1daaa9af91a36f32d2d23d26b66,2017-03-25 02:23:12,2017-03-25 03:13:52
+179,1,99,99,306bd72157f089b962b9c537bbacf710a4158647,7133040,Russell Yanofsky,https://api.github.com/repos/bitcoin/bitcoin/commits/306bd72157f089b962b9c537bbacf710a4158647,https://github.com/bitcoin/bitcoin/commit/306bd72157f089b962b9c537bbacf710a4158647,"Fix importmulti returning rescan errors for wrong keys
+
+Bug was a missing ++i line in a new range for loop added in commit e2e2f4c
+""Return errors from importmulti if complete rescans are not successful""",2,,7ac2112dd29e707a4d723c37aea61224b2860265,2017-03-25 02:23:12,2017-03-25 03:13:52
+180,1,100,100,d5046e72f4180b7932368919ae08da24be8e9583,7133040,Russell Yanofsky,https://api.github.com/repos/bitcoin/bitcoin/commits/d5046e72f4180b7932368919ae08da24be8e9583,https://github.com/bitcoin/bitcoin/commit/d5046e72f4180b7932368919ae08da24be8e9583,"Avoid scoped_connection compile error with boost 1.55.0
+
+Construct scoped_connection directly instead of relying on copy initialization
+and move constructor. Avoids the following compile error in debian jessie:
+
+```
+In file included from /usr/include/boost/signals2/signal.hpp:21:0,
+                 from ./util.h:29,
+                 from ./dbwrapper.h:11,
+                 from ./txdb.h:10,
+                 from ./test/test_bitcoin.h:11,
+                 from qt/test/wallettests.cpp:11:
+/usr/include/boost/signals2/connection.hpp: In function ‘uint256 {anonymous}::SendCoins(CWallet&, SendCoinsDialog&, const CBitcoinAddress&, CAmount)’:
+/usr/include/boost/signals2/connection.hpp:234:7: error: ‘boost::signals2::scoped_connection::scoped_connection(const boost::signals2::scoped_connection&)’ is private
+       scoped_connection(const scoped_connection &other);
+       ^
+qt/test/wallettests.cpp:47:6: error: within this context
+     });
+      ^
+```
+
+Error reported by Pavel Janík <Pavel@Janik.cz> in
+https://github.com/bitcoin/bitcoin/pull/9974#issuecomment-287550034",1,,118b54e8de2937e205f569d6f17f3aa2e624d111,2017-03-25 02:23:13,2017-03-25 03:13:53
+181,1,100,100,b5bec4e330fc7201d989663b4dbc6a1e620dd0f9,7133040,Russell Yanofsky,https://api.github.com/repos/bitcoin/bitcoin/commits/b5bec4e330fc7201d989663b4dbc6a1e620dd0f9,https://github.com/bitcoin/bitcoin/commit/b5bec4e330fc7201d989663b4dbc6a1e620dd0f9,"Avoid QTimer::singleShot compile error with Qt 5.3.2
+
+Construct QTimer object directly, instead of relying on QTimer::singleShot
+overloads accepting lambdas, which weren't introduced until Qt 5.4.
+
+Avoids the following compile error in debian jessie:
+
+```
+qt/test/wallettests.cpp: In function ‘void {anonymous}::ConfirmSend()’:
+qt/test/wallettests.cpp:34:6: error: no matching function for call to ‘QTimer::singleShot(int, Qt::TimerType, {anonymous}::ConfirmSend()::<lambda()>)’
+     });
+      ^
+qt/test/wallettests.cpp:34:6: note: candidates are:
+In file included from /usr/include/x86_64-linux-gnu/qt5/QtCore/QTimer:1:0,
+                 from ./qt/sendcoinsdialog.h:13,
+                 from qt/test/wallettests.cpp:7:
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qtimer.h:81:17: note: static void QTimer::singleShot(int, const QObject*, const char*)
+     static void singleShot(int msec, const QObject *receiver, const char *member);
+                 ^
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qtimer.h:81:17: note:   no known conversion for argument 2 from ‘Qt::TimerType’ to ‘const QObject*’
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qtimer.h:82:17: note: static void QTimer::singleShot(int, Qt::TimerType, const QObject*, const char*)
+     static void singleShot(int msec, Qt::TimerType timerType, const QObject *receiver, const char *member);
+                 ^
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qtimer.h:82:17: note:   candidate expects 4 arguments, 3 provided
+```
+
+Error reported by Pavel Janík <Pavel@Janik.cz> in
+https://github.com/bitcoin/bitcoin/pull/9974#issuecomment-287574436",1,,36d93361ddc227bdc890c805448ef7cbd1668d27,2017-03-25 02:23:13,2017-03-25 03:15:04
