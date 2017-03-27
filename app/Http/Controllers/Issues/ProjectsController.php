@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Issues;
 
 use App\Project;
 use App\Utilities\Utility;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class ProjectsController extends Utility
@@ -20,7 +21,7 @@ class ProjectsController extends Utility
 
         $url = $request->get('url');
 
-        if(Project::where('api_url', $url)->first())
+        if($request->get('action') != 'updatable' && Project::where('api_url', $url)->first())
         {
             return $this->respond(
                 [
@@ -33,7 +34,7 @@ class ProjectsController extends Utility
         $res = $this->jsonToObject($this->ping($url, $this->headers ));
 
 //        return $this->toArray($res);
-        if(Project::where('identifier', $res->id)->first())
+        if($request->get('action') != 'updatable' && Project::where('identifier', $res->id)->first())
         {
             return $this->respond(
                 [
@@ -43,9 +44,10 @@ class ProjectsController extends Utility
             );
         }
         $project['identifier'] = $res->id;
-        $project['organization_name'] = (isset($res->organization)) ? $res->organization->login: 'Unknown';
         $project['name'] = $res->name;
+        $project['organization_name'] = (isset($res->organization)) ? $res->organization->login: 'Unknown';
         $project['type'] = 'framework';
+        $project['private'] = $res->private;
         $project['language'] = $res->language;
         $project['description'] = $res->description;
         $project['homepage'] = $res->homepage;
@@ -56,8 +58,15 @@ class ProjectsController extends Utility
         $project['prs_url'] = $res->pulls_url;
         $project['date_created'] = $res->created_at;
         $project['default_branch'] = $res->default_branch;
-        
-        if(Project::firstOrCreate(['identifier' => $project['identifier']], $project))
+        $project['size'] = $res->size;
+        $project['merges_url'] = $res->merges_url;
+        $project['labels_url'] = $res->labels_url;
+        $project['languages_url'] = $res->languages_url;
+        $project['contributors_url'] = $res->contributors_url;
+        $project['clone_url'] = $res->clone_url;
+
+        Model::unguard();
+        if(Project::updateOrCreate(['identifier' => $project['identifier']], $project))
         {
 //            $project[]['response_status'] = 'Successfully added project \''.$project['name'].'\'';
 
@@ -71,6 +80,7 @@ class ProjectsController extends Utility
                 201
             );
         }
+        Model::reguard();
 
         return $this->respond(
             [
