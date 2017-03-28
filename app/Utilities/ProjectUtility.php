@@ -30,7 +30,8 @@ class ProjectUtility extends Utility
 
     public function __construct()
     {
-
+        $this->headers['headers']['If-Modified-Since'] = 'Tue, 28 Mar 2017 07:24:36 GMT';
+        return parent::__construct();
     }
 
     /**
@@ -58,11 +59,19 @@ class ProjectUtility extends Utility
     }
 
     /**
-     * @param mixed $issues_labels
+     * @param mixed $issues_url
+     * @return $this
      */
-    public function setIssuesLabels($issues_labels)
+    public function setIssuesLabels($issues_url ='')
     {
-        $this->issues_labels = $issues_labels;
+        if(!$issues_url) { $issues_url = $this->project->labels_url; }
+
+        $ping = $this->ping(
+            $this->concat($this->cutLabelsUrl($issues_url)),
+            $this->headers
+        );
+        $this->issues_labels = $this->arrayToCollection($this->jsonToArray($ping))->pluck('name');
+        return $this;
     }
 
     /**

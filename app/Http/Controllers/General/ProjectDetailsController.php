@@ -24,8 +24,9 @@ class ProjectDetailsController extends ProjectUtility
             return $this->respond(" '{$project_name}' does not exist", 404);
         }
 
+
         $this->setProject($project);
-        $project_details['issues_labels'] = $this->getProject()->name;
+        $project_details['issues_labels'] = $this->setIssuesLabels()->getIssuesLabels();
 
         return $project_details;
         $project->projectDetails()->updateOrCreate(['project_id' => $project->id],

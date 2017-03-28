@@ -147,8 +147,23 @@ class Utility extends Controller
         return (array)$_var;
     }
 
+    function arrayToCollection($_array)
+    {
+       return collect($_array);
+    }
+
     protected function respond($__attr, $code = 200)
     {
         return response()->json($__attr, $code);
+    }
+
+    protected function cutUrl($url, $cut)
+    {
+        return substr($url, 0, -$cut);
+    }
+
+    protected function cutLabelsUrl($url)
+    {
+        return $this->cutUrl($url, 7);
     }
 }
