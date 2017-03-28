@@ -14,6 +14,9 @@ use App\Project;
 class ProjectUtility extends Utility
 {
     protected  $project;
+
+    protected  $developers;
+
     protected  $issues_labels;
     protected  $file_types;
     protected  $languages;
@@ -30,7 +33,8 @@ class ProjectUtility extends Utility
 
     public function __construct()
     {
-        $this->headers['headers']['If-Modified-Since'] = 'Tue, 28 Mar 2017 07:24:36 GMT';
+        //todo: setup ETag or Last-Modified for saving rate limit
+        $this->headers['headers']['Last-Modified'] = 'Tue, 28 Mar 2017 07:24:36 GMT';
         return parent::__construct();
     }
 
@@ -50,6 +54,24 @@ class ProjectUtility extends Utility
         $this->project = $project;
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function getDevelopers()
+    {
+        return $this->developers;
+    }
+
+    /**
+     * @param mixed $developers
+     */
+    public function setDevelopers($developers)
+    {
+        $this->developers = $developers;
+    }
+
+
     /**
      * @return mixed
      */
@@ -59,18 +81,22 @@ class ProjectUtility extends Utility
     }
 
     /**
-     * @param mixed $issues_url
+     * @param mixed $labels_url
      * @return $this
      */
-    public function setIssuesLabels($issues_url ='')
+    public function setIssuesLabels($labels_url ='')
     {
-        if(!$issues_url) { $issues_url = $this->project->labels_url; }
+        if(!$labels_url) { $labels_url = $this->project->labels_url; }
 
-        $ping = $this->ping(
-            $this->concat($this->cutLabelsUrl($issues_url)),
-            $this->headers
-        );
-        $this->issues_labels = $this->arrayToCollection($this->jsonToArray($ping))->pluck('name');
+        if(!$labels = $this->alreadySaved($this->project, 'issues_label')) {
+            $ping = $this->ping(
+                $this->concat($this->cutLabelsUrl($labels_url)),
+                $this->headers
+            );
+            $this->issues_labels = $this->arrayToCollection($this->jsonToArray($ping))->pluck('name');
+            return $this;
+        }
+        $this->issues_labels = $labels;
         return $this;
     }
 
@@ -99,11 +125,24 @@ class ProjectUtility extends Utility
     }
 
     /**
-     * @param mixed $languages
+     * @param mixed $languages_url
+     *
+     * @return $this
      */
-    public function setLanguages($languages)
+    public function setLanguages($languages_url = '')
     {
+        if(!$languages_url) { $languages_url = $this->project->languages_url; }
+
+        if(!$languages = $this->alreadySaved($this->project, 'languages')) {
+            $ping = $this->ping(
+                $this->concat($languages_url),
+                $this->headers
+            );
+            $this->languages = $this->jsonToArray($ping);
+            return $this;
+        }
         $this->languages = $languages;
+        return $this;
     }
 
     /**
@@ -120,22 +159,6 @@ class ProjectUtility extends Utility
     public function setTotalDevelopers($total_developers)
     {
         $this->total_developers = $total_developers;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLabels()
-    {
-        return $this->labels;
-    }
-
-    /**
-     * @param mixed $labels
-     */
-    public function setLabels($labels)
-    {
-        $this->labels = $labels;
     }
 
     /**
@@ -282,5 +305,18 @@ class ProjectUtility extends Utility
         $this->total_additions = $total_additions;
     }
 
+    public function alreadySaved($project, $field)
+    {
+        if(!$details = $project->details)
+        {
+            return false;
+        }
 
+        if($data = $details->{$field})
+        {
+            return $data;
+        }
+
+        return false;
+    }
 }

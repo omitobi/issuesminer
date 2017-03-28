@@ -30,4 +30,9 @@ class Project extends Model
         'date_created',
         'default_branch'
     ];
+
+    public function details()
+    {
+        return $this->hasOne(ProjectDetail::class);
+    }
 }
