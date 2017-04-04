@@ -9,7 +9,9 @@
 namespace App\Utilities;
 
 
+use App\Developer;
 use App\Project;
+use Illuminate\Database\Eloquent\Model;
 
 class ProjectUtility extends Utility
 {
@@ -154,11 +156,27 @@ class ProjectUtility extends Utility
     }
 
     /**
-     * @param mixed $total_developers
+     * Also known as contributors?
+     * @param mixed $contributors_url
+     *
+     * @return $this
      */
-    public function setTotalDevelopers($total_developers)
+    public function setTotalDevelopers($contributors_url = '')
     {
-        $this->total_developers = $total_developers;
+
+        if(!$contributors_url) { $contributors_url = $this->project->contributors_url; }
+
+        if(!$developers = $this->alreadySaved($this->project, 'total_developers')) {
+            $ping = $this->ping(
+                $this->concat($this->concat($contributors_url), 'per_page=100', '&'),
+                $this->headers
+            );
+            $this->total_developers = collect($this->jsonToArray($ping));
+            $this->saveDevelopers($this->total_developers);
+            return $this;
+        }
+        $this->total_developers = $developers;
+        return $this;
     }
 
     /**
@@ -318,5 +336,27 @@ class ProjectUtility extends Utility
         }
 
         return false;
+    }
+
+    public function saveDevelopers($developers)
+    {
+        Model::unguard();
+        $devs = [];
+        foreach ($developers as $key => $developer)
+        {
+
+            $devs['name'] = $developer['login'];
+//            $dev->email = $developer->login;
+            $devs['api_url'] = $developer['url'];
+            $devs['web_url'] = $developer['html_url'];
+            $devs['total_contributions'] = $developer['contributions'];
+//            $dev->date_created = $developer->contributions;
+
+            $this->project->developers()->updateOrCreate($devs, $devs);
+        }
+
+        Model::reguard();
+
+        return true;
     }
 }

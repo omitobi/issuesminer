@@ -35,4 +35,9 @@ class Project extends Model
     {
         return $this->hasOne(ProjectDetail::class);
     }
+
+    public function developers()
+    {
+        return $this->hasMany(Developer::class);
+    }
 }

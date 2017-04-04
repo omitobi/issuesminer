@@ -36,8 +36,22 @@ class ProjectDetailsController extends ProjectUtility
 
 
         $this->setProject($project);
-        $project_details['issues_labels'] = $this->setIssuesLabels()->getIssuesLabels();
-        $project_details['languages'] = $this->setLanguages()->getLanguages();
+
+
+//        $project_details['issues_labels'] = $this->setIssuesLabels()->getIssuesLabels();
+//        $project_details['files_types'] = $this->setFileTypes()->getFileTypes(); //command line in _notes
+//        $project_details['languages'] = $this->setLanguages()->getLanguages();
+        $project_details['main_branch'] = 'master';
+        $project_details['total_developers'] = $this->setTotalDevelopers()->getTotalDevelopers();
+       /* $project_details['total_commits'] = $this->setTotalCommits()->getTotalCommits();
+        $project_details['total_issues'] = $this->setTotalIssues()->getTotatlIssues();
+        $project_details['total_bug_issues'] = $this->setTotalBugIssues()->geTotalBugIssues();
+        $project_details['total_closed_bug_issues'] = $this->setTotalClosedBugIssues()->getTotalClosedBugIssues();
+        $project_details['total_created_files'] = $this->setTotalCreatedFiles()->getTotalCreatedFiles();
+        $project_details['total_modified_files'] = $this->setTotalModifiedFiles()->getTotalModifiedFiles();
+        $project_details['total_deleted_files'] = $this->setTotalDeletedFiles()->getTotalDeletedFiles();
+        $project_details['total_deletions'] = $this->setTotalDeletions()->getTotalDeletions();
+        $project_details['total_addition'] = $this->setTotalAdditions()->getTotalAdditions();*/
 
         return $project_details;
         $project->projectDetails()->updateOrCreate(['project_id' => $project->id],
