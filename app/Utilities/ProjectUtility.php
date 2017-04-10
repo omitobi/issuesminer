@@ -161,21 +161,45 @@ class ProjectUtility extends Utility
      *
      * @return $this
      */
-    public function setTotalDevelopers($contributors_url = '')
+    public function setTotalDevelopers($contributors_url = '', $page='')
     {
 
         if(!$contributors_url) { $contributors_url = $this->project->contributors_url; }
 
         if(!$developers = $this->alreadySaved($this->project, 'total_developers')) {
             $ping = $this->ping(
-                $this->concat($this->concat($contributors_url), 'per_page=100', '&'),
-                $this->headers
+                $this->concat($this->concat($contributors_url), 'per_page=100'.$page, '&'),
+                $this->headers,
+                ['body', 'head']
             );
-            $this->total_developers = collect($this->jsonToArray($ping));
-            $this->saveDevelopers($this->total_developers);
+            $this->setDevelopers( collect($this->jsonToArray($ping->getBody())) );
+
+            $_next = [];
+            if(count($header_ = $ping->getHeader('Link')))
+            {
+
+                $links = explode(',', $header_[0]);
+
+//            return $parsed = Psr7\parse_header($ping->getHeader('Link'));
+                if (($_fs = strpos($links[0], '<')) === 0)
+                    $_next['page'] =  substr($links[0], $_fs+1, strpos($links[0],'>')-1);
+
+                if (($_ls = strpos($links[1], '<')) === 1)
+                    $_next['last'] =  substr($links[1], $_ls+1, strpos($links[1],'>')-2);
+
+                if (($_fsn = strpos($links[0], "&page=")) > 0)
+                    $_next['next_page'] = substr($links[0], $_fsn + 6, -13);
+
+                if (($_lsn = strpos($links[1], "&page=")) > 0)
+                    $_next['last_page'] = substr($links[1], $_lsn+6, -13);
+
+            }
+
+            $this->next_ = $_next;
+            $this->saveDevelopers($this->developers);
             return $this;
         }
-        $this->total_developers = $developers;
+        $this->developers = $developers;
         return $this;
     }
 
@@ -346,13 +370,14 @@ class ProjectUtility extends Utility
         {
 
             $devs['name'] = $developer['login'];
+            $devs['identifier'] = $developer['id'];
 //            $dev->email = $developer->login;
             $devs['api_url'] = $developer['url'];
             $devs['web_url'] = $developer['html_url'];
             $devs['total_contributions'] = $developer['contributions'];
 //            $dev->date_created = $developer->contributions;
 
-            $this->project->developers()->updateOrCreate($devs, $devs);
+            $this->project->developers()->updateOrCreate(['name' => $developer['login']], $devs);
         }
 
         Model::reguard();

@@ -45,3 +45,4 @@ $app->get('commits', 'General\CommitsController@load');
 //$app->get('/issues', 'Issues\IssuesController@resolve');
 
 $app->get('/projects/details', 'General\ProjectDetailsController@load');
+$app->post('/developers', 'General\DevelopersController@load');
