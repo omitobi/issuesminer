@@ -10,8 +10,10 @@ namespace App\Http\Controllers\VCS;
 
 
 use App\Utilities\Utility;
+use App\VCSModels\VCSExtension;
 use App\VCSModels\VCSProject;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class VCSFilesController extends Utility
@@ -41,5 +43,53 @@ class VCSFilesController extends Utility
 //        return $this->respond($project, 200, true);
 
         return $_files;
+    }
+
+
+    public function sortExtensions(Request $request)
+    {
+        $project_name = $request->project_name;
+
+        $oo_langs = ['c', 'h', 'cpp', 'cs', 'php', 'java', 'cxx', 'hpp','js'];
+        $imp_langs = ['cpp', 'cs', 'php', 'java', 'cxx', 'hpp', 'js'];
+        $texts = ['dtd', 'py', 'php', 'java', 'rb', 'sgml', 'txt', 'wsdl', 'xsd'];
+
+        $vcs_project = VCSProject::where('Name', $project_name)->first();
+
+        $_vfiles = $vcs_project->VCSFiles;
+
+        $extensions = [];
+
+        Model::unguard();
+        foreach ($_vfiles as $chunk)
+        {
+            $ext = pathinfo($chunk['Name'], PATHINFO_EXTENSION);
+
+            $vcs_extension = new VCSExtension();
+            $vcs_extension->Extension  = ".".$ext;
+            $vcs_extension->Type  = mb_strtoupper($ext);
+
+
+//            if(in_array($ext, $oo_langs)){
+//                $vcs_extension->isOO = true;
+//            }
+//            if(in_array($ext, $imp_langs)){
+//                $vcs_extension->isImperative = true;
+//            }
+            if($ext === 'xml' || $ext === 'xsd' || $ext === 'wsdl'){
+                $vcs_extension->isXML  = true;
+            }
+
+            if(in_array($ext, $texts)){
+                $vcs_extension->isText  = true;
+            }
+
+            if(!VCSExtension::where('Extension', ".".$ext)->first()) {
+                $extensions[] = $vcs_extension->saveOrFail();
+            } else $extensions[] = $vcs_extension->update();
+
+        }
+        Model::reguard();
+        return $extensions;
     }
 }
