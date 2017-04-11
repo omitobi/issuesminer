@@ -11,13 +11,10 @@ namespace App\VCSModels;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VCSProject extends Model
+class VCSFile extends Model
 {
     protected $primaryKey = 'Id';
-    protected $table = "VCSProject";
+    protected $table = "VCSFile";
 
-    public function VCSFiles()
-    {
-        return $this->hasMany(VCSFile::class, 'ProjectId', 'Id');
-    }
+    protected $fillable = ['Id', 'Name'];
 }

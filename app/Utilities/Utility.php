@@ -152,8 +152,11 @@ class Utility extends Controller
        return collect($_array);
     }
 
-    protected function respond($__attr, $code = 200)
+    protected function respond($__attr, $code = 200, $transform = false)
     {
+        if($transform) {
+            return $this->respond($this->jsonToArray($__attr), $code);
+        }
         return response()->json($__attr, $code);
     }
 

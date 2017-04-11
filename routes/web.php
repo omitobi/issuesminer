@@ -50,3 +50,4 @@ $app->post('/developers', 'General\DevelopersController@load');
 
 //VCS Routes
 $app->post('/vcs/projects', 'VCS\ProjectsController@loadAll');
+$app->post('/vcs/files', 'VCS\VCSFilesController@save');
