@@ -34,8 +34,8 @@ class CreateVCSFileRevisionTable extends Migration
             $table->string('Extension');
             $table->string('ExtensionId');
 
-            $table->bigInteger('FileTypeId')->unsigned();
-            $table->foreign('FileId')->references('Id')->on('VCSFile');
+            $table->integer('FiletypeId')->unsigned();
+            $table->foreign('FiletypeId')->references('Id')->on('VCSFileTypes');
 
 
             $table->timestamps();

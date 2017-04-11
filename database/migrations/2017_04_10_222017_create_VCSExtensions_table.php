@@ -14,7 +14,12 @@ class CreateVCSExtensionsTable extends Migration
     public function up()
     {
         Schema::create('VCSExtensions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('Id');
+            $table->string('Extension');
+            $table->string('Type');
+            $table->boolean('IsText');
+            $table->boolean('IsXML');
+            $table->integer('TypeId')->unsigned();
             $table->timestamps();
         });
     }
