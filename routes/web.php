@@ -46,3 +46,7 @@ $app->get('commits', 'General\CommitsController@load');
 
 $app->get('/projects/details', 'General\ProjectDetailsController@load');
 $app->post('/developers', 'General\DevelopersController@load');
+
+
+//VCS Routes
+$app->post('/vcs/projects', 'VCS\ProjectsController@loadAll');
