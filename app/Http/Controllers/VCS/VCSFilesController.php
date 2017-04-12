@@ -11,6 +11,7 @@ namespace App\Http\Controllers\VCS;
 
 use App\Utilities\Utility;
 use App\VCSModels\VCSExtension;
+use App\VCSModels\VCSFiletype;
 use App\VCSModels\VCSProject;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,50 @@ use Illuminate\Http\Request;
 
 class VCSFilesController extends Utility
 {
+
+    protected $oo_langs = ['c', 'h', 'cpp', 'cs', 'php', 'java', 'cxx', 'hpp','js'];
+    protected $imp_langs = ['cpp', 'cs', 'php', 'java', 'cxx', 'hpp', 'js'];
+    protected $texts = ['dtd', 'py', 'php', 'java', 'rb', 'sgml', 'txt', 'wsdl', 'xsd'];
+    protected $types_  = [
+        'h' => 'C',
+        'cs' => 'C#',
+        'cpp' => 'C++',
+        'data' => 'Data',
+        'dtd' => 'DTD',
+        'groovy' => 'Groovy',
+        'jpg' => 'Graphics',
+        'png' => 'Graphics',
+        'tiff' => 'Graphics',
+        'xpm' => 'Graphics',
+        'gif' => 'Graphics',
+        'htm' => 'HTML',
+        'js' => 'JavaScript',
+        'xsd' => 'XML Schema',
+        'sh' => 'Bash Script',
+        'ods' => 'Open Document',
+        'odt' => 'Open Document',
+        'txt' => 'Plaintext',
+        'py' => 'Python',
+        'rb' => 'Ruby',
+        'bin' => 'Binary',
+        'class' => 'Binary',
+        'dll' => 'Binary',
+        'jar' => 'Binary',
+        'o' => 'Binary',
+        'exe' => 'Binary',
+        'so' => 'Binary',
+        'bat' => 'Command Script',
+        'cmd' => 'Command Script',
+        'dat' => 'Data',
+        'csv' => 'Data',
+        'in' => 'MakeFile',
+        'am' => 'MakeFile',
+        'php~' => 'PHP',
+        'phpt' => 'PHP',
+        'xslt' => 'XSL',
+        'xslt,v' => 'XSL',
+        '' => 'No extension',
+    ];
 
     public function save(Request $request)
     {
@@ -50,9 +95,7 @@ class VCSFilesController extends Utility
     {
         $project_name = $request->project_name;
 
-        $oo_langs = ['c', 'h', 'cpp', 'cs', 'php', 'java', 'cxx', 'hpp','js'];
-        $imp_langs = ['cpp', 'cs', 'php', 'java', 'cxx', 'hpp', 'js'];
-        $texts = ['dtd', 'py', 'php', 'java', 'rb', 'sgml', 'txt', 'wsdl', 'xsd'];
+
 
         $vcs_project = VCSProject::where('Name', $project_name)->first();
 
@@ -67,7 +110,8 @@ class VCSFilesController extends Utility
 
             $vcs_extension = new VCSExtension();
             $vcs_extension->Extension  = ".".$ext;
-            $vcs_extension->Type  = mb_strtoupper($ext);
+            $_type = (isset($this->types_[mb_strtolower($ext)])) ? $this->types_[mb_strtolower($ext)] : mb_strtoupper($ext);
+            $vcs_extension->Type  = $_type;
 
 
 //            if(in_array($ext, $oo_langs)){
@@ -76,11 +120,11 @@ class VCSFilesController extends Utility
 //            if(in_array($ext, $imp_langs)){
 //                $vcs_extension->isImperative = true;
 //            }
-            if($ext === 'xml' || $ext === 'xsd' || $ext === 'wsdl'){
+            if($ext === 'xml' || $ext === 'xsd' || $ext === 'wsdl' || $ext === 'xsl'){
                 $vcs_extension->isXML  = true;
             }
 
-            if(in_array($ext, $texts)){
+            if(in_array($ext, $this->texts)){
                 $vcs_extension->isText  = true;
             }
 
@@ -92,4 +136,49 @@ class VCSFilesController extends Utility
         Model::reguard();
         return $extensions;
     }
+
+
+    public function sortFileTypes(Request $request)
+    {
+        $project_name = $request->project_name;
+
+        $vcs_project = VCSProject::where('Name', $project_name)->first();
+
+        $_vfiles = $vcs_project->VCSFiles;
+
+        $extensions = [];
+
+        Model::unguard();
+        foreach ($_vfiles as $chunk)
+        {
+            $ext = pathinfo($chunk['Name'], PATHINFO_EXTENSION);
+
+            $vcs_file_types = new VCSFiletype();
+            $_type = (isset($this->types_[mb_strtolower($ext)])) ? $this->types_[mb_strtolower($ext)] : mb_strtoupper($ext);
+            $vcs_file_types->Type  = $_type;
+
+
+            if(in_array($ext, $this->oo_langs)){
+                $vcs_file_types->isOO = true;
+            }
+            if(in_array($ext, $this->imp_langs)){
+                $vcs_file_types->isImperative = true;
+            }
+            if($ext === 'xml' || $ext === 'xsd' || $ext === 'wsdl'){
+                $vcs_file_types->isXML  = true;
+            }
+
+            if(in_array($ext, $this->texts)){
+                $vcs_file_types->isText  = true;
+            }
+
+            if(!VCSFiletype::where('Type', $_type)->first()) {
+                $extensions[] = $vcs_file_types->saveOrFail();
+            } else $extensions[] = $vcs_file_types->update();
+
+        }
+        Model::reguard();
+        return $extensions;
+    }
+
 }

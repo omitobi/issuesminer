@@ -52,3 +52,4 @@ $app->post('/developers', 'General\DevelopersController@load');
 $app->post('/vcs/projects', 'VCS\ProjectsController@loadAll');
 $app->post('/vcs/files', 'VCS\VCSFilesController@save');
 $app->post('/vcs/fileextensions', 'VCS\VCSFilesController@sortExtensions');
+$app->post('/vcs/filetypes', 'VCS\VCSFilesController@sortFileTypes');
