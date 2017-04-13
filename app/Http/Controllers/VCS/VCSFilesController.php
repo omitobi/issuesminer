@@ -20,50 +20,6 @@ use Illuminate\Http\Request;
 class VCSFilesController extends Utility
 {
 
-    protected $oo_langs = ['c', 'h', 'cpp', 'cs', 'php', 'java', 'cxx', 'hpp','js'];
-    protected $imp_langs = ['cpp', 'cs', 'php', 'java', 'cxx', 'hpp', 'js'];
-    protected $texts = ['dtd', 'py', 'php', 'java', 'rb', 'sgml', 'txt', 'wsdl', 'xsd'];
-    protected $types_  = [
-        'h' => 'C',
-        'cs' => 'C#',
-        'cpp' => 'C++',
-        'data' => 'Data',
-        'dtd' => 'DTD',
-        'groovy' => 'Groovy',
-        'jpg' => 'Graphics',
-        'png' => 'Graphics',
-        'tiff' => 'Graphics',
-        'xpm' => 'Graphics',
-        'gif' => 'Graphics',
-        'htm' => 'HTML',
-        'js' => 'JavaScript',
-        'xsd' => 'XML Schema',
-        'sh' => 'Bash Script',
-        'ods' => 'Open Document',
-        'odt' => 'Open Document',
-        'txt' => 'Plaintext',
-        'py' => 'Python',
-        'rb' => 'Ruby',
-        'bin' => 'Binary',
-        'class' => 'Binary',
-        'dll' => 'Binary',
-        'jar' => 'Binary',
-        'o' => 'Binary',
-        'exe' => 'Binary',
-        'so' => 'Binary',
-        'bat' => 'Command Script',
-        'cmd' => 'Command Script',
-        'dat' => 'Data',
-        'csv' => 'Data',
-        'in' => 'MakeFile',
-        'am' => 'MakeFile',
-        'php~' => 'PHP',
-        'phpt' => 'PHP',
-        'xslt' => 'XSL',
-        'xslt,v' => 'XSL',
-        '' => 'No extension',
-    ];
-
     public function save(Request $request)
     {
         $vcsproject = VCSProject::find($request->id);
@@ -164,7 +120,7 @@ class VCSFilesController extends Utility
             if(in_array($ext, $this->imp_langs)){
                 $vcs_file_types->isImperative = true;
             }
-            if($ext === 'xml' || $ext === 'xsd' || $ext === 'wsdl'){
+            if($ext === 'xml' || $ext === 'xsd' || $ext === 'wsdl' || $ext === 'xsl'){
                 $vcs_file_types->isXML  = true;
             }
 

@@ -17,6 +17,51 @@ class Utility extends Controller
     const BEFORE_STRING = 0;
     const AFTER_STRING = 1;
 
+    protected $oo_langs = ['c', 'h', 'cpp', 'cs', 'php', 'java', 'cxx', 'hpp','js'];
+    protected $imp_langs = ['cpp', 'cs', 'php', 'java', 'cxx', 'hpp', 'js'];
+    protected $texts = ['dtd', 'py', 'php', 'java', 'rb', 'sgml', 'txt', 'wsdl', 'xsd'];
+    protected $types_  = [
+        'h' => 'C',
+        'cs' => 'C#',
+        'cpp' => 'C++',
+        'data' => 'Data',
+        'dtd' => 'DTD',
+        'groovy' => 'Groovy',
+        'jpg' => 'Graphics',
+        'png' => 'Graphics',
+        'tiff' => 'Graphics',
+        'xpm' => 'Graphics',
+        'gif' => 'Graphics',
+        'htm' => 'HTML',
+        'js' => 'JavaScript',
+        'xsd' => 'XML Schema',
+        'sh' => 'Bash Script',
+        'ods' => 'Open Document',
+        'odt' => 'Open Document',
+        'txt' => 'Plaintext',
+        'py' => 'Python',
+        'rb' => 'Ruby',
+        'bin' => 'Binary',
+        'class' => 'Binary',
+        'dll' => 'Binary',
+        'jar' => 'Binary',
+        'o' => 'Binary',
+        'exe' => 'Binary',
+        'so' => 'Binary',
+        'bat' => 'Command Script',
+        'cmd' => 'Command Script',
+        'dat' => 'Data',
+        'csv' => 'Data',
+        'in' => 'MakeFile',
+        'am' => 'MakeFile',
+        'php~' => 'PHP',
+        'phpt' => 'PHP',
+        'xslt' => 'XSL',
+        'xslt,v' => 'XSL',
+        '' => 'No extension',
+    ];
+
+
     protected $headers = [
                 'headers' => [
                     'User-Agent' => 'omitobi',
