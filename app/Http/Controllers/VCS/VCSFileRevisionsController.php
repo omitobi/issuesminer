@@ -96,24 +96,24 @@ class VCSFileRevisionsController extends Utility
                         $file_['CommitterId'] = isset($_commit->committer) ? $_commit->committer->login : (
                             ($_commit->commit->committer-> name).'|'.($_commit->commit->committer->email));
                         $file_['Extension'] = '.' . $ext;
-                        $file_extension = VCSExtension::where('Extension', $file_['Extension'])->first();
 
-                        $file_['ExtensionId'] = $file_extension ? $file_extension->Id : VCSFiletype::create(
-                            [
-                                'Extension' => '.' . $ext,
-                                'Type' => $_type,
-                                'IsText' => in_array(mb_strtolower($_type), $this->texts),
-                                'IsXML' => in_array(mb_strtolower($_type), $this->xmls),
-                                'TypeId' => 0,
-                            ])->Id;
-                        $file_type = VCSFiletype::where('Type', $_type)->first();
-                        $file_['FiletypeId'] = $file_type ? $file_type->Id : VCSFiletype::create(
+                        $file_['FiletypeId'] = VCSFiletype::firstOrCreate(
+                            ['Type' => $_type],
                             [
                                 'Type' => $_type,
                                 'IsText' => in_array(mb_strtolower($_type), $this->texts),
                                 'IsXML' => in_array(mb_strtolower($_type), $this->xmls),
                                 'IsImperative' => in_array(mb_strtolower($_type), $this->imp_langs),
                                 'IsOO' => in_array(mb_strtolower($_type), $this->oo_langs)
+                            ])->Id;
+                        $file_['ExtensionId'] = VCSExtension::firstOrCreate(
+                            ['Extension' => '.' . $ext],
+                            [
+                                'Extension' => '.' . $ext,
+                                'Type' => $_type,
+                                'IsText' => in_array(mb_strtolower($_type), $this->texts),
+                                'IsXML' => in_array(mb_strtolower($_type), $this->xmls),
+                                'TypeId' => 0,
                             ])->Id;
 //                        return $file_;
 
