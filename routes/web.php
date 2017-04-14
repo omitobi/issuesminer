@@ -51,6 +51,6 @@ $app->post('/developers', 'General\DevelopersController@load');
 //VCS Routes
 $app->post('/vcs/projects', 'VCS\ProjectsController@loadAll');
 $app->post('/vcs/files', 'VCS\VCSFilesController@save');
-$app->post('/vcs/fileextensions', 'VCS\VCSFilesController@sortExtensions');
+$app->get('/vcs/fileextensions', 'VCS\VCSFilesController@sortExtensions');
 $app->post('/vcs/filetypes', 'VCS\VCSFilesController@sortFileTypes');
 $app->get('/vcs/filerevisions', 'VCS\VCSFileRevisionsController@sortRevisions');

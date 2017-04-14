@@ -42,9 +42,10 @@ class VCSFileRevisionsController extends Utility
 
         $commits_urls = [];
         $_record_count = 0;
+        $request_count = 0;
         if(count($commits = Commit::where('project_id', $project->Id)
             ->where('touched', '0')
-            ->take(5)  //in order to stick with Github's 30 requests per minute
+            ->take(27)  //in order to stick with Github's 30 requests per minute
             ->get())) {
 
             $prev_rev = VCSFileRevision::where('ProjectId', $project->Id)->get();
@@ -58,8 +59,7 @@ class VCSFileRevisionsController extends Utility
 //            $_SESSION['timeout'] = time() + 70;
 
 
-            foreach ($commits as $key => $commit)
-            {
+            foreach ($commits as $key => $commit) {
                 $commits_url = $this->concat($commit->api_url);
                 $commits_urls[] = $commits_url;
                 $_commit = $this->jsonToObject($this->ping($commits_url));
@@ -67,52 +67,91 @@ class VCSFileRevisionsController extends Utility
 
 
                 $file_count = count($_files);
-                foreach ($_files as $_file)
-                {
-                    $ext = pathinfo($_file->filename, PATHINFO_EXTENSION);
-
-                    $_type = (isset($this->types_[mb_strtolower($ext)])) ? $this->types_[mb_strtolower($ext)] : mb_strtoupper($ext);
+                if ($file_count) {
 
 
-                    $file_['ProjectId'] = $project->Id;
+                    foreach ($_files as $_file) {
+//                    return $this->toArray($_commit);
+
+                        $ext = pathinfo($_file->filename, PATHINFO_EXTENSION);
+
+                        $_type = (isset($this->types_[mb_strtolower($ext)])) ? $this->types_[mb_strtolower($ext)] : mb_strtoupper($ext);
+
+
+                        $file_['ProjectId'] = $project->Id;
 //                    $file_['Name'] = $commit->id;
-                    $file_['Name'] = $_commit->sha;
+                        $file_['Name'] = $_file->sha;
 //                    $file_['issue_id'] = $commit->issue_id;
 
 
 //                    $file_['FileId'] = $_file->filename;
-                    $the_file = VCSFile::where('Name',$_file->filename)->first();
-                    $file_['FileId'] = ($the_file) ? $the_file->Id : 0;
+                        $the_file = VCSFile::where('Name', $_file->filename)->first();
+                        $file_['FileId'] = ($the_file) ? $the_file->Id : 0;
 
-                    $file_['Date'] = str_replace(['T','Z'], [' ', ''], $_commit->commit->committer->date);
-                    $file_['Comment'] = $_commit->commit->message;
-                    $file_['PreviousRevisionId'] = $prev_rev_id;
-                    $file_['Alias'] = $_file->filename;
-                    $file_['ProjectLOC'] = 0;  //to be added to project table
-                    $file_['CommitterId'] = $_commit->committer->login;
-                    $file_['Extension'] = '.'.$ext;
-                    $file_['ExtensionId'] = VCSExtension::where('Extension', $file_['Extension'])->first()->Id;
-                    $file_['FiletypeId'] = VCSFiletype::where('Type', $_type)->first()->Id;
+                        $file_['Date'] = str_replace(['T', 'Z'], [' ', ''], $_commit->commit->committer->date);
+                        $file_['Comment'] = $_commit->commit->message;
+                        $file_['PreviousRevisionId'] = $prev_rev_id;
+                        $file_['Alias'] = $_file->filename;
+                        $file_['ProjectLOC'] = 0;  //to be added to project table
+                        $file_['CommitterId'] = isset($_commit->committer) ? $_commit->committer->login : (
+                            ($_commit->commit->committer-> name).'|'.($_commit->commit->committer->email));
+                        $file_['Extension'] = '.' . $ext;
+                        $file_extension = VCSExtension::where('Extension', $file_['Extension'])->first();
+
+                        $file_['ExtensionId'] = $file_extension ? $file_extension->Id : VCSFiletype::create(
+                            [
+                                'Extension' => '.' . $ext,
+                                'Type' => $_type,
+                                'IsText' => in_array(mb_strtolower($_type), $this->texts),
+                                'IsXML' => in_array(mb_strtolower($_type), $this->xmls),
+                                'TypeId' => 0,
+                            ])->Id;
+                        $file_type = VCSFiletype::where('Type', $_type)->first();
+                        $file_['FiletypeId'] = $file_type ? $file_type->Id : VCSFiletype::create(
+                            [
+                                'Type' => $_type,
+                                'IsText' => in_array(mb_strtolower($_type), $this->texts),
+                                'IsXML' => in_array(mb_strtolower($_type), $this->xmls),
+                                'IsImperative' => in_array(mb_strtolower($_type), $this->imp_langs),
+                                'IsOO' => in_array(mb_strtolower($_type), $this->oo_langs)
+                            ])->Id;
+//                        return $file_;
 
 //                    $commits_['description'] = ''; //to be updated when each commit is checked too
 
-                    Model::unguard();
-                    if($vcsfilerevision = VCSFileRevision::firstOrCreate([
-                        'ProjectId' => $file_['ProjectId'],
-                        'Name' => $file_['Name'],
-                    ], $file_))
-                    {
-                        $prev_rev_id = $vcsfilerevision->Id;
-                        $commit->file_changed_count = $file_count;
-                        $commit->touched = $file_['Name'];
-                        $commit->description = $_commit->commit->message;
-                        $commit->update();
-                        $_errors[] = false;
-                        $_record_count ++;
-                    }else{ $_errors[] = true; }
-                    Model::reguard();
-                }
+                        Model::unguard();
+                        if ($vcsfilerevision = VCSFileRevision::firstOrCreate([
+                            'ProjectId' => $file_['ProjectId'],
+                            'Name' => $file_['Name'],
+                            'Date' => $file_['Date']
+                        ], $file_)
+                        ) {
+                            $prev_rev_id = $vcsfilerevision->Id;
+                            $commit->file_changed_count = $file_count;
+                            $commit->touched = $file_['Name'];
+                            $commit->description = $_commit->commit->message;
+                            $commit->update();
+                            $_errors[] = false;
+                            $_record_count++;
+                        } else {
+                            $_errors[] = true;
+                        }
+                        Model::reguard();
+                    }
 
+                }
+            }
+            $request_count ++;
+            if($request_count >= 28)
+            {
+                $msg = [
+                    "status" => "success",
+                    "message" => "'{$_record_count}' record(s) successfully added to {$project->Name}'s 'commits_files'",
+                    "extra" => (!$_record_count) ? 'covered' : '',
+                    "params" => '',
+                    "request_count" => $request_count
+                ];
+                return $this->respond($msg, 201);
             }
         }
         if(!in_array(true, $_errors))

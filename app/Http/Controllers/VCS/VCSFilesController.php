@@ -23,6 +23,9 @@ class VCSFilesController extends Utility
     public function save(Request $request)
     {
         $vcsproject = VCSProject::find($request->id);
+        if(!$vcsproject){
+            return $this->respond('Project does not exist', 404);
+        }
 //        return $vcsproject;
 //        $p_name = 'jquery';
         $_files = [];
@@ -49,11 +52,18 @@ class VCSFilesController extends Utility
 
     public function sortExtensions(Request $request)
     {
-        $project_name = $request->project_name;
+        $project_name = $request->get('project_name');
+        $vcs_project = null;
+        if($request->get('pid')){
+            $vcs_project = VCSProject::find($request->get('pid'));
+        }
 
-
-
-        $vcs_project = VCSProject::where('Name', $project_name)->first();
+        if(!$vcs_project){
+            $vcs_project  = VCSProject::where('Name', $project_name)->first();
+        }
+        if(!$vcs_project){
+            return $this->respond('Project does not exist', 404);
+        }
 
         $_vfiles = $vcs_project->VCSFiles;
 
@@ -96,9 +106,18 @@ class VCSFilesController extends Utility
 
     public function sortFileTypes(Request $request)
     {
-        $project_name = $request->project_name;
+        $project_name = $request->get('project_name');
+        $vcs_project = null;
+        if($request->get('pid')){
+            $vcs_project = VCSProject::find($request->get('pid'));
+        }
 
-        $vcs_project = VCSProject::where('Name', $project_name)->first();
+        if(!$vcs_project){
+            $vcs_project  = VCSProject::where('Name', $project_name)->first();
+        }
+        if(!$vcs_project){
+            return $this->respond('Project does not exist', 404);
+        }
 
         $_vfiles = $vcs_project->VCSFiles;
 
@@ -120,6 +139,7 @@ class VCSFilesController extends Utility
             if(in_array($ext, $this->imp_langs)){
                 $vcs_file_types->isImperative = true;
             }
+
             if($ext === 'xml' || $ext === 'xsd' || $ext === 'wsdl' || $ext === 'xsl'){
                 $vcs_file_types->isXML  = true;
             }

@@ -15,6 +15,7 @@ class CreateVCSFileRevisionTable extends Migration
     {
         Schema::create('VCSFileRevision', function (Blueprint $table) {
             $table->bigIncrements('Id');
+            $table->bigInteger('ProjectId')->unsigned();
 
             $table->string('Name');
 
