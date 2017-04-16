@@ -11,6 +11,7 @@ namespace App\Http\Controllers\General;
 use App\Commit;
 use App\Project;
 use App\Utilities\Utility;
+use App\VCSModels\VCSProject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use GuzzleHttp\Psr7;
@@ -18,16 +19,35 @@ use GuzzleHttp\Psr7;
 
 class CommitsController extends Utility
 {
+
+    public function untouch_commits(Request $request)
+    {
+        $project_name = $request->get('project_name');
+        $vcs_project = null;
+        if($request->get('pid')){
+            $vcs_project = VCSProject::find($request->get('pid'));
+        }
+
+        if(!$vcs_project){
+            $vcs_project  = VCSProject::where('Name', $project_name)->first();
+        }
+        if(!$vcs_project){
+            return $this->respond('Project does not exist', 404);
+        }
+
+        $vcs_project->commits()->update(['touched' => 0]);
+
+        return $vcs_project;
+    }
+
     public function load(Request $request)
     {
 
-        if(!$project_name = $request->get('project_name'))
-        {
+        if(!$project_name = $request->get('project_name')) {
             return response(['error' => 'invalid project_name'], 400);
         }
 //         sleep ( 61 );
-        if(!$project = Project::where('name', $project_name)->first())
-        {
+        if(!$project = Project::where('name', $project_name)->first()) {
             return $this->respond('Project does not exist', 404);
         }
 
@@ -43,8 +63,7 @@ class CommitsController extends Utility
         $_next['next_page'] = 'x';
         $_next['last_page'] = 'x';
 
-        if(count($header_ = $ping->getHeader('Link')))
-        {
+        if(count($header_ = $ping->getHeader('Link'))) {
 
             $links = explode(',', $header_[0]);
 
@@ -108,8 +127,7 @@ class CommitsController extends Utility
         $requests = $request->all();
         $requests['page'] = (isset($_next['next_page'])) ? $_next['next_page'] : '';
 
-        if(!in_array(false, $_errors))
-        {
+        if(!in_array(false, $_errors)) {
             $msg = [
                 "status" => "success",
                 'model' => 'commits',

@@ -44,10 +44,11 @@ class VCSFileRevisionsController extends Utility
         $_record_count = 0;
         $request_count = 0;
         if(count($commits = Commit::where('project_id', $project->Id)
-            ->where('touched', '0')
+            ->where('touched', '0')->orderBy('date_committed', 'asc')
             ->take(27)  //in order to stick with Github's 30 requests per minute
             ->get())) {
 
+//            return $commits;
             $prev_rev = VCSFileRevision::where('ProjectId', $project->Id)->get();
             $prev_rev_id =  $prev_rev->last() ? $prev_rev->last()->Id : 1;
 //            session_start();
@@ -64,7 +65,6 @@ class VCSFileRevisionsController extends Utility
                 $commits_urls[] = $commits_url;
                 $_commit = $this->jsonToObject($this->ping($commits_url));
                 $_files = $_commit->files;
-
 
                 $file_count = count($_files);
                 if ($file_count) {
@@ -87,6 +87,7 @@ class VCSFileRevisionsController extends Utility
 //                    $file_['FileId'] = $_file->filename;
                         $the_file = VCSFile::where('Name', $_file->filename)->first();
                         $file_['FileId'] = ($the_file) ? $the_file->Id : 0;
+                        $file_['CommitId'] = $commit->id;
 
                         $file_['Date'] = str_replace(['T', 'Z'], [' ', ''], $_commit->commit->committer->date);
                         $file_['Comment'] = $_commit->commit->message;
@@ -120,7 +121,7 @@ class VCSFileRevisionsController extends Utility
 //                    $commits_['description'] = ''; //to be updated when each commit is checked too
 
                         Model::unguard();
-                        if ($vcsfilerevision = VCSFileRevision::firstOrCreate([
+                        if ($vcsfilerevision = VCSFileRevision::updateOrCreate([
                             'ProjectId' => $file_['ProjectId'],
                             'Name' => $file_['Name'],
                             'Date' => $file_['Date']
@@ -140,8 +141,8 @@ class VCSFileRevisionsController extends Utility
                     }
 
                 }
+                $request_count ++;
             }
-            $request_count ++;
             if($request_count >= 28)
             {
                 $msg = [

@@ -9,6 +9,7 @@
 namespace App\VCSModels;
 
 
+use App\Commit;
 use Illuminate\Database\Eloquent\Model;
 
 class VCSProject extends Model
@@ -19,5 +20,10 @@ class VCSProject extends Model
     public function VCSFiles()
     {
         return $this->hasMany(VCSFile::class, 'ProjectId', 'Id');
+    }
+
+    public function commits()
+    {
+        return $this->hasMany(Commit::class, 'project_id', 'Id');
     }
 }
