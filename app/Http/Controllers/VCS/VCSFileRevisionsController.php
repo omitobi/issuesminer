@@ -28,8 +28,6 @@ class VCSFileRevisionsController extends Utility
         return $this->loadFromCommits($request);
     }
 
-
-
     public function loadFromCommits(Request $request)
     {
 
@@ -45,7 +43,7 @@ class VCSFileRevisionsController extends Utility
         $request_count = 0;
         if(count($commits = Commit::where('project_id', $project->Id)
             ->where('touched', '0')->orderBy('date_committed', 'asc')
-            ->take(27)  //in order to stick with Github's 30 requests per minute
+            ->take(80)  //in order to stick with Github's 83.33 requests per minute
             ->get())) {
 
 //            return $commits;
@@ -155,8 +153,7 @@ class VCSFileRevisionsController extends Utility
                 return $this->respond($msg, 201);
             }
         }
-        if(!in_array(true, $_errors))
-        {
+        if(!in_array(true, $_errors)) {
             $msg = [
                 "status" => "success",
                 "message" => "'{$_record_count}' record(s) successfully added to {$project->Name}'s 'commits_files'",
