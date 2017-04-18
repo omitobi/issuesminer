@@ -40,6 +40,7 @@ class CreateVCSFileRevisionTable extends Migration
 
 
             $table->timestamps();
+            $table->bigInteger('CommitId')->unsigned();
         });
     }
 
