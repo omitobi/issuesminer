@@ -19,7 +19,28 @@ class Utility extends Controller
 
     protected $oo_langs = ['c', 'h', 'cpp', 'cs', 'php', 'java', 'cxx', 'hpp','js'];
     protected $imp_langs = ['cpp', 'cs', 'php', 'java', 'cxx', 'hpp', 'js'];
-    protected $texts = ['dtd', 'py', 'php', 'java', 'rb', 'sgml', 'txt', 'wsdl', 'xsd', 'md', 'readme'];
+    protected $texts = [
+        'dtd',
+        'py',
+        'php',
+        'java',
+        'rb',
+        'sgml',
+        'txt',
+        'wsdl',
+        'xsd',
+        'md',
+        'readme',
+        'cpp',
+        'cs',
+        'cxx',
+        'hpp',
+        'js',
+        'c',
+        'h',
+        'cs',
+        'php'
+    ];
     protected $xmls = ['xml', 'xsd', 'wsdl', 'xsl'];
     protected $types_  = [
         'h' => 'C',

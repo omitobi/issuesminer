@@ -17,6 +17,7 @@ use App\VCSModels\VCSFile;
 use App\VCSModels\VCSFileRevision;
 use App\VCSModels\VCSFiletype;
 use App\VCSModels\VCSProject;
+use App\VCSModels\VCSTextFileRevision;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -100,18 +101,18 @@ class VCSFileRevisionsController extends Utility
                             ['Type' => $_type],
                             [
                                 'Type' => $_type,
-                                'IsText' => in_array(mb_strtolower($_type), $this->texts),
-                                'IsXML' => in_array(mb_strtolower($_type), $this->xmls),
-                                'IsImperative' => in_array(mb_strtolower($_type), $this->imp_langs),
-                                'IsOO' => in_array(mb_strtolower($_type), $this->oo_langs)
+                                'IsText' => in_array(mb_strtolower($ext), $this->texts),
+                                'IsXML' => in_array(mb_strtolower($ext), $this->xmls),
+                                'IsImperative' => in_array(mb_strtolower($ext), $this->imp_langs),
+                                'IsOO' => in_array(mb_strtolower($ext), $this->oo_langs)
                             ])->Id;
                         $file_['ExtensionId'] = VCSExtension::firstOrCreate(
                             ['Extension' => '.' . $ext],
                             [
                                 'Extension' => '.' . $ext,
                                 'Type' => $_type,
-                                'IsText' => in_array(mb_strtolower($_type), $this->texts),
-                                'IsXML' => in_array(mb_strtolower($_type), $this->xmls),
+                                'IsText' => in_array(mb_strtolower($ext), $this->texts),
+                                'IsXML' => in_array(mb_strtolower($ext), $this->xmls),
                                 'TypeId' => 0,
                             ])->Id;
 //                        return $file_;
@@ -119,7 +120,7 @@ class VCSFileRevisionsController extends Utility
 //                    $commits_['description'] = ''; //to be updated when each commit is checked too
 
                         Model::unguard();
-                        if ($vcsfilerevision = VCSFileRevision::updateOrCreate([
+                        if ($vcsfilerevision = VCSFileRevision::firstOrCreate([
                             'ProjectId' => $file_['ProjectId'],
                             'Name' => $file_['Name'],
                             'Date' => $file_['Date']
@@ -130,6 +131,30 @@ class VCSFileRevisionsController extends Utility
                             $commit->touched = $file_['Name'];
                             $commit->description = $_commit->commit->message;
                             $commit->update();
+
+                            if(in_array(mb_strtolower($ext), $this->texts)){
+
+                                $vcstextfilerevision['RevisionId'] = $vcsfilerevision->Id;
+//                            $vcstextfilerevision['CodeChurnLines'] = NULL;
+                                $vcstextfilerevision['AddedCodeLines'] = $_file->additions;
+                                $vcstextfilerevision['RemovedCodeLines'] = $_file->deletions;
+                                $vcstextfilerevision['LinesOfCode'] = 0;
+
+                                $vcstextfilerevision['ContentsU'] = '0';
+                                $vcstextfilerevision['CompressedContents'] = '0';
+
+                                $vcstextfilerevision['status'] = $_file->status;
+
+                                $vcstextfilerevision['CommitId'] = $commit->id;
+                                $vcstextfilerevision['FileId'] = $vcsfilerevision->FileId;
+                                $vcstextfilerevision['ProjectId'] = $vcsfilerevision->ProjectId;
+
+                                $vcstextfilerevision['changes'] = $_file->changes;
+                                $vcstextfilerevision['Alias'] = $_file->filename;
+                                $vcstextfilerevision['patch'] = (!isset($_file->patch)) ?:$_file->patch;
+                                VCSTextFileRevision::firstOrCreate($vcstextfilerevision, $vcstextfilerevision);
+                            }
+
                             $_errors[] = false;
                             $_record_count++;
                         } else {

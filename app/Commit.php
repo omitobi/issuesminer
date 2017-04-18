@@ -16,6 +16,6 @@ class Commit extends Model
 {
     public function vcs_text_file_revisions()
     {
-        return $this->hasMany(VCSTextFileRevision::class, 'CommitId', 'Id');
+        return $this->hasMany(VCSTextFileRevision::class, 'CommitId', 'id');
     }
 }

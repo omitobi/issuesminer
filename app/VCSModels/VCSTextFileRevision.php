@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class VCSTextFileRevision extends Model
 {
     protected $primaryKey = 'RevisionId';
-    protected $table = "VCCSTextFileRevision";
+    protected $table = "VCSTextFileRevision";
 
     protected $fillable = [
         'RevisionId',
@@ -26,6 +26,8 @@ class VCSTextFileRevision extends Model
 
         'ContentsU',
         'CompressedContents',
+
+        'status',
 
         'CommitId',
         'FileId',
