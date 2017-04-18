@@ -9,9 +9,13 @@
 namespace App;
 
 
+use App\VCSModels\VCSTextFileRevision;
 use Illuminate\Database\Eloquent\Model;
 
 class Commit extends Model
 {
-
+    public function vcs_text_file_revisions()
+    {
+        return $this->hasMany(VCSTextFileRevision::class, 'CommitId', 'Id');
+    }
 }

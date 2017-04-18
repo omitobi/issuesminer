@@ -25,9 +25,9 @@ class CreateVCSTextFileRevisionTable extends Migration
             $table->text('ContentsU');
             $table->text('CompressedContents');
 
-            $table->string('CommitId');
-            $table->string('FileId');
-            $table->string('ProjectId');
+            $table->bigInteger('CommitId')->unsigned();
+            $table->integer('FileId')->unsigned();
+            $table->integer('ProjectId')->unsigned();
 
             $table->timestamps();
             $table->primary('RevisionId');
