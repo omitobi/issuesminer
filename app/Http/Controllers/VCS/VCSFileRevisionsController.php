@@ -134,7 +134,7 @@ class VCSFileRevisionsController extends Utility
 
                             if(in_array(mb_strtolower($ext), $this->texts)){
 
-                                $vcstextfilerevision['RevisionId'] = $vcsfilerevision->Id;
+//                                $vcstextfilerevision['RevisionId'] = $vcsfilerevision->Id;
 //                            $vcstextfilerevision['CodeChurnLines'] = NULL;
                                 $vcstextfilerevision['AddedCodeLines'] = $_file->additions;
                                 $vcstextfilerevision['RemovedCodeLines'] = $_file->deletions;
@@ -152,7 +152,7 @@ class VCSFileRevisionsController extends Utility
                                 $vcstextfilerevision['changes'] = $_file->changes;
                                 $vcstextfilerevision['Alias'] = $_file->filename;
                                 $vcstextfilerevision['patch'] = (!isset($_file->patch)) ?:$_file->patch;
-                                VCSTextFileRevision::firstOrCreate($vcstextfilerevision, $vcstextfilerevision);
+                                VCSTextFileRevision::firstOrCreate(['RevisionId' =>  $vcsfilerevision->Id], $vcstextfilerevision);
                             }
 
                             $_errors[] = false;
