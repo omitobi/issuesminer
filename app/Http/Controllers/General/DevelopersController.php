@@ -17,11 +17,12 @@ class DevelopersController extends ProjectUtility
 {
     public function load(Request $request)
     {
-        if(!$project_name = $request->get('project_name')) {
+        if(!$_project = $request->get('project_name')) {
             return response(['error' => 'invalid project_name'], 400);
         }
 //         sleep ( 61 );
-        if(!$project = Project::where('name', $project_name)->first()) {
+        if(!$project = Project::where('name', $_project)
+            ->orWhere('id', $_project)->first()) {
             return $this->respond('Project does not exist', 404);
         }
 

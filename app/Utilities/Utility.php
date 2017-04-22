@@ -39,7 +39,10 @@ class Utility extends Controller
         'c',
         'h',
         'cs',
-        'php'
+        'php',
+        'xml',
+        'xls',
+        'xsd'
     ];
     protected $xmls = ['xml', 'xsd', 'wsdl', 'xsl'];
     protected $types_  = [
@@ -214,16 +217,21 @@ class Utility extends Controller
         return (array)$_var;
     }
 
-    function arrayToCollection($_array)
+    function toCollection($_array)
     {
-       return collect($_array);
+        if(is_array($_array))
+            return collect($_array);
+        return $this->toCollection($this->jsonToArray($_array));
     }
 
-    protected function respond($__attr, $code = 200, $transform = false)
+    protected function respond($__attr, $code = 200)
     {
-        if($transform) {
+        if(is_string($__attr))
             return $this->respond($this->jsonToArray($__attr), $code);
-        }
+
+        if(is_object($__attr))
+            return $this->respond($this->toArray($__attr), $code);
+
         return response()->json($__attr, $code);
     }
 

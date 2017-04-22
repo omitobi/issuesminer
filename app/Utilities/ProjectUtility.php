@@ -95,7 +95,7 @@ class ProjectUtility extends Utility
                 $this->concat($this->cutLabelsUrl($labels_url)),
                 $this->headers
             );
-            $this->issues_labels = $this->arrayToCollection($this->jsonToArray($ping))->pluck('name');
+            $this->issues_labels = $this->toCollection($this->jsonToArray($ping))->pluck('name');
             return $this;
         }
         $this->issues_labels = $labels;
