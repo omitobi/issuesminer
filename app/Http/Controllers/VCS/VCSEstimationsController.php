@@ -72,7 +72,7 @@ class VCSEstimationsController extends Utility
         });
 
 
-        return $this->respond( $this->estimations );
+        return $this->respond( ['ProjectId' => $project->Id, 'Estimations' => $this->estimations] );
     }
 
     function populateEstimations($date, $field, $value)
