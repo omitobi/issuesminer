@@ -38,15 +38,20 @@ class VCSEstimationsController extends Utility
         $imp_f_count = 0;
         $project->vcsFileRevisions()->orderBy('Date','asc')->with('vcsFileType')->chunk(2500, function ($revisions) use (&$estimations, $imp_f_count){
 
-            $_revisions = $revisions->groupBy('Date')->all();
-            foreach ($_revisions as $date =>  $revision)
+            $_revisions_by_date = $revisions->groupBy('Date')->all();
+            foreach ($_revisions_by_date as $date =>  $revision)
             {
+                $_revisions_by_imp = $revision->where('vcsFileType.IsOO', '=', 1)->unique('CommitId')->count();
+//                $this->estimations = $_revisions_by_imp;
+//                return false;
 //                $imp_f_count = $imp_f_count + ($revision->vcsFileType->IsImperative) ? 1 : 0;
 //                $this->populateEstimations($date, 'Imperative_Files', $revision->count());
-                $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $revision->unique('CommitId')->where('vcsFileType.IsImperative', 1)->count());
-                $this->populateEstimations($date, 'Avg_Previous_OO_Commits', 1);
-                $this->populateEstimations($date, 'Avg_Previous_XML_Commits', 1);
+                $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $revision->where('vcsFileType.IsImperative',  1)->unique('CommitId')->count());
+                $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $revision->where('vcsFileType.IsOO', 1)->unique('CommitId')->count());
+                $this->populateEstimations($date, 'Avg_Previous_XML_Commits', $revision->where('vcsFileType.IsXML', 1)->unique('CommitId')->count());
                 $this->populateEstimations($date, 'Avg_Previous_XSL_Commits', 1);
+
+
                 $this->populateEstimations($date, 'Committer_Previous_Commits', 1);
                 $this->populateEstimations($date, 'Committer_Previous_Imp_Commits', 1);
                 $this->populateEstimations($date, 'Committer_Previous_OO_Commits', 1);
@@ -69,6 +74,9 @@ class VCSEstimationsController extends Utility
 //                $this->populateEstimations($date, 'XLS_Files', $revision->where('vcsFileType.isXML', 1)->count());
 
             }
+
+            return false;
+
         });
 
 
