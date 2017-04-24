@@ -36,16 +36,36 @@ class VCSEstimationsController extends Utility
         }
         $estimations = [];
         $imp_f_count = 0;
-        $project->vcsFileRevisions()->orderBy('Date','asc')->with('vcsFileType')->chunk(50, function ($revisions) use (&$estimations, $imp_f_count){
+        $project->vcsFileRevisions()->orderBy('Date','asc')->with('vcsFileType')->chunk(2500, function ($revisions) use (&$estimations, $imp_f_count){
 
             $_revisions = $revisions->groupBy('Date')->all();
             foreach ($_revisions as $date =>  $revision)
             {
 //                $imp_f_count = $imp_f_count + ($revision->vcsFileType->IsImperative) ? 1 : 0;
 //                $this->populateEstimations($date, 'Imperative_Files', $revision->count());
+                $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $revision->unique('CommitId')->where('vcsFileType.IsImperative', 1)->count());
+                $this->populateEstimations($date, 'Avg_Previous_OO_Commits', 1);
+                $this->populateEstimations($date, 'Avg_Previous_XML_Commits', 1);
+                $this->populateEstimations($date, 'Avg_Previous_XSL_Commits', 1);
+                $this->populateEstimations($date, 'Committer_Previous_Commits', 1);
+                $this->populateEstimations($date, 'Committer_Previous_Imp_Commits', 1);
+                $this->populateEstimations($date, 'Committer_Previous_OO_Commits', 1);
+                $this->populateEstimations($date, 'Committer_Previous_XML_Commits', 1);
+                $this->populateEstimations($date, 'Committer_Previous_XSL_Commits', 1);
+                $this->populateEstimations($date, 'Developers_On_Project_To_Date', 1);
+                $this->populateEstimations($date, 'Imp_Developers_On_Project_To_Date', 1);
                 $this->populateEstimations($date, 'Imperative_Files', $revision->where('vcsFileType.IsImperative', 1)->count());
+                $this->populateEstimations($date, 'OO_Developers_On_Project_To_Date', 1);
                 $this->populateEstimations($date, 'OO_Files', $revision->where('vcsFileType.IsOO', 1)->count());
+                $this->populateEstimations($date, 'Total_Developers', 1);
+                $this->populateEstimations($date, 'Total_Imp_Developers', 1);
+                $this->populateEstimations($date, 'Total_OO_Developers', 1);
+                $this->populateEstimations($date, 'Total_XML_Developers', 1);
+                $this->populateEstimations($date, 'Total_XSL_Developers', 1);
+                $this->populateEstimations($date, 'XML_Developers_On_Project_To_Date', 1);
                 $this->populateEstimations($date, 'XML_Files', $revision->where('vcsFileType.isXML', 1)->count());
+                $this->populateEstimations($date, 'XSL_Developers_On_Project_To_Date', 1);
+                $this->populateEstimations($date, 'XSL_Files', 1);
 //                $this->populateEstimations($date, 'XLS_Files', $revision->where('vcsFileType.isXML', 1)->count());
 
             }
