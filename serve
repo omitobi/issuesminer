@@ -10,7 +10,7 @@
 /**
 * Start the server with 'php serve 8001' the port can be changed
 * Kill the process on the terminal 'ps -ef | grep php'
-* Then pick the process_id, and use 'kill [:process_id]'
+* Then pick the process_id, and use 'kill [:process_id]' or 'kill -9 [:process_id] to force kill'
 */
 $port = escapeshellarg($argv[1]);
 $message = "Started server on localhost:{$port}";

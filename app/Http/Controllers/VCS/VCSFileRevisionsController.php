@@ -45,7 +45,7 @@ class VCSFileRevisionsController extends Utility
         $text_files_revision_counts = 0;
         if(count($commits = Commit::where('project_id', $project->Id)
             ->where('touched', '0')->orderBy('date_committed', 'asc')
-            ->take(80)  //in order to stick with Github's 83.33 requests per minute
+            ->take(10)  //in order to stick with Github's 83.33 requests per minute
             ->get())) {
 
 //            return $commits;
@@ -60,7 +60,8 @@ class VCSFileRevisionsController extends Utility
 //            $_SESSION['timeout'] = time() + 70;
 
 
-            foreach ($commits as $key => $commit) {
+            foreach ($commits as $key => $commit)
+            {
                 $commits_url = $this->concat($commit->api_url);
                 $commits_urls[] = $commits_url;
                 $_commit = $this->jsonToObject($this->ping($commits_url));
