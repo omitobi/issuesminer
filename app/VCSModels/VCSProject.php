@@ -22,6 +22,11 @@ class VCSProject extends Model
         return $this->hasMany(VCSFile::class, 'ProjectId', 'Id');
     }
 
+    public function vcsFileRevisions()
+    {
+        return $this->hasMany(VCSFileRevision::class, 'ProjectId', 'Id');
+    }
+
     public function commits()
     {
         return $this->hasMany(Commit::class, 'project_id', 'Id');

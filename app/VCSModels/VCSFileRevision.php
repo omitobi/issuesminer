@@ -35,4 +35,9 @@ class VCSFileRevision extends Model
     {
         return $this->hasMany(VCSTextFileRevision::class, 'RevisionId', 'Id');
     }
+
+    public function vcsFileType()
+    {
+        return $this->hasOne(VCSFiletype::class, 'Id', 'FiletypeId');
+    }
 }

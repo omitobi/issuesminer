@@ -55,3 +55,6 @@ $app->post('/vcs/files', 'VCS\VCSFilesController@save');
 $app->get('/vcs/fileextensions', 'VCS\VCSFilesController@sortExtensions');
 $app->post('/vcs/filetypes', 'VCS\VCSFilesController@sortFileTypes');
 $app->get('/vcs/filerevisions', 'VCS\VCSFileRevisionsController@sortRevisions');
+
+
+$app->get('/vcs/estimations', 'VCS\VCSEstimationsController@loadAll');
