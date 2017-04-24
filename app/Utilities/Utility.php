@@ -112,11 +112,13 @@ class Utility extends Controller
     ];
 
     protected $files;
+    protected $guzzleclient;
     protected $fields = ['issues', 'pulls', 'commits'];
     protected $done = [];
 
     public function __construct()
     {
+        $this->guzzleclient = new GuzzleHttp\Client();
         $this->access_token = getenv('GITHUB_API_SECRET');
         $this->github_url = getenv('GITHUB_URL');
         $this->setDone();
@@ -179,9 +181,12 @@ class Utility extends Controller
         }
     }
 
-    protected function ping( $link, $headers = [], $default_response = ['body'], $method = 'GET')
+    protected function ping( $link, $headers = [], $default_response = ['body'], $method = 'GET', $public_client = false)
     {
-        $client = new GuzzleHttp\Client();
+        if($public_client)
+            $client = $this->guzzleclient;
+        else
+            $client = new GuzzleHttp\Client();
         $res = $client->request($method, $link, $headers);
         $result = $res;
         $_d_count = count($default_response);

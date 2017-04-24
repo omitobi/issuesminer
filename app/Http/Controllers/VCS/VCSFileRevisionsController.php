@@ -45,26 +45,26 @@ class VCSFileRevisionsController extends Utility
         $text_files_revision_counts = 0;
         if(count($commits = Commit::where('project_id', $project->Id)
             ->where('touched', '0')->orderBy('date_committed', 'asc')
-            ->take(10)  //in order to stick with Github's 83.33 requests per minute
+            ->take(80)  //in order to stick with Github's 83.33 requests per minute
             ->get())) {
 
-//            return $commits;
-            $prev_rev = VCSFileRevision::where('ProjectId', $project->Id)->get();
-            $prev_rev_id =  $prev_rev->last() ? $prev_rev->last()->Id : 1;
-//            session_start();
+            $prev_rev = VCSFileRevision::where('ProjectId', $project->Id)->orderBy('Id', 'desc')->first();
+            $prev_rev_id =  $prev_rev ? $prev_rev->Id : 1;
+
+            //            session_start();
 //            if (isset($_SESSION['timeout']) && $_SESSION['timeout'] >= time()) {
 //                $diff = $_SESSION['timeout'] - time();
 //                $error = ["You need to wait $diff seconds before making another request"];
 //                return $this->respond($error, 503);
 //            }
-//            $_SESSION['timeout'] = time() + 70;
+//            $_SESSION['timeout'] = time() + 70;rer
 
 
             foreach ($commits as $key => $commit)
             {
                 $commits_url = $this->concat($commit->api_url);
                 $commits_urls[] = $commits_url;
-                $_commit = $this->jsonToObject($this->ping($commits_url));
+                $_commit = $this->jsonToObject($this->ping($commits_url, [], ['body'], 'GET', true));
                 $_files = $_commit->files;
 
 //                return $this->respond($_commit);
@@ -158,7 +158,7 @@ class VCSFileRevisionsController extends Utility
                                 $vcstextfilerevision['changes'] = $_file->changes;
                                 $vcstextfilerevision['Alias'] = $_file->filename;
                                 $vcstextfilerevision['patch'] = (!isset($_file->patch)) ?:$_file->patch;
-                                $vcstextfilerevision['ContentsU'] = (!isset($_file->raw_url)) ?: $this->ping($_file->raw_url);
+                                $vcstextfilerevision['ContentsU'] = (!isset($_file->raw_url)) ?: $this->ping($_file->raw_url, [], ['body'], 'GET', true);
                                 VCSTextFileRevision::updateOrCreate(['RevisionId' =>  $vcsfilerevision->Id], $vcstextfilerevision);
                             }
 
