@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVcsEstimationTable extends Migration
+class CreateVCSEstimationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateVcsEstimationTable extends Migration
      */
     public function up()
     {
-        Schema::create('vcs_estimation', function (Blueprint $table) {
-            $table->increments('id');
-            $table->bigInteger('ProjectDateRevisionId')->unsigned();
+        Schema::create('VCSEstimations', function (Blueprint $table) {
+            $table->increments('Id');
+//            $table->bigInteger('ProjectDateRevisionId')->unique()->unsigned();
             $table->bigInteger('ProjectId')->unsigned();
-            $table->dateTime('Date');
+            $table->dateTime('Date')->unique();
             $table->decimal('Avg_Previous_Imp_Commits', 38, 6)->nullable();
             $table->decimal('Avg_Previous_OO_Commits', 38, 6)->nullable();
             $table->decimal('Avg_Previous_XML_Commits', 38, 6)->nullable();
@@ -52,6 +52,6 @@ class CreateVcsEstimationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vcs_estimation');
+        Schema::dropIfExists('VCSEstimations');
     }
 }
