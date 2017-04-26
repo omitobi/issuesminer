@@ -38,7 +38,15 @@ class VCSEstimationsController extends Utility
         }
         $estimations = [];
         $imp_f_count = 0;
-        $project->vcsFileRevisions()->orderBy('Date','asc')->with('vcsFileType')->chunk(6000, function ($revisions) use (&$estimations, $imp_f_count){
+        $cntplus= 0;
+        $_revisions_by_imp = [];
+        $project->vcsFileRevisions()->orderBy('Date','asc')->with('vcsFileType')->chunk(6000, function ($revisions)
+        use (
+            &$estimations,
+            $imp_f_count,
+            $cntplus,
+            &$_revisions_by_imp
+        ){
 
             $_revisions_by_date = $revisions->groupBy('Date')->all();
             foreach ($_revisions_by_date as $date =>  $revision)
@@ -52,6 +60,22 @@ class VCSEstimationsController extends Utility
                 $this->populateEstimations($date, 'ProjectId', $revision->first()->ProjectId, 'normal' );
                 $this->populateEstimations($date, 'Date', $date, 'normal' );
                 $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $revision->where('vcsFileType.IsImperative',  1)->unique('CommitId')->count());
+                foreach ($revision as $key => $_revision) {
+                    if ($imperative = $_revision->vcsFileType->IsImperative) {
+                        if (!isset($_revisions_by_imp[$date])) {
+                            $cntplus++;
+                        }
+                        $_revisions_by_imp[$_revision->Date]['Avg_Previous_Imp_Commits'] = $imp_f_count ?  $imp_f_count/$cntplus : 0;
+                        $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', ($imp_f_count ? $imp_f_count / $cntplus : 0), 'no');
+//                    $_revisions_by_imp[$revision->Date][$key] = $imperative;
+                        $imp_f_count += $imperative;
+                    }
+                }
+
+
+
+
+
                 $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $revision->where('vcsFileType.IsOO', 1)->unique('CommitId')->count());
                 $this->populateEstimations($date, 'Avg_Previous_XML_Commits', $revision->where('vcsFileType.IsXML', 1)->unique('CommitId')->count());
                 $this->populateEstimations($date, 'Avg_Previous_XSL_Commits', 0);
@@ -80,53 +104,82 @@ class VCSEstimationsController extends Utility
 
             }
 
-            foreach ($revisions as $_revision)
+//            $_revisions_by_imp = [];
+//            $_revisions_by_ComitId = $revisions->groupBy('CommitId')->all();
+//            foreach ($_revisions_by_ComitId as $key => $_revision)
+//            {
+////                $_revisions_by_imp[$_revision->Date]['isNormal'] = $key;
+//                $imperative = $_revision->where('vcsFileType.IsImperative',  1);
+//                if($imperative->count()){
+//                    $_revisions_by_imp[$_revision->first()->Date]['isImperative'] = $imp_f_count;
+////                    $_revisions_by_imp[$_revision->first()->Date][$key] = $imperative;
+//                    $imp_f_count += $imperative->count();
+////                    break;
+//                }
+//
+//            }
+           /* $cntplus = 0;
+            foreach ($revisions as $key => $_revision)
             {
-                $_revisions_by_imp[] = $_revision->vcsFileType->IsImperative;
+                if($imperative = $_revision->vcsFileType->IsImperative){
+                    if(!isset($_revisions_by_imp[$_revision->Date])){
+                        $cntplus++;
+                    }
+                    $_revisions_by_imp[$_revision->Date]['Avg_Previous_Imp_Commits'] = $imp_f_count ?  $imp_f_count/$cntplus : 0;
+                    $_revisions_by_imp[$_revision->Date][$key] = $imperative;
+                    $imp_f_count += $imperative;
+
+//                    break;
+                }
 
             }
-
-            $estimations = $this->estimations;
+            $this->results = $_revisions_by_imp;
+//            $this->results = array_where($_revisions_by_imp, function($array){
+//                return $array['isImperative'] === 1;
+//            });
+            $estimations = $this->estimations;*/
 
 //            $dates  = array_keys($this->estimations);
 
-//            $others  = $this->array_extract($this->estimations, [
-//                'Date',
-//                'ProjectId',
-//                'Avg_Previous_Imp_Commits',
-//                'Avg_Previous_OO_Commits',
-//                'Avg_Previous_XML_Commits',
-//                'Avg_Previous_XSL_Commits',
-//                'Committer_Previous_Commits',
-//                'Committer_Previous_Imp_Commits',
-//                'Committer_Previous_OO_Commits',
-//                'Committer_Previous_XML_Commits',
-//                'Committer_Previous_XSL_Commits',
-//                'Developers_On_Project_To_Date',
-//                'Imp_Developers_On_Project_To_Date',
-//                'Imperative_Files',
-//                'OO_Developers_On_Project_To_Date',
-//                'OO_Files',
-//                'Total_Developers',
-//                'Total_Imp_Developers',
-//                'Total_OO_Developers',
-//                'Total_XML_Developers',
-//                'Total_XSL_Developers',
-//                'XML_Developers_On_Project_To_Date',
-//                'XML_Files',
-//                'XSL_Developers_On_Project_To_Date',
-//                'XSL_Files'
-//            ]);
-////            $this->results = $this->updatesOrInserts($others, new VCSEstimation());
-//            $this->insertOrUpdate($others, 'VCSEstimations');
 
+
+//            return false;
 //            return false;
         });
 //        $estimations_values = array_values($this->estimations);
 //        list($keys, $estimations_values) = array_divide($this->estimations);
 //        $dates  = array_keys($this->estimations);
 
-        return $this->respond($this->results );
+        $others  = $this->array_extract($this->estimations, [
+            'Date',
+            'ProjectId',
+            'Avg_Previous_Imp_Commits',
+            'Avg_Previous_OO_Commits',
+            'Avg_Previous_XML_Commits',
+            'Avg_Previous_XSL_Commits',
+            'Committer_Previous_Commits',
+            'Committer_Previous_Imp_Commits',
+            'Committer_Previous_OO_Commits',
+            'Committer_Previous_XML_Commits',
+            'Committer_Previous_XSL_Commits',
+            'Developers_On_Project_To_Date',
+            'Imp_Developers_On_Project_To_Date',
+            'Imperative_Files',
+            'OO_Developers_On_Project_To_Date',
+            'OO_Files',
+            'Total_Developers',
+            'Total_Imp_Developers',
+            'Total_OO_Developers',
+            'Total_XML_Developers',
+            'Total_XSL_Developers',
+            'XML_Developers_On_Project_To_Date',
+            'XML_Files',
+            'XSL_Developers_On_Project_To_Date',
+            'XSL_Files'
+        ]);
+////            $this->results = $this->updatesOrInserts($others, new VCSEstimation());
+        $this->insertOrUpdate($others, 'VCSEstimations');
+        return $this->respond( $others );
 //        return $this->respond( ['ProjectId' => $project->Id, 'Estimations' => $this->estimations] );
     }
 
