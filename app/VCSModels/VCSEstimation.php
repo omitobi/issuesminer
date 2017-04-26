@@ -9,9 +9,11 @@
 namespace App\VCSModels;
 
 
-use Illuminate\Database\Eloquent\Model;
+//use Illuminate\Database\Eloquent\Model;
 
-class VCSEstimation extends Model
+use App\Modellers\Directory;
+
+class VCSEstimation extends Directory
 {
     protected $primaryKey = 'Id';
     protected $table = "VCSEstimations";

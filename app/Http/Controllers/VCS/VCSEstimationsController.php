@@ -37,14 +37,14 @@ class VCSEstimationsController extends Utility
             return $this->respond('Project does not exist', 404);
         }
         $estimations = [];
-        $imp_f_count = 0;
-        $cntplus= 0;
+        $imp_f_count = ['aic' => 0, 'aooc' => 0];
+        $cntplus = ['aic' => 0, 'aooc' => 0];
         $_revisions_by_imp = [];
         $project->vcsFileRevisions()->orderBy('Date','asc')->with('vcsFileType')->chunk(6000, function ($revisions)
         use (
             &$estimations,
-            $imp_f_count,
-            $cntplus,
+            &$imp_f_count,
+            &$cntplus,
             &$_revisions_by_imp
         ){
 
@@ -59,24 +59,33 @@ class VCSEstimationsController extends Utility
 //                $this->populateEstimations($date, 'ProjectDateRevisionId', 'normal' );
                 $this->populateEstimations($date, 'ProjectId', $revision->first()->ProjectId, 'normal' );
                 $this->populateEstimations($date, 'Date', $date, 'normal' );
+
+
+
                 $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $revision->where('vcsFileType.IsImperative',  1)->unique('CommitId')->count());
+                $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $revision->where('vcsFileType.IsOO', 1)->unique('CommitId')->count());
                 foreach ($revision as $key => $_revision) {
                     if ($imperative = $_revision->vcsFileType->IsImperative) {
-                        if (!isset($_revisions_by_imp[$date])) {
-                            $cntplus++;
+                        if (!isset($_revisions_by_imp[$date]['Avg_Previous_Imp_Commits'])) {
+                            $cntplus['aic']++;
                         }
-                        $_revisions_by_imp[$_revision->Date]['Avg_Previous_Imp_Commits'] = $imp_f_count ?  $imp_f_count/$cntplus : 0;
-                        $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', ($imp_f_count ? $imp_f_count / $cntplus : 0), 'no');
+                        $_revisions_by_imp[$_revision->Date]['Avg_Previous_Imp_Commits'] = $imp_f_count['aic'] ?  $imp_f_count['aic']/$cntplus['aic'] : 0;
+                        $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', ( $imp_f_count['aic'] ?  $imp_f_count['aic']/$cntplus['aic'] : 0), 'no');
 //                    $_revisions_by_imp[$revision->Date][$key] = $imperative;
-                        $imp_f_count += $imperative;
+                        $imp_f_count['aic'] += $imperative;
+                    }
+
+                    if ($oo = $_revision->vcsFileType->IsOO) {
+                        if (!isset($_revisions_by_imp[$date]['Avg_Previous_OO_Commits'])) {
+                            $cntplus['aooc']++;
+                        }
+                        $_revisions_by_imp[$_revision->Date]['Avg_Previous_OO_Commits'] =  $imp_f_count['aooc'] ?  $imp_f_count['aooc']/$cntplus['aooc'] : 0;
+                        $this->populateEstimations($date, 'Avg_Previous_OO_Commits', ( $imp_f_count['aooc'] ?  $imp_f_count['aooc']/$cntplus['aooc'] : 0), 'no');
+                        $imp_f_count['aooc'] += $oo;
                     }
                 }
 
 
-
-
-
-                $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $revision->where('vcsFileType.IsOO', 1)->unique('CommitId')->count());
                 $this->populateEstimations($date, 'Avg_Previous_XML_Commits', $revision->where('vcsFileType.IsXML', 1)->unique('CommitId')->count());
                 $this->populateEstimations($date, 'Avg_Previous_XSL_Commits', 0);
 
@@ -178,7 +187,7 @@ class VCSEstimationsController extends Utility
             'XSL_Files'
         ]);
 ////            $this->results = $this->updatesOrInserts($others, new VCSEstimation());
-        $this->insertOrUpdate($others, 'VCSEstimations');
+        VCSEstimation::insertOrUpdates($others, 'VCSEstimations');
         return $this->respond( $others );
 //        return $this->respond( ['ProjectId' => $project->Id, 'Estimations' => $this->estimations] );
     }
@@ -230,44 +239,7 @@ class VCSEstimationsController extends Utility
         return $result;
     }
 
-    /**
-     * Mass (bulk) insert or update on duplicate for Laravel 4/5
-     *ref: http://stackoverflow.com/a/27593831/5704410
-     * src: https://gist.github.com/RuGa/5354e44883c7651fd15c
-     * insertOrUpdate([
-     *   ['id'=>1,'value'=>10],
-     *   ['id'=>2,'value'=>60]
-     * ]);
-     *
-     *
-     * @param array $rows
-     */
-    function insertOrUpdate(array $rows, $table){
-//        $table = \DB::getTablePrefix().with(new self)->getTable();
 
-
-        $first = reset($rows);
-
-        $columns = implode( ',',
-            array_map( function( $value ) { return "$value"; } , array_keys($first) )
-        );
-
-        $values = implode( ',', array_map( function( $row ) {
-                return '('.implode( ',',
-                        array_map( function( $value ) { return '"'.str_replace('"', '""', $value).'"'; } , $row )
-                    ).')';
-            } , $rows )
-        );
-
-        $updates = implode( ',',
-            array_map( function( $value ) { return "$value = VALUES($value)"; } , array_keys($first) )
-        );
-
-
-        $sql = "INSERT INTO {$table}({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
-
-        return \DB::statement( $sql );
-    }
 
     function updatesOrInserts($attributes, $model)
     {

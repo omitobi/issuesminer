@@ -18,7 +18,7 @@ class Utility extends Controller
     const AFTER_STRING = 1;
 
     protected $oo_langs = ['c', 'h', 'cpp', 'cs', 'php', 'java', 'cxx', 'hpp','js'];
-    protected $imp_langs = ['cpp', 'cs', 'php', 'java', 'cxx', 'hpp', 'js'];
+    protected $imp_langs = ['c','cpp', 'cs', 'php', 'java', 'cxx', 'hpp', 'js', 'py', 'rb', 'd', 'groovy'];
     protected $texts = [
         'dtd',
         'py',
