@@ -40,4 +40,9 @@ class VCSFileRevision extends Model
     {
         return $this->hasOne(VCSFiletype::class, 'Id', 'FiletypeId');
     }
+
+    public function vcsFileExtension()
+    {
+        return $this->hasOne(VCSExtension::class, 'Id', 'ExtensionId');
+    }
 }
