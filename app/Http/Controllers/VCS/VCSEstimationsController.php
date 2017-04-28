@@ -50,7 +50,8 @@ class VCSEstimationsController extends Utility
 
             $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(3000)->with('vcsFileType')->with('vcsFileExtension')->get();
             $revise = $this->revise(
-                $revisions
+                $revisions,
+                $project
             );
             return $this->respond($this->estimations);
         }
@@ -446,32 +447,57 @@ class VCSEstimationsController extends Utility
 
 
 
-    function revise($revisions)
+    function revise($revisions, $project)
     {
         $gen_count = 0;
 
-        $imp_f_count = ['aic' => 0, 'aooc' => 0, 'axmc' => 0];
-        $cntplus = ['aic' => 0, 'aooc' => 0, 'axmc' => 0];
+        $imp_f_count = ['aic' => 0, 'aooc' => 0, 'axmc' => 0, 'axlc' => 0];
+        $cntplus = ['aic' => 0, 'aooc' => 0, 'axmc' => 0, 'axlc' => 0];
 
         $_revisions_by_imp = [];
+        $dev_size = 0;
 
         $developers = $revisions->unique('CommitterId');
+//        $mperative_commits = $revisions->where('vcsFileType.IsImperative', 1)->unique('CommitterId');
+//        $this->estimations = $mperative_commits;
+//        return ;
         $_revisions_by_date = $revisions->groupBy('Date')->all();
         foreach ($_revisions_by_date as $date =>  $revision)
         {
+
+            $this->populateEstimations($date, 'ProjectId', $project->Id, 'normal' );
+            $this->populateEstimations($date, 'Date', $date, 'normal' );
+
+
+            $dev_size =  $developers->filter( function ($devs) use ($date) {
+                return CollectionUtility::whereDate($devs->Date, '<=', $date);
+            })->count();
 //                $_revisions_by_imp = $revision->where('vcsFileType.IsOO', '=', 1)->unique('CommitId')->count();
 //                $this->estimations = $_revisions_by_imp;
 //                return false;
 //                $imp_f_count = $imp_f_count + ($revision->vcsFileType->IsImperative) ? 1 : 0;
 //                $this->populateEstimations($date, 'Imperative_Files', $revision->count());
 //                $this->populateEstimations($date, 'ProjectDateRevisionId', 'normal' );
-            $this->populateEstimations($date, 'ProjectId', $revision->first()->ProjectId, 'normal' );
-            $this->populateEstimations($date, 'Date', $date, 'normal' );
+            $imperative_for_day = $revision->where('vcsFileType.IsImperative', 1)->count();
+            $oo_for_day = $revision->where('vcsFileType.IsOO', 1)->count();
+            $xml_for_day = $revision->where('vcsFileType.IsXML', 1)->count();
 
 
-            $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', 0, 'on');
-            $this->populateEstimations($date, 'Avg_Previous_OO_Commits', 0, 'on');
-            $this->populateEstimations($date, 'Avg_Previous_XML_Commits', 0, 'on');
+            $imp_f_count['aic'] += (($imperative_for_day > 0) ? 1 : 0);
+            $imp_f_count['aooc'] += (($oo_for_day > 0) ? 1 : 0);
+            $imp_f_count['axmc'] += (($xml_for_day > 0) ? 1 : 0);
+
+            $cntplus['aic'] += $imperative_for_day;
+            $cntplus['aooc'] += $oo_for_day;
+            $cntplus['axmc'] += $xml_for_day;
+
+
+//            $xls_for_day = $revision->where('vcsFileType.IsImperative', 1)->count();
+
+
+            $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $imp_f_count['aic']/$dev_size, 'on');
+            $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $imp_f_count['aooc']/$dev_size, 'on');
+            $this->populateEstimations($date, 'Avg_Previous_XML_Commits', $imp_f_count['axmc']/$dev_size, 'on');
             $this->populateEstimations($date, 'Avg_Previous_XSL_Commits', 0);
 
             $this->populateEstimations($date, 'Committer_Previous_Commits', 0);
@@ -479,72 +505,31 @@ class VCSEstimationsController extends Utility
             $this->populateEstimations($date, 'Committer_Previous_OO_Commits', 0);
             $this->populateEstimations($date, 'Committer_Previous_XML_Commits', 0);
             $this->populateEstimations($date, 'Committer_Previous_XSL_Commits', 0);
-            $this->populateEstimations($date, 'Developers_On_Project_To_Date', 0);
+            $this->populateEstimations($date, 'Developers_On_Project_To_Date', $dev_size);
             $this->populateEstimations($date, 'Imp_Developers_On_Project_To_Date', 0);
 
-            $this->populateEstimations($date, 'Imperative_Files', $revision->where('vcsFileType.IsImperative', 1)->count());
+            $this->populateEstimations($date, 'Imperative_Files', $cntplus['aic'], 'abc');
             $this->populateEstimations($date, 'OO_Developers_On_Project_To_Date', 0);
-            $this->populateEstimations($date, 'OO_Files', $revision->where('vcsFileType.IsOO', 1)->count());
+            $this->populateEstimations($date, 'OO_Files', $cntplus['aooc']);
 //            $this->populateEstimations($date, 'Total_Imp_Developers', $gen_count, 'on');
+            $this->populateEstimations($date, 'Total_Developers', $dev_size);
 
-            $this->populateEstimations($date, 'Total_Developers', 0);
             $this->populateEstimations($date, 'Total_Imp_Developers', 0);
             $this->populateEstimations($date, 'Total_OO_Developers', 0);
             $this->populateEstimations($date, 'Total_XML_Developers', 0);
             $this->populateEstimations($date, 'Total_XSL_Developers', 0);
             $this->populateEstimations($date, 'XML_Developers_On_Project_To_Date', 0);
-            $this->populateEstimations($date, 'XML_Files', $revision->where('vcsFileType.isXML', 1)->count());
+            $this->populateEstimations($date, 'XML_Files', $cntplus['axmc']);
             $this->populateEstimations($date, 'XSL_Developers_On_Project_To_Date', 0);
             $this->populateEstimations($date, 'XSL_Files', 0);
 
-            foreach ($developers as $developer)
-            {
-                if ($developer['Date'] === $date) {
-                    $gen_count++;
-                }
-            }
-
-            $this->populateEstimations($date, 'Total_Developers',
-                $developers->filter( function ($devs) use ($date) {
-                   return CollectionUtility::whereDate($devs->Date, '<=', $date);
-                })->count(),
-                'on');
-
-            foreach ($revision as $key => $_revision) {
-                if ($imperative = $_revision->vcsFileType->IsImperative) {
-                    if (!isset($_revisions_by_imp[$date]['Avg_Previous_Imp_Commits'])) {
-                        $cntplus['aic']++;
-                    }
-                    $_revisions_by_imp[$_revision->Date]['Avg_Previous_Imp_Commits'] = $imp_f_count['aic'] ?  $imp_f_count['aic']/$cntplus['aic'] : 0;
-                    $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $cntplus['aic']/$gen_count, 'no');
-//                    $_revisions_by_imp[$revision->Date][$key] = $imperative;
-                    $imp_f_count['aic'] += $imperative;
-                }
-
-                if ($oo = $_revision->vcsFileType->IsOO) {
-                    if (!isset($_revisions_by_imp[$date]['Avg_Previous_OO_Commits'])) {
-                        $cntplus['aooc']++;
-                    }
-                    $_revisions_by_imp[$_revision->Date]['Avg_Previous_OO_Commits'] =  $imp_f_count['aooc'] ?  $imp_f_count['aooc']/$cntplus['aooc'] : 0;
-                    $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $cntplus['aooc']/$gen_count, 'no');
-                    $imp_f_count['aooc'] += $oo;
-                }
-
-                if ($xml = $_revision->vcsFileType->isXML) {
-                    if (!isset($_revisions_by_imp[$date]['Avg_Previous_XML_Commits'])) {
-                        $cntplus['axmc']++;
-                    }
-                    $_revisions_by_imp[$_revision->Date]['Avg_Previous_XML_Commits'] =  $imp_f_count['axmc'] ?  $imp_f_count['axmc']/$cntplus['axmc'] : 0;
-                    $this->populateEstimations($date, 'Avg_Previous_XML_Commits', $cntplus['axmc']/$gen_count, 'no');
-                    $imp_f_count['axmc'] += $xml;
-                }
-            }
-
-
-
-
 
             $this->populateEstimations($date, 'Total_Imp_Developers',
+                $developers->filter( function ($devs) use ($date) {
+                    return $devs->vcsFileType->IsImperative && CollectionUtility::whereDate($devs->Date, '<=', $date);
+                })->count()
+                , 'on');
+            $this->populateEstimations($date, 'Imp_Developers_On_Project_To_Date',
                 $developers->filter( function ($devs) use ($date) {
                     return $devs->vcsFileType->IsImperative && CollectionUtility::whereDate($devs->Date, '<=', $date);
                 })->count()
@@ -554,7 +539,17 @@ class VCSEstimationsController extends Utility
                     return $devs->vcsFileType->IsOO && CollectionUtility::whereDate($devs->Date, '<=', $date);
                 })->count()
                 , 'on');
+            $this->populateEstimations($date, 'OO_Developers_On_Project_To_Date',
+                $developers->filter( function ($devs) use ($date) {
+                    return $devs->vcsFileType->IsOO && CollectionUtility::whereDate($devs->Date, '<=', $date);
+                })->count()
+                , 'on');
             $this->populateEstimations($date, 'Total_XML_Developers',
+                $developers->filter( function ($devs) use ($date) {
+                    return $devs->vcsFileType->IsXML && CollectionUtility::whereDate($devs->Date, '<=', $date);
+                })->count()
+                , 'on');
+            $this->populateEstimations($date, 'XML_Developers_On_Project_To_Date',
                 $developers->filter( function ($devs) use ($date) {
                     return $devs->vcsFileType->IsXML && CollectionUtility::whereDate($devs->Date, '<=', $date);
                 })->count()
