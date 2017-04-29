@@ -37,6 +37,7 @@ class CollectionUtility extends Collection
            return $key_date->notEqualTo($result);
         }
 
+
         return $key_date->equalTo($result);
 //        return self::operatorForWhereDate( $key, $operator, $value );
     }

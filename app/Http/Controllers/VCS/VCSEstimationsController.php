@@ -48,7 +48,7 @@ class VCSEstimationsController extends Utility
 
         if(in_array($project->Id, [3, 1])){
 
-            $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(3000)->with('vcsFileType')->with('vcsFileExtension')->get();
+            $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(1000)->with('vcsFileType')->with('vcsFileExtension')->get();
             $revise = $this->revise(
                 $revisions,
                 $project
@@ -491,19 +491,18 @@ class VCSEstimationsController extends Utility
             $cntplus['aooc'] += $oo_for_day;
             $cntplus['axmc'] += $xml_for_day;
 
-
+            $previous_commits = $revisions->where('CommitterId', $revision->last()->CommitterId)->whereDate('Date', '<', $date);
 //            $xls_for_day = $revision->where('vcsFileType.IsImperative', 1)->count();
-
 
             $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $imp_f_count['aic']/$dev_size, 'on');
             $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $imp_f_count['aooc']/$dev_size, 'on');
             $this->populateEstimations($date, 'Avg_Previous_XML_Commits', $imp_f_count['axmc']/$dev_size, 'on');
             $this->populateEstimations($date, 'Avg_Previous_XSL_Commits', 0);
 
-            $this->populateEstimations($date, 'Committer_Previous_Commits', 0);
-            $this->populateEstimations($date, 'Committer_Previous_Imp_Commits', 0);
-            $this->populateEstimations($date, 'Committer_Previous_OO_Commits', 0);
-            $this->populateEstimations($date, 'Committer_Previous_XML_Commits', 0);
+            $this->populateEstimations($date, 'Committer_Previous_Commits', $previous_commits->count(), 'on');
+            $this->populateEstimations($date, 'Committer_Previous_Imp_Commits', $previous_commits->where('vcsFileType.IsImperative', 1)->count(), 'on');
+            $this->populateEstimations($date, 'Committer_Previous_OO_Commits', $previous_commits->where('vcsFileType.IsOO', 1)->count(), 'on');
+            $this->populateEstimations($date, 'Committer_Previous_XML_Commits', $previous_commits->where('vcsFileType.IsXML', 1)->count(), 'on');
             $this->populateEstimations($date, 'Committer_Previous_XSL_Commits', 0);
             $this->populateEstimations($date, 'Developers_On_Project_To_Date', $dev_size);
             $this->populateEstimations($date, 'Imp_Developers_On_Project_To_Date', 0);
