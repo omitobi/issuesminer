@@ -18,6 +18,7 @@ use App\VCSModels\VCSFileRevision;
 use App\VCSModels\VCSFiletype;
 use App\VCSModels\VCSProject;
 use App\VCSModels\VCSTextFileRevision;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -158,7 +159,12 @@ class VCSFileRevisionsController extends Utility
                                 $vcstextfilerevision['changes'] = $_file->changes;
                                 $vcstextfilerevision['Alias'] = $_file->filename;
                                 $vcstextfilerevision['patch'] = (!isset($_file->patch)) ?:$_file->patch;
-                                $vcstextfilerevision['ContentsU'] = (!isset($_file->raw_url)) ?: $this->ping($_file->raw_url, [], ['body'], 'GET', true);
+                                try{
+                                    $content = (!isset($_file->raw_url)) ?: $this->ping($_file->raw_url, [], ['body'], 'GET', true);
+                                    $vcstextfilerevision['ContentsU'] = $content;
+                                } catch ( ClientException $exception){
+                                    $vcstextfilerevision['ContentsU'] = 0;
+                                }
                                 VCSTextFileRevision::updateOrCreate(['RevisionId' =>  $vcsfilerevision->Id], $vcstextfilerevision);
                             }
 
