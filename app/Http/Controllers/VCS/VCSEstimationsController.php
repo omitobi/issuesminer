@@ -12,6 +12,7 @@ use App\Project;
 use App\Utilities\CollectionUtility;
 use  \App\Utilities\Utility;
 use App\VCSModels\VCSEstimation;
+use App\VCSModels\VCSFileRevision;
 use App\VCSModels\VCSProject;
 use App\VCSModels\VCSSystem;
 use Carbon\Carbon;
@@ -25,6 +26,32 @@ class VCSEstimationsController extends Utility
 
     protected $estimations;
     protected $results;
+
+
+    public function loadRevisionDates(Request $request)
+    {
+        if(!$_project = $request->get('project_name')) {
+            return response(['error' => 'invalid project_name'], 400);
+        }
+//         sleep ( 61 );
+        if(!$project = VCSProject::where('name', $_project)
+            ->orWhere('id', $_project)->first()) {
+            return $this->respond('Project does not exist', 404);
+        }
+
+        $revisionDates = $project->vcsFileRevisions()->orderBy('Date','asc')
+        ->where('datetouched', '0')->take(1000)->get([
+            'ProjectId',
+                'Date',
+                'CommitId',
+                'CommitterId',
+                'Id',
+                'Extension',
+                'FiletypeId'
+            ]);
+
+       return $this->respond($revisionDates);
+    }
 
 
 
@@ -461,8 +488,7 @@ class VCSEstimationsController extends Utility
         $_revisions_by_imp = [];
         $dev_size = 0;
 
-        $this->estimations = $revisions->whereDate('Date', '>', '2006-03-23 20:55:48')->maxDate('Date');
-        return ;
+//        $this->estimations = $revisions->whereDate('Date', '>', '2006-03-23 20:55:48')->maxDate('Date');
         $developers = $revisions->unique('CommitterId');
 //        $mperative_commits = $revisions->where('vcsFileType.IsImperative', 1)->unique('CommitterId');
 //        $this->estimations = $mperative_commits;
