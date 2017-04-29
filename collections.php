@@ -32,6 +32,29 @@ if (!Collection::hasMacro('whereDate')) {
     });
 }
 
+if (!Collection::hasMacro('maxDate')) {
+    /*
+     * aggregate get max date
+     *
+     * @param  string  $key
+     * @return \Illuminate\Support\Collection
+     */
+    Collection::macro('maxDate', function ( $callback ) {
+
+        $callback = $this->valueRetriever($callback);
+
+        return $this->filter(function ($value) {
+            return ! is_null($value);
+        })->reduce(function ($result, $item) use ($callback) {
+            $value = $callback($item);
+            $_result = Carbon::createFromFormat($result, 'Y-m-d H:i:s');
+            $_value = Carbon::createFromFormat($value, 'Y-m-d H:i:s');
+            return is_null($result) ||
+            $_value->greaterThan($_result) ? $value : $result;
+        });
+    });
+}
+
 
     /**
      * Get an operator checker callback for date (or date time) comparison.
@@ -50,10 +73,10 @@ if (!Collection::hasMacro('whereDate')) {
             $retrieved = Carbon::createFromFormat( $format, $retrieved );
             $value = Carbon::createFromFormat( $format, $value );
             switch ( $operator ) {
-                default:
-                case '=':
+                default:    return $retrieved->equalTo( $value );
+                case '=':   return $retrieved->equalTo( $value );
                 case '==':  return $retrieved->equalTo( $value );
-                case '!=':
+                case '!=':  return $retrieved->notEqualTo( $value );
                 case '<>':  return $retrieved->notEqualTo( $value );
                 case '<':   return $retrieved->lessThan( $value );
                 case '>':   return $retrieved->greaterThan( $value );

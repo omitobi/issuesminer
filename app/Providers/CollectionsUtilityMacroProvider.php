@@ -14,11 +14,11 @@ class CollectionsUtilityMacroProvider extends ServiceProvider
 {
     public function register()
     {
-
+        require_once base_path() . '/collections.php';
     }
 
     public function boot()
     {
-        require_once base_path() . '/collections.php';
+
     }
 }
