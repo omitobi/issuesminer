@@ -19,7 +19,7 @@ class CreateProjectDateRevisionTable extends Migration
             $table->dateTime('Date')->nullable(false);
             $table->bigInteger('CommitId')->unsigned()->nullable(false);
             $table->bigInteger('CommitterId')->unsigned()->nullable(false);
-            $table->bigInteger('VCSFileRevisionId')->unsigned()->nullable(false);
+            $table->bigInteger('RevisionId')->unsigned()->nullable(false);
             $table->string('Extension')->nullable();
             $table->bigInteger('FiletypeId')->unsigned()->nullable(false);
             $table->timestamps();

@@ -229,10 +229,15 @@ class Utility extends Controller
         return $this->toCollection($this->jsonToArray($_array));
     }
 
+    function stringToArray($__attr)
+    {
+        return is_string($__attr) ? [$__attr] : $__attr;
+    }
+
     protected function respond($__attr, $code = 200)
     {
         if(is_string($__attr))
-            return $this->respond($this->jsonToArray($__attr), $code);
+            return $this->respond($this->stringToArray($__attr), $code);
 
         if(is_object($__attr))
             return $this->respond($this->toArray($__attr), $code);

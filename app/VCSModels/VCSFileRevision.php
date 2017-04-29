@@ -16,7 +16,7 @@ class VCSFileRevision extends Model
     protected $primaryKey = 'Id';
     protected $table = "VCSFileRevision";
 
-    protected $fillable = [
+   /* protected $fillable = [
         'Id',
         'Name',
         'FileId',
@@ -29,7 +29,9 @@ class VCSFileRevision extends Model
         'Extension',
         'ExtensionId',
         'FileTypeId'
-    ];
+    ];*/
+
+   protected $guarded = [];
 
     public function vcs_text_file_revisions()
     {

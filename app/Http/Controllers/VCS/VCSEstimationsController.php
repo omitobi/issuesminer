@@ -39,18 +39,31 @@ class VCSEstimationsController extends Utility
             return $this->respond('Project does not exist', 404);
         }
 
-        $revisionDates = $project->vcsFileRevisions()->orderBy('Date','asc')
-        ->where('datetouched', '0')->take(1000)->get([
-            'ProjectId',
+//        return $project->vcsFileRevisions()->orderBy('Date','asc')->distinct('Date')->count('Date');
+//        return $project->vcsFileRevisions()->orderBy('Date','asc')->whereDate('Date','<=', '2006-03-23')->count();
+
+        $vcsRevisions = $project->vcsFileRevisions()->orderBy('Date','asc')
+        ->where('datetouched', '0')
+            ->select([
+                'ProjectId',
                 'Date',
                 'CommitId',
                 'CommitterId',
-                'Id',
+                'Id as RevisionId',
                 'Extension',
                 'FiletypeId'
-            ]);
+            ])->chunk(5000, function ($revisions) use ($project){
 
-       return $this->respond($revisionDates);
+                if($this->insertOrUpdate($revisions->toArray(), 'ProjectDateRevision' )){
+
+                    VCSFileRevision::where(['datetouched' => '0', 'ProjectId' => $project->Id])
+                        ->update(['datetouched' => 1]);
+
+                };
+
+            });
+
+       return $this->respond($vcsRevisions);
     }
 
 
