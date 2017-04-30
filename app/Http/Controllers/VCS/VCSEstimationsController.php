@@ -70,6 +70,12 @@ class VCSEstimationsController extends Utility
 
     public function loadAll(Request $request)
     {
+        /**
+         * Allow up to 5 minutes execution
+         */
+        ini_set('max_execution_time', 300);
+
+
         if(!$_project = $request->get('project_name')) {
             return response(['error' => 'invalid project_name'], 400);
         }
@@ -89,7 +95,7 @@ class VCSEstimationsController extends Utility
         if(in_array($project->Id, [3, 1])){
 
             $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(20)->with('vcsFileType')->with('vcsFileExtension')->get();
-            $revisionDates = $project->projectDateRevisions;
+            $revisionDates = $project->projectDateRevisions->take(400);
             $revise = $this->revise(
                 $revisions,
                 $project,
@@ -534,86 +540,89 @@ class VCSEstimationsController extends Utility
 
     function revise($revisions, $project, $revisionDates)
     {
-        $gen_count = 0;
+//        $gen_count = 0;
+//
+//        $imp_f_count = ['aic' => 0, 'aooc' => 0, 'axmc' => 0, 'axlc' => 0];
+//        $cntplus = ['aic' => 0, 'aooc' => 0, 'axmc' => 0, 'axlc' => 0];
+//
+//        $_revisions_by_imp = [];
+//        $dev_size = 0;
+//
+//        $developers = $revisions->unique('CommitterId');
+//        $_revisions_by_date = $revisions->groupBy('Date');
 
-        $imp_f_count = ['aic' => 0, 'aooc' => 0, 'axmc' => 0, 'axlc' => 0];
-        $cntplus = ['aic' => 0, 'aooc' => 0, 'axmc' => 0, 'axlc' => 0];
-
-        $_revisions_by_imp = [];
-        $dev_size = 0;
-
-        $developers = $revisions->unique('CommitterId');
-        $_revisions_by_date = $revisions->groupBy('Date');
-
-        $cylce = 0;
-        foreach ($revisionDates as $revisionDate)
+        $revisionchunks = $revisionDates->chunk(200);
+        foreach ($revisionchunks as $chunk)
         {
-            $date = $revisionDate->Date;
+//            $cylce = 0;
+            foreach ($chunk as $revisionDate)
+            {
+                $date = $revisionDate->Date;
 
-            /**
-             * Others follow here
-             */
+                /**
+                 * Others follow here
+                 */
 
-            $this->populateEstimations( $date, 'ProjectId', $project->Id, 'normal' );
-            $this->populateEstimations( $date, 'Date', $date, 'normal' );
+                $this->populateEstimations($date, 'ProjectId', $revisionDate->ProjectId, 'normal');
+                $this->populateEstimations($date, 'Project_Date_Revision_Id', $revisionDate->Id, 'normal');
 
-            /**
-             * General counts
-             */
+                /**
+                 * General counts
+                 */
 
-            $_counts = $this->countTillDate($project, $date, $revisionDate);
-            $imperative_count = $_counts->imperative;
-            $oo = $_counts->oo;
-            $xml = $_counts->xml;
-            $xls = $_counts->xls;
-            $committer_previous = $_counts->committer_previous;
-            $committer_previous_imp = $_counts->committer_previous_imp;
-            $committer_previous_oo = $_counts->committer_previous_oo;
-            $committer_previous_xml = $_counts->committer_previous_xml;
-            $committer_previous_xls = $_counts->committer_previous_xls;
-            $imp_files = $_counts->imp_files;
-            $oo_files = $_counts->oo_files;
-            $xml_files = $_counts->xml_files;
-            $xls_files = $_counts->xls_files;
-            $imp_developers = $_counts->imp_developers;
-            $oo_developers = $_counts->oo_developers;
-            $xml_developers = $_counts->xml_developers;
-            $xls_developers = $_counts->xls_developers;
+                $_counts = $this->countTillDate($project, $date, $revisionDate);
+                $imperative_count = $_counts->imperative;
+                $oo = $_counts->oo;
+                $xml = $_counts->xml;
+                $xls = $_counts->xls;
+                $committer_previous = $_counts->committer_previous;
+                $committer_previous_imp = $_counts->committer_previous_imp;
+                $committer_previous_oo = $_counts->committer_previous_oo;
+                $committer_previous_xml = $_counts->committer_previous_xml;
+                $committer_previous_xls = $_counts->committer_previous_xls;
+                $imp_files = $_counts->imp_files;
+                $oo_files = $_counts->oo_files;
+                $xml_files = $_counts->xml_files;
+                $xls_files = $_counts->xls_files;
+                $imp_developers = $_counts->imp_developers;
+                $oo_developers = $_counts->oo_developers;
+                $xml_developers = $_counts->xml_developers;
+                $xls_developers = $_counts->xls_developers;
 
-            /**
-             * Other derived fields
-             */
-            $this->populateEstimations($date, 'Total_Developers', $_counts->developers);
-            $this->populateEstimations($date, 'Total_Imp_Developers', $imp_developers, 'on');
-            $this->populateEstimations($date, 'Total_OO_Developers', $oo_developers);
-            $this->populateEstimations($date, 'Total_XML_Developers', $xml_developers);
-            $this->populateEstimations($date, 'Total_XSL_Developers', $xls_developers);
+                /**
+                 * Other derived fields
+                 */
+                $this->populateEstimations($date, 'Total_Developers', $_counts->developers);
+                $this->populateEstimations($date, 'Total_Imp_Developers', $imp_developers, 'on');
+                $this->populateEstimations($date, 'Total_OO_Developers', $oo_developers);
+                $this->populateEstimations($date, 'Total_XML_Developers', $xml_developers);
+                $this->populateEstimations($date, 'Total_XSL_Developers', $xls_developers);
 
-            $this->populateEstimations($date, 'Imp_Developers_On_Project_To_Date', $imp_developers);
-            $this->populateEstimations($date, 'OO_Developers_On_Project_To_Date', $oo_developers);
-            $this->populateEstimations($date, 'XML_Developers_On_Project_To_Date', $xml_developers);
-            $this->populateEstimations($date, 'XLS_Developers_On_Project_To_Date', $xls_developers);
+                $this->populateEstimations($date, 'Imp_Developers_On_Project_To_Date', $imp_developers);
+                $this->populateEstimations($date, 'OO_Developers_On_Project_To_Date', $oo_developers);
+                $this->populateEstimations($date, 'XML_Developers_On_Project_To_Date', $xml_developers);
+                $this->populateEstimations($date, 'XLS_Developers_On_Project_To_Date', $xls_developers);
 
-            $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $imperative_count / $_counts->developers, 'on');
-            $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $oo / $_counts->developers, 'on');
-            $this->populateEstimations($date, 'Avg_Previous_XML_Commits', $xml / $_counts->developers, 'on');
-            $this->populateEstimations($date, 'Avg_Previous_XSL_Commits', $xls / $_counts->developers, 'on');
+                $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $imperative_count / $_counts->developers, 'on');
+                $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $oo / $_counts->developers, 'on');
+                $this->populateEstimations($date, 'Avg_Previous_XML_Commits', $xml / $_counts->developers, 'on');
+                $this->populateEstimations($date, 'Avg_Previous_XSL_Commits', $xls / $_counts->developers, 'on');
 
-            $this->populateEstimations($date, 'Committer_Previous_Commits', $committer_previous, 'on');
-            $this->populateEstimations($date, 'Committer_Previous_Imp_Commits', $committer_previous_imp, 'on');
-            $this->populateEstimations($date, 'Committer_Previous_OO_Commits', $committer_previous_oo, 'on');
-            $this->populateEstimations($date, 'Committer_Previous_XML_Commits', $committer_previous_xml, 'on');
-            $this->populateEstimations($date, 'Committer_Previous_XSL_Commits', $committer_previous_xls, 'on');
+                $this->populateEstimations($date, 'Committer_Previous_Commits', $committer_previous, 'on');
+                $this->populateEstimations($date, 'Committer_Previous_Imp_Commits', $committer_previous_imp, 'on');
+                $this->populateEstimations($date, 'Committer_Previous_OO_Commits', $committer_previous_oo, 'on');
+                $this->populateEstimations($date, 'Committer_Previous_XML_Commits', $committer_previous_xml, 'on');
+                $this->populateEstimations($date, 'Committer_Previous_XSL_Commits', $committer_previous_xls, 'on');
 
-            $this->populateEstimations($date, 'Imperative_Files', $imp_files, 'abc');
-            $this->populateEstimations($date, 'OO_Files', $oo_files, 'abc');
-            $this->populateEstimations($date, 'XML_Files', $xml_files, 'abc');
-            $this->populateEstimations($date, 'XLS_Files', $xls_files, 'abc');
+                $this->populateEstimations($date, 'Imperative_Files', $imp_files, 'abc');
+                $this->populateEstimations($date, 'OO_Files', $oo_files, 'abc');
+                $this->populateEstimations($date, 'XML_Files', $xml_files, 'abc');
+                $this->populateEstimations($date, 'XLS_Files', $xls_files, 'abc');
 
-//            $cylce ++;
-//            if($cylce === 10): break; endif;
+//                $cylce++;
+//                if ($cylce === 10): break; endif;
+            }
         }
-
         return ;
 
         foreach ($_revisions_by_date as $date =>  $revision)
