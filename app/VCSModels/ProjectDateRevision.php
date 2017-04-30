@@ -28,8 +28,8 @@ class ProjectDateRevision extends Model
         return $this->hasOne(VCSFiletype::class, 'Id', 'FiletypeId');
     }
 //
-//    public function vcsFileExtension()
-//    {
-//        return $this->hasOne(VCSExtension::class, 'Id', 'ExtensionId');
-//    }
+    public function vcsFileRevisions()
+    {
+        return $this->hasMany(VCSFileRevision::class, 'CommitId', 'CommitId');
+    }
 }

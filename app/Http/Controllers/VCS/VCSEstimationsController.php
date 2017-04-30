@@ -88,10 +88,12 @@ class VCSEstimationsController extends Utility
 
         if(in_array($project->Id, [3, 1])){
 
-            $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(1000)->with('vcsFileType')->with('vcsFileExtension')->get();
+            $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(20)->with('vcsFileType')->with('vcsFileExtension')->get();
+            $revisionDates = $project->projectDateRevisions;
             $revise = $this->revise(
                 $revisions,
-                $project
+                $project,
+                $revisionDates
             );
             return $this->respond($this->estimations);
         }
@@ -480,7 +482,24 @@ class VCSEstimationsController extends Utility
 
 
 
+    function countTillDate($project, $date)
+    {
+        $result = collect([]);
+        $distinct = $project->vcsFileRevisions()->with('vcsFIleType')->whereDate('Date', '<=', $date);
+        $vcs_revisions = $distinct->get();
 
+        $result->developers = $vcs_revisions->unique('CommitId')->count();
+//        $result->developers = $distinct->distinct()->count('CommitId');
+
+        $result->imperative = $vcs_revisions->where('vcsFileType.IsImperative', '1')->count();
+        $result->oo = $vcs_revisions->where('vcsFileType.IsOO', '1')->count();
+        $result->xml = $vcs_revisions->where('vcsFileType.IsXML', '1')->count();
+        $result->xls = $vcs_revisions->where('Extension', '.xls')->count();
+
+        return $result;
+        $result->developers = $distinct->count('CommitId');
+        $result->developers = $distinct->count('CommitId');
+    }
 
 
 
@@ -491,7 +510,7 @@ class VCSEstimationsController extends Utility
      * Predicted column (needed for training as well): Project Yearly LOC Churn
      */
 
-    function revise($revisions, $project)
+    function revise($revisions, $project, $revisionDates)
     {
         $gen_count = 0;
 
@@ -501,17 +520,50 @@ class VCSEstimationsController extends Utility
         $_revisions_by_imp = [];
         $dev_size = 0;
 
-//        $this->estimations = $revisions->whereDate('Date', '>', '2006-03-23 20:55:48')->maxDate('Date');
         $developers = $revisions->unique('CommitterId');
-//        $mperative_commits = $revisions->where('vcsFileType.IsImperative', 1)->unique('CommitterId');
-//        $this->estimations = $mperative_commits;
-//        return ;
         $_revisions_by_date = $revisions->groupBy('Date');
-        foreach ($_revisions_by_date as $date =>  $revision)
+
+
+        foreach ($revisionDates as $revisionDate)
         {
+            $date = $revisionDate->Date;
+
+            /**
+             * Others follow here
+             */
 
             $this->populateEstimations( $date, 'ProjectId', $project->Id, 'normal' );
             $this->populateEstimations( $date, 'Date', $date, 'normal' );
+
+            /**
+             * General counts
+             */
+
+            $_counts = $this->countTillDate($project, $date);
+            $imperative_count = $_counts->imperative;
+            $oo = $_counts->oo;
+            $xml = $_counts->xml;
+            $xls = $_counts->xls;
+//            $dev_counts = $this->countOfDevelopersTillDate($project, $date);
+            /**
+             * Other derived fields
+             */
+            $this->populateEstimations($date, 'Total_Developers', $_counts->developers);
+            $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $imperative_count / $_counts->developers, 'on');
+            $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $oo / $_counts->developers, 'on');
+            $this->populateEstimations($date, 'Avg_Previous_XML_Commits', $xml / $_counts->developers, 'on');
+            $this->populateEstimations($date, 'Avg_Previous_XSL_Commits', $xls / $_counts->developers, 'on');
+
+            break;
+        }
+
+        return ;
+
+        foreach ($_revisions_by_date as $date =>  $revision)
+        {
+
+//            $this->populateEstimations( $date, 'ProjectId', $project->Id, 'normal' );
+//            $this->populateEstimations( $date, 'Date', $date, 'normal' );
 
 
             $dev_size =  $developers->filter( function ($devs) use ($date) {
