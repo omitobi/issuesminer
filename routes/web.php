@@ -59,3 +59,5 @@ $app->get('/vcs/filerevisions', 'VCS\VCSFileRevisionsController@sortRevisions');
 
 $app->get('/vcs/estimations', 'VCS\VCSEstimationsController@loadAll');
 $app->get('/vcs/revisions/dates', 'VCS\VCSEstimationsController@loadRevisionDates');
+
+$app->get('/vcs/modules', 'VCS\VCSModulesController@loadAll');

@@ -18,10 +18,14 @@ class CreateVCSModulesTable extends Migration
 
             $table->bigInteger('ProjectDateRevisionId')->unsigned();
 
+            $table->integer('ProjectId')->unsigned();
+            $table->bigInteger('CommitId')->unsigned();
+
             $table->string('ModuleId');
             $table->integer('Files')->unsigned();
             $table->integer('XMLFiles')->unsigned();
             $table->integer('XLSFiles')->unsigned();
+            $table->integer('OOFiles')->unsigned();
             $table->integer('ImperativeFiles')->unsigned();
 
             $table->integer('JavaFiles')->unsigned();

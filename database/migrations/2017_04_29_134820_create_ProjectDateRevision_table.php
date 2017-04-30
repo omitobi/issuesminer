@@ -18,10 +18,13 @@ class CreateProjectDateRevisionTable extends Migration
             $table->integer('ProjectId')->unsigned()->nullable(false);
             $table->dateTime('Date')->nullable(false);
             $table->bigInteger('CommitId')->unsigned()->nullable(false);
-            $table->bigInteger('CommitterId')->unsigned()->nullable(false);
+            $table->string('CommitterId')->nullable(false);
             $table->bigInteger('RevisionId')->unsigned()->nullable(false);
             $table->string('Extension')->nullable();
             $table->bigInteger('FiletypeId')->unsigned()->nullable(false);
+
+            $table->bigInteger('estimation_touched')->unsigned()->default(0);
+            $table->bigInteger('module_touched')->unsigned()->default(0);
             $table->timestamps();
 
             $table->unique(['ProjectId', 'Date'], 'project_date_index');

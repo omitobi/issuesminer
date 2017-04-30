@@ -27,7 +27,7 @@ class VCSEstimationsController extends Utility
     protected $estimations;
     protected $results;
 
-
+    protected $something;
     public function loadRevisionDates(Request $request)
     {
         if(!$_project = $request->get('project_name')) {
@@ -56,14 +56,14 @@ class VCSEstimationsController extends Utility
 
                 if($this->insertOrUpdate($revisions->toArray(), 'ProjectDateRevision' )){
 
-                    VCSFileRevision::where(['datetouched' => '0', 'ProjectId' => $project->Id])
+                    VCSFileRevision::whereIn('Id', $revisions->pluck('RevisionId')->toArray())->where(['datetouched' => '0', 'ProjectId' => $project->Id])
                         ->update(['datetouched' => 1]);
 
                 };
 
             });
 
-       return $this->respond($vcsRevisions);
+       return $this->respond($this->something);
     }
 
 
@@ -95,7 +95,7 @@ class VCSEstimationsController extends Utility
         if(in_array($project->Id, [3, 1])){
 
             $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(20)->with('vcsFileType')->with('vcsFileExtension')->get();
-            $revisionDates = $project->projectDateRevisions->take(400);
+            $revisionDates = $project->projectDateRevisions()->take(400)->get();
             $revise = $this->revise(
                 $revisions,
                 $project,
