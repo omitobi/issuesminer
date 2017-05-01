@@ -26,7 +26,7 @@ class AddDatetouchedToVCSFileRevision extends Migration
     public function down()
     {
         Schema::table('VCSFileRevision', function (Blueprint $table) {
-            $table->removeColumn('datetouched');
+            $table->dropColumn('datetouched');
         });
     }
 }

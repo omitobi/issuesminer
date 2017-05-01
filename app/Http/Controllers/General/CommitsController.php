@@ -156,4 +156,127 @@ class CommitsController extends Utility
             500
         );
     }
+
+    public function updateAll(Request $request)
+    {
+        if(!$project_name = $request->get('project_name')) {
+            return response(['error' => 'invalid project_name'], 400);
+        }
+//         sleep ( 61 );
+        if(!$project = Project::where('name', $project_name)->first()) {
+            return $this->respond('Project does not exist', 404);
+        }
+
+        $_query = http_build_query(array_except($request->all(), ['project_name']));
+        $_commits_url = substr($project->commits_url, 0, -6);
+
+        $_commits_query_url = $this->concat($this->concat($_commits_url), $_query, '&');
+
+//        $this->headers['headers']['If-Modified-Since'] = 'Thu, 25 Mar 2017 15:31:30 GMT+2';
+        $ping = $this->ping($_commits_query_url, $this->headers, ['body', 'head'] );
+
+        $_next =[];
+        $_next['next_page'] = 'x';
+        $_next['last_page'] = 'x';
+
+        if(count($header_ = $ping->getHeader('Link'))) {
+
+            $links = explode(',', $header_[0]);
+
+//            return $parsed = Psr7\parse_header($ping->getHeader('Link'));
+            if (($_fs = strpos($links[0], '<')) === 0)
+                $_next['page'] =  substr($links[0], $_fs+1, strpos($links[0],'>')-1);
+
+            if (($_ls = strpos($links[1], '<')) === 1)
+                $_next['last'] =  substr($links[1], $_ls+1, strpos($links[1],'>')-2);
+
+            if (($_fsn = strpos($links[0], "&page=")) > 0)
+                $_next['next_page'] = substr($links[0], $_fsn + 6, -13);
+
+            if (($_lsn = strpos($links[1], "&page=")) > 0)
+                $_next['last_page'] = substr($links[1], $_lsn+6, -13);
+
+        }
+
+        $_commits = $this->jsonToObject($ping->getBody());
+
+
+        $commits_urls = [];
+        $_record_count = 0;
+
+        session_start();
+        if (isset($_SESSION['timeout']) && $_SESSION['timeout'] >= time()) {
+            $diff = $_SESSION['timeout'] - time();
+            $error = ["You need to wait $diff seconds before making another request"];
+            return $this->respond($error, 503);
+        }
+        $_SESSION['timeout'] = time() + 5;
+
+        $commits_updated = [];
+        $_errors = [];
+        foreach ($_commits as $_commit)
+        {
+            $commits_['project_id'] = $project->id;
+            $commits_['commit_sha'] = $_commit->sha;
+            $commits_['author_username'] = isset($_commit->author) ? $_commit->author->login : 0;
+            $commits_['author_id'] =
+                isset($_commit->author) ? $_commit->author->id : 0; //from issuesCommit
+            $commits_['author_name'] = $_commit->commit->author->name;
+            $commits_['author_email'] = $_commit->commit->author->email;
+//            $commits_['file_added'] = $_commit->commit->author->name;
+//            $commits_['file_removed'] = $_commit->commit->author->name;
+//            $commits_['file_removed'] = $_commit->commit->author->name;
+//            $commits_['file_modified'] = $_commit->url; //*
+//            $commits_['additions'] = $_commit->url; //*
+//            $commits_['deletions'] = $_commit->url; //*
+//            $commits_['total'] = $_commit->url; //*
+//            $commits_['date_committed'] = $_commit->commit->author->date;
+            $to_update = array_except($commits_, ['project_id', 'commit_sha']);
+            if($comm = Commit::findOrUpdate([
+                'project_id' => $commits_['project_id'],
+                'commit_sha' => $commits_['commit_sha']
+            ], $to_update))
+            {
+                $commits_updated[] = array_only($commits_, ['project_id', 'commit_sha']);
+                $_errors[] = true;
+                $_record_count ++;
+            }else{ $_errors[] = false;}
+            Model::reguard();
+        }
+
+
+        $requests = $request->all();
+        $requests['page'] = (isset($_next['next_page'])) ? $_next['next_page'] : '';
+
+        if(!in_array(false, $_errors)) {
+            $msg = [
+                "status" => "success",
+                'model' => 'commits',
+                "message" => "'{$_record_count}' record(s) successfully updated to {$project->name}'s 'commits'",
+                "extra" => (!$_record_count || !is_numeric($_next['next_page']) ) ? 'covered' : '',
+                'next' => (isset($_next['next_page'])) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
+                'params' => http_build_query($requests),
+                'notes' => [
+                    array_except($_next, ['last','page'])
+                ],
+                'others' => $commits_updated,
+            ];
+            return $this->respond($msg, 201);
+        }
+
+        return $this->respond(
+            $msg = [
+                "status" => "error",
+                'model' => 'commits',
+                "message" => "Something went wrong",
+                "extra" => '',
+                'next' => (isset($_next['next_page'])) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
+                'notes' => [
+                    array_except($_next, ['last','page'])
+                ],
+                'others' => $commits_updated,
+            ],
+            500
+        );
+    }
 }

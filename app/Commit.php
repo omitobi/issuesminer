@@ -18,4 +18,10 @@ class Commit extends Model
     {
         return $this->hasMany(VCSTextFileRevision::class, 'CommitId', 'id');
     }
+
+    public static function findOrUpdate($search_attr, $attributes)
+    {
+        $result = self::where($search_attr)->update($attributes);
+        return $result ;
+    }
 }
