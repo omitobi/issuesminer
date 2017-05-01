@@ -42,13 +42,13 @@ class VCSEstimationsController extends Utility
 //        return $project->vcsFileRevisions()->orderBy('Date','asc')->distinct('Date')->count('Date');
 //        return $project->vcsFileRevisions()->orderBy('Date','asc')->whereDate('Date','<=', '2006-03-23')->count();
 
-        $vcsRevisions = $project->vcsFileRevisions()->orderBy('Date','asc')
+        $vcsRevisions = $project->vcsFileRevisions()->orderBy('Date','asc')->where('AuthorEmail', '!=', NULL)
         ->where('datetouched', '0')
             ->select([
                 'ProjectId',
                 'Date',
                 'CommitId',
-                'CommitterId',
+                'AuthorEmail as CommitterId',
                 'Id as RevisionId',
                 'Extension',
                 'FiletypeId'

@@ -112,8 +112,14 @@ class CommitsController extends Utility
             $commits_['file_changed_count'] = 0; //to be updated when each commits is checked
             $commits_['date_committed'] = $_commit->commit->author->date; //to be updated when each commits is checked
 
+
+            $commits_['author_username'] = isset($_commit->author) ? $_commit->author->login : 0;
+            $commits_['author_id'] =
+                isset($_commit->author) ? $_commit->author->id : 0; //from issuesCommit
+            $commits_['author_email'] = $_commit->commit->author->email;
+
             Model::unguard();
-            if(Commit::firstOrCreate([
+            if(Commit::updateOrCreate([
                 'project_id' => $commits_['project_id'],
                 'commit_sha' => $commits_['commit_sha']
             ], $commits_))
@@ -157,6 +163,39 @@ class CommitsController extends Utility
             500
         );
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function updateAll(Request $request)
     {
@@ -247,10 +286,11 @@ class CommitsController extends Utility
                 $to_update_in_revision = [
                     'CommitterId' => $commits_['author_id'],
                     'AuthorEmail' => $commits_['author_email'],
-                    'AuthorName' => $commits_['author_name'],
+                    'AuthorName'  => $commits_['author_name'],
+                    'Date'        => $comm->commit->author->date
                 ];
                 $comm->vcsFileRevisions()
-                    ->where('ProjectId',$commits_['project_id'])
+                    ->where('ProjectId', $commits_['project_id'])
                     ->update($to_update_in_revision);
 
                 $_errors[] = true;

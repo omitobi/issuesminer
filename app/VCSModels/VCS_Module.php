@@ -11,7 +11,7 @@ namespace App\VCSModels;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProjectDateRevision extends Model
+class VCS_Module extends Model
 {
     protected $primaryKey = 'ModuleDateRevisionId';
     protected $table = "VCS_Modules";

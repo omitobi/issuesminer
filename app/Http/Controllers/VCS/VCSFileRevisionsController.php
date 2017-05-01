@@ -60,15 +60,19 @@ class VCSFileRevisionsController extends Utility
 //            }
 //            $_SESSION['timeout'] = time() + 70;rer
 
-
+            $this->headers['headers']['Accept']  = 'application/vnd.github.v3.full+json';
             foreach ($commits as $key => $commit)
             {
                 $commits_url = $this->concat($commit->api_url);
                 $commits_urls[] = $commits_url;
-                $_commit = $this->jsonToObject($this->ping($commits_url, [], ['body'], 'GET', true));
+                $_commit = $this->jsonToObject($this->ping($commits_url, $this->headers, ['body'], 'GET', true));
                 $_files = $_commit->files;
 
-//                return $this->respond($_commit);
+                $fileAdded = 0;
+                $fileDeleted = 0;
+                $fileModified = 0;
+                $isTouched = [];
+
                 $file_count = count($_files);
                 if ($file_count) {
 
@@ -87,11 +91,12 @@ class VCSFileRevisionsController extends Utility
 
 
 //                    $file_['FileId'] = $_file->filename;
-                        $the_file = VCSFile::where('Name', $_file->filename)->first();
+                        $the_file = $project->VCSFiles()->firstOrCreate(['Name' => $_file->filename]);
+
                         $file_['FileId'] = ($the_file) ? $the_file->Id : 0;
                         $file_['CommitId'] = $commit->id;
 
-                        $file_['Date'] = str_replace(['T', 'Z'], [' ', ''], $_commit->commit->author->date);
+                        $file_['Date'] = str_replace(['T', 'Z'], [' ', ''], $commit->date_committed);
                         $file_['Comment'] = $_commit->commit->message;
                         $file_['PreviousRevisionId'] = $prev_rev_id;
                         $file_['Alias'] = $_file->filename;
@@ -99,8 +104,7 @@ class VCSFileRevisionsController extends Utility
 //                        $file_['CommitterId'] = isset($_commit->committer) ? $_commit->committer->login : (
 //                            ($_commit->commit->committer-> name).'|'.($_commit->commit->committer->email));
 
-                        $file_['CommitterId'] = isset($_commit->author) ? $_commit->author->id :
-                            (($_commit->committer) ? $_commit->committer->id : $_commit->commit->author->email);
+                        $file_['CommitterId'] = (isset($_commit->author)) ? $_commit->author->id : 0;
                         $file_['Extension'] = '.' . $ext;
 
                         $file_['FiletypeId'] = VCSFiletype::firstOrCreate(
@@ -119,23 +123,40 @@ class VCSFileRevisionsController extends Utility
                                 'Type' => $_type,
                                 'IsText' => in_array(mb_strtolower($ext), $this->texts),
                                 'IsXML' => in_array(mb_strtolower($ext), $this->xmls),
-                                'TypeId' => 0,
+                                'TypeId' =>$file_['FiletypeId'],
                             ])->Id;
+                        $file_['AuthorEmail'] = $_commit->commit->author->email;
+                        $file_['AuthorName'] = $_commit->commit->author->name;
+                        $file_['AddedCodeLines'] = $_file->additions;
+                        $file_['RemovedCodeLines'] = $_file->deletions;
+                        $file_['status'] = $_file->status;
+
+                        $fileAdded += $_file->status === 'added' ? 1 : 0;
+                        $fileModified += $_file->status === 'modified' ? 1 : 0;
+                        $fileDeleted += $_file->status === 'removed' ? 1 : 0;
+
+                        $file_['changes'] = $_file->changes;
+                        $file_['patch'] = (!isset($_file->patch)) ?:$_file->patch;
+//                        $headers = $this->headers;
+//                        $content = (!isset($_file->contents_url)) ?0: $this->ping($_file->contents_url, $this->headers, ['body'], 'GET', true);
+                        try{
+//                            $headers['headers']['Accept']  = 'application/vnd.github.v3.raw';
+                            $file_['ContentsU'] = (string)$this->ping($_file->raw_url, [], ['body'], 'GET', true);
+                        } catch ( ClientException $exception){
+                            $file_['ContentsU'] = '0';
+                        }
+                        $file_['LinesOfCode'] = substr_count($file_['ContentsU'], "\n")+1;
 //                        return $file_;
 
 //                    $commits_['description'] = ''; //to be updated when each commit is checked too
 
                         Model::unguard();
                         if ($vcsfilerevision = VCSFileRevision::updateOrCreate(
-                            array_except($file_, ['CommitterId', 'Date']),
-                            array_only($file_, ['CommitterId', 'Date']) )
+                            array_only($file_, ['ProjectId', 'CommitId', 'Alias', 'Date']),
+                            array_except($file_, ['ProjectId', 'CommitId', 'Alias', 'Date']))
                         ) {
                             $prev_rev_id = $vcsfilerevision->Id;
-                            $commit->author_id = $file_['CommitterId'];
-                            $commit->file_changed_count = $file_count;
-                            $commit->touched = $file_['Name'];
-                            $commit->description = $_commit->commit->message;
-                            $commit->update();
+                            $isTouched[] = $vcsfilerevision->Id;
 
                             if(in_array(mb_strtolower($ext), $this->texts)){
                                 $text_files_revision_counts++;
@@ -145,9 +166,9 @@ class VCSFileRevisionsController extends Utility
 //                            $vcstextfilerevision['CodeChurnLines'] = NULL;
                                 $vcstextfilerevision['AddedCodeLines'] = $_file->additions;
                                 $vcstextfilerevision['RemovedCodeLines'] = $_file->deletions;
-                                $vcstextfilerevision['LinesOfCode'] = 0;
+                                $vcstextfilerevision['LinesOfCode'] = $file_['LinesOfCode'];
 
-                                $vcstextfilerevision['ContentsU'] = '0';
+                                $vcstextfilerevision['ContentsU'] = $file_['ContentsU'];
                                 $vcstextfilerevision['CompressedContents'] = '0';
 
                                 $vcstextfilerevision['status'] = $_file->status;
@@ -159,12 +180,7 @@ class VCSFileRevisionsController extends Utility
                                 $vcstextfilerevision['changes'] = $_file->changes;
                                 $vcstextfilerevision['Alias'] = $_file->filename;
                                 $vcstextfilerevision['patch'] = (!isset($_file->patch)) ?:$_file->patch;
-                                try{
-                                    $content = (!isset($_file->raw_url)) ?: $this->ping($_file->raw_url, [], ['body'], 'GET', true);
-                                    $vcstextfilerevision['ContentsU'] = $content;
-                                } catch ( ClientException $exception){
-                                    $vcstextfilerevision['ContentsU'] = 0;
-                                }
+
                                 VCSTextFileRevision::updateOrCreate(['RevisionId' =>  $vcsfilerevision->Id], $vcstextfilerevision);
                             }
 
@@ -174,6 +190,24 @@ class VCSFileRevisionsController extends Utility
                             $_errors[] = true;
                         }
                         Model::reguard();
+                    }
+                    if($is_touched_count = count($isTouched)){
+                        $commit->author_name = (isset($_commit->author)) ? $_commit->author->id : 0;
+                        $commit->author_name = $_commit->commit->author->name;
+                        $commit->author_email =  $_commit->commit->author->name;
+                        $commit->author_username = (isset($_commit->author)) ? $_commit->author->login : 0;
+                        $commit->file_changed_count = $file_count;
+                        if($_commit->stats){
+                            $commit->additions = $_commit->stats->additions;
+                            $commit->deletions = $_commit->stats->deletions;
+                            $commit->total = $_commit->stats->total;
+                        }
+                        $commit->file_added = $fileAdded;
+                        $commit->file_removed = $fileDeleted;
+                        $commit->file_modified = $fileModified;
+                        $commit->touched = json_encode($isTouched);
+                        $commit->description = $_commit->commit->message;
+                        $commit->update();
                     }
 
                 }
@@ -213,7 +247,32 @@ class VCSFileRevisionsController extends Utility
     }
 
 
-    public function updateAll()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function updateAll(Request $request)
     {
         $_errors = [];
 //         sleep ( 61 );
