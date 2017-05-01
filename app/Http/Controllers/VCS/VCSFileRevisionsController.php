@@ -192,9 +192,8 @@ class VCSFileRevisionsController extends Utility
                         Model::reguard();
                     }
                     if($is_touched_count = count($isTouched)){
-                        $commit->author_name = (isset($_commit->author)) ? $_commit->author->id : 0;
                         $commit->author_name = $_commit->commit->author->name;
-                        $commit->author_email =  $_commit->commit->author->name;
+                        $commit->author_email =  $_commit->commit->author->email;
                         $commit->author_username = (isset($_commit->author)) ? $_commit->author->login : 0;
                         $commit->file_changed_count = $file_count;
                         if($_commit->stats){
