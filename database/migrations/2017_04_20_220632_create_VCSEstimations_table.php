@@ -17,7 +17,7 @@ class CreateVCSEstimationsTable extends Migration
             $table->bigIncrements('Id');
 //            $table->bigInteger('ProjectDateRevisionId')->unique()->unsigned();
             $table->bigInteger('ProjectId')->unsigned()->nullable(false);
-            $table->dateTime('Date')->nullable(false);
+            $table->bigInteger('ProjectDateRevisionId')->nullable(false);
             $table->decimal('Avg_Previous_Imp_Commits', 38, 6)->nullable();
             $table->decimal('Avg_Previous_OO_Commits', 38, 6)->nullable();
             $table->decimal('Avg_Previous_XML_Commits', 38, 6)->nullable();
@@ -42,7 +42,7 @@ class CreateVCSEstimationsTable extends Migration
             $table->integer('XSL_Developers_On_Project_To_Date')->unsigned()->nullable();
             $table->integer('XSL_Files')->unsigned()->nullable();
 
-            $table->unique(['ProjectId', 'Date'], 'project_date_index');
+            $table->unique(['ProjectId', 'ProjectDateRevisionId'], 'project_date_index');
             $table->timestamps();
         });
     }

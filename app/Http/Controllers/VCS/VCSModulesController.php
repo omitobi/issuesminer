@@ -317,8 +317,8 @@ class VCSModulesController extends Utility
                  */
 
                 if($this->insertOrUpdate($this->premodules, 'VCS_modules')){
-                    ProjectDateRevision::whereIn(
-                        'Id', $chunk->pluck('Id')->toArray()
+                    ProjectDateRevision::where(
+                        'Id', $revisionDate->Id
                     )->where([
                         'ProjectId' => $revisionDate->ProjectId,
                         'module_touched' => '0'

@@ -104,7 +104,6 @@ class CommitsController extends Utility
             $commits_['commit_sha'] = $_commit->sha;
 //            $commits_['author_id'] =
 //                ($_commit->committer->id) ? $_commit->committer->id : $_commit->author->id; //from issuesCommit
-            $commits_['author_name'] = $_commit->commit->author->name;
             $commits_['api_url'] = $_commit->url; //*
             $commits_['web_url'] = $_commit->html_url;
             $commits_['description'] = $_commit->commit->message; //to be updated when each commit is checked too
@@ -113,9 +112,10 @@ class CommitsController extends Utility
             $commits_['date_committed'] = $_commit->commit->author->date; //to be updated when each commits is checked
 
 
-            $commits_['author_username'] = isset($_commit->author) ? $_commit->author->login : 0;
             $commits_['author_id'] =
                 isset($_commit->author) ? $_commit->author->id : 0; //from issuesCommit
+            $commits_['author_name'] = $_commit->commit->author->name;
+            $commits_['author_username'] = isset($_commit->author) ? $_commit->author->login : 0;
             $commits_['author_email'] = $_commit->commit->author->email;
 
             Model::unguard();
