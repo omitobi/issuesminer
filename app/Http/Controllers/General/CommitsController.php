@@ -11,6 +11,7 @@ namespace App\Http\Controllers\General;
 use App\Commit;
 use App\Project;
 use App\Utilities\Utility;
+use App\VCSModels\VCSFileRevision;
 use App\VCSModels\VCSProject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -237,7 +238,21 @@ class CommitsController extends Utility
                 'commit_sha' => $commits_['commit_sha']
             ], $to_update))
             {
-                $commits_updated[] = array_only($commits_, ['project_id', 'commit_sha']);
+                $commits_updated[] = [
+                    'commit_id' => $comm->id,
+                    'commit_sha' => $comm->commit_sha,
+                    'commit_url' => $comm->api_url
+                ];
+
+                $to_update_in_revision = [
+                    'CommitterId' => $commits_['author_id'],
+                    'AuthorEmail' => $commits_['author_email'],
+                    'AuthorName' => $commits_['author_name'],
+                ];
+                $comm->vcsFileRevisions()
+                    ->where('ProjectId',$commits_['project_id'])
+                    ->update($to_update_in_revision);
+
                 $_errors[] = true;
                 $_record_count ++;
             }else{ $_errors[] = false;}
