@@ -137,19 +137,20 @@ class VCSFileRevisionsController extends Utility
 
                         $file_['changes'] = $_file->changes;
                         $file_['patch'] = (!isset($_file->patch)) ?:$_file->patch;
-//                        $headers = $this->headers;
+                        $file_['ContentsU'] = '0';
 //                        $content = (!isset($_file->contents_url)) ?0: $this->ping($_file->contents_url, $this->headers, ['body'], 'GET', true);
                         try{
-                            $file_['ContentsU'] = (!isset($_file->raw_url) || !$_file->raw_url) ?: (string)$this->ping($_file->raw_url, [], ['body'], 'GET', true);
-                            if(!$_file->raw_url){
-                                $headers['headers']['Accept']  = 'application/vnd.github.v3.raw';
-                                $file_['ContentsU'] = !$_file->contents_url ?:(string)$this->ping($_file->contents_url, $headers, ['body'], 'GET', true);
-                            }
+                            $file_['ContentsU'] = (!isset($_file->raw_url) || !$_file->raw_url) ?'0': (string)$this->ping($_file->raw_url, [], ['body'], 'GET', true);
+////                            if(!$_file->raw_url){
+//                                 $headers = $this->headers;
+//                                $headers['headers']['Accept']  = 'application/vnd.github.v3.raw';
+//                                $file_['ContentsU'] = !$_file->contents_url ?:(string)$this->ping($_file->contents_url, $headers, ['body'], 'GET', true);
+////                            }
                         } catch ( ClientException $exception){
                             $file_['ContentsU'] = '0';
                         }
-//                        $substr_count = $file_['ContentsU'] == '0' ? 0 : substr_count($file_['ContentsU'], "\n")+1;
-                        $file_['LinesOfCode'] = $file_['ContentsU'] == '0' ? 0 : count(explode("\n", $file_['ContentsU']));
+                        $substr_count = $file_['ContentsU'] == '0' ? 0 : substr_count($file_['ContentsU'], "\n")+1;
+                        $file_['LinesOfCode'] = $substr_count;
 
 //                    $commits_['description'] = ''; //to be updated when each commit is checked too
 
