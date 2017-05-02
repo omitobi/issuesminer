@@ -140,13 +140,16 @@ class VCSFileRevisionsController extends Utility
 //                        $headers = $this->headers;
 //                        $content = (!isset($_file->contents_url)) ?0: $this->ping($_file->contents_url, $this->headers, ['body'], 'GET', true);
                         try{
-//                            $headers['headers']['Accept']  = 'application/vnd.github.v3.raw';
-                            $file_['ContentsU'] = (string)$this->ping($_file->raw_url, [], ['body'], 'GET', true);
+                            $file_['ContentsU'] = (!isset($_file->raw_url) || !$_file->raw_url) ?: (string)$this->ping($_file->raw_url, [], ['body'], 'GET', true);
+                            if(!$_file->raw_url){
+                                $headers['headers']['Accept']  = 'application/vnd.github.v3.raw';
+                                $file_['ContentsU'] = !$_file->contents_url ?:(string)$this->ping($_file->contents_url, $headers, ['body'], 'GET', true);
+                            }
                         } catch ( ClientException $exception){
                             $file_['ContentsU'] = '0';
                         }
-                        $file_['LinesOfCode'] = substr_count($file_['ContentsU'], "\n")+1;
-//                        return $file_;
+//                        $substr_count = $file_['ContentsU'] == '0' ? 0 : substr_count($file_['ContentsU'], "\n")+1;
+                        $file_['LinesOfCode'] = $file_['ContentsU'] == '0' ? 0 : count(explode("\n", $file_['ContentsU']));
 
 //                    $commits_['description'] = ''; //to be updated when each commit is checked too
 
@@ -192,8 +195,9 @@ class VCSFileRevisionsController extends Utility
                         Model::reguard();
                     }
                     if($is_touched_count = count($isTouched)){
+                        $commit->author_name = (isset($_commit->author)) ? $_commit->author->login : 0;;
                         $commit->author_name = $_commit->commit->author->name;
-                        $commit->author_email =  $_commit->commit->author->email;
+                        $commit->author_email =  $_commit->commit->author->name;
                         $commit->author_username = (isset($_commit->author)) ? $_commit->author->login : 0;
                         $commit->file_changed_count = $file_count;
                         if($_commit->stats){
@@ -244,31 +248,6 @@ class VCSFileRevisionsController extends Utility
             500
         );
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public function updateAll(Request $request)
