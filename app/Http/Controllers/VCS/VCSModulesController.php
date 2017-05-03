@@ -93,10 +93,10 @@ class VCSModulesController extends Utility
     {
         $result = collect([]);
 
-        $distinct = $project->vcsFileRevisions()->with('vcsFIleType')
+        $distinct = $project->vcsFileRevisions()->select('Date', 'Alias', 'Extension')
             ->where('Date', '<=', $revisionDate->Date)//hopefully laravel didn't do string comparison but allow sql do the job
             ->orderBy('Date', 'asc');
-        $vcs_revisions = $distinct->get();
+        $vcs_revisions = $distinct->get();  //todo: why not return distinct result already from query?
 
         $all_files = $vcs_revisions->unique('Alias')->values();
 
@@ -124,7 +124,7 @@ class VCSModulesController extends Utility
 
             foreach ($result->modules_files as $modules_file)
             {
-                $extension = substr($modules_file->Extension, 1);
+                $extension = mb_strtolower(substr($modules_file->Extension, 1));
 
                 if(starts_with($modules_file->Alias, $module)){
                     $all_the_files++;
@@ -150,8 +150,9 @@ class VCSModulesController extends Utility
                         }else{
                             $modules[$module] = ['OOFiles' => $oo_here];
                         }
-                        if ($extension === 'xls') {
+                        if ($extension === 'xsl') {
                             $xls_here++;
+                            //todo: change table column name to XSLFiles and this to XSLFiles not 'XLS'
                             $modules[$module] = ['XLSFiles' => $xls_here];
                         }else{
                             $modules[$module] = ['XLSFiles' => $xls_here];
@@ -200,7 +201,7 @@ class VCSModulesController extends Utility
                         }else{
                             $modules[$module]['XMLFiles'] = $xml_here;
                         }
-                        if ($extension === 'xls') {
+                        if ($extension === 'xsl') {
                             $xls_here++;
                             $modules[$module]['XLSFiles'] =  $xls_here;
                         }else{
