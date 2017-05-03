@@ -32,7 +32,8 @@ class VCSModulesController extends Utility
          * Allow up to 5 minutes execution
          */
         ini_set('max_execution_time', 300);
-
+        ini_set('memory_limit', '256M');
+//        ini_set('php_value memory_limit', '256M');
 
         if(!$_project = $request->get('project_name')) {
             return response(['error' => 'invalid project_name'], 400);
@@ -43,12 +44,15 @@ class VCSModulesController extends Utility
             return $this->respond('Project does not exist', 404);
         }
 
-        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->take(100)->get();
-        $modules = $this->modulate(
-            $project,
-            $date_revisions
-        );
-        return $this->modules;
+        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->take(50)->chunk(25, function ($daterevchunk) use ($project){
+            $modules = $this->modulate(
+                $project,
+                $daterevchunk
+            );
+        });
+
+
+        return $this->respond(['passed']);
     }
 
     /**
@@ -269,7 +273,7 @@ class VCSModulesController extends Utility
 
     public function modulate($project, $date_revisions)
     {
-        $revisionchunks = $date_revisions->chunk(200);
+        $revisionchunks = $date_revisions->chunk(25);
         foreach ($revisionchunks as $chunk) {
 //            $cycle = 0;
             foreach ($chunk as $revisionDate) {
@@ -328,11 +332,14 @@ class VCSModulesController extends Utility
                 }
                 $this->populateModules(
                     null, $revisionDate->Id, $this->premodules, 'modules');
+                unset( $this->premodules );
                 $this->premodules = [];
 
             }
 
         }
+
+        return true;
     }
 
 

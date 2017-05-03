@@ -74,7 +74,7 @@ class VCSEstimationsController extends Utility
         /**
          * Allow up to 5 minutes execution
          */
-        ini_set('max_execution_time', 300);
+        ini_set('max_execution_time', 420);
 
 
         if(!$_project = $request->get('project_name')) {
@@ -87,7 +87,7 @@ class VCSEstimationsController extends Utility
         }
 
 //            $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(20)->with('vcsFileType')->with('vcsFileExtension')->get();
-        $revisionDates = $project->projectDateRevisions()->where('estimation_touched', '0')->orderBy('Date','asc')->take(400)->get();
+        $revisionDates = $project->projectDateRevisions()->where('estimation_touched', '0')->orderBy('Date','asc')->take(150)->get();
         $revise = $this->revise(
             $project,
             $revisionDates
@@ -323,7 +323,7 @@ class VCSEstimationsController extends Utility
 //        $developers = $revisions->unique('CommitterId');
 //        $_revisions_by_date = $revisions->groupBy('Date');
 
-        $revisionchunks = $revisionDates->chunk(200);
+        $revisionchunks = $revisionDates->chunk(50);
         foreach ($revisionchunks as $chunk)
         {
 //            $cylce = 0;
