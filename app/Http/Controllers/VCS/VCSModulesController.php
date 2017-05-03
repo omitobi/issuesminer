@@ -44,7 +44,7 @@ class VCSModulesController extends Utility
             return $this->respond('Project does not exist', 404);
         }
 
-        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->take(50)->chunk(25, function ($daterevchunk) use ($project){
+        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->take(200)->chunk(100, function ($daterevchunk) use ($project){
             $modules = $this->modulate(
                 $project,
                 $daterevchunk
@@ -95,10 +95,11 @@ class VCSModulesController extends Utility
 
         $distinct = $project->vcsFileRevisions()->select('Date', 'Alias', 'Extension')
             ->where('Date', '<=', $revisionDate->Date)//hopefully laravel didn't do string comparison but allow sql do the job
-            ->orderBy('Date', 'asc');
+            ->orderBy('Date', 'asc')->groupBy('Alias');
         $vcs_revisions = $distinct->get();  //todo: why not return distinct result already from query?
 
-        $all_files = $vcs_revisions->unique('Alias')->values();
+//        dd(json_encode($vcs_revisions->pluck('Alias')->values()));
+        $all_files = $vcs_revisions;
 
         $modules = [];
 
@@ -274,7 +275,7 @@ class VCSModulesController extends Utility
 
     public function modulate($project, $date_revisions)
     {
-        $revisionchunks = $date_revisions->chunk(25);
+        $revisionchunks = $date_revisions->chunk(50);
         foreach ($revisionchunks as $chunk) {
 //            $cycle = 0;
             foreach ($chunk as $revisionDate) {
