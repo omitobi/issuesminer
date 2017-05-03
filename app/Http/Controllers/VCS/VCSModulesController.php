@@ -44,7 +44,7 @@ class VCSModulesController extends Utility
             return $this->respond('Project does not exist', 404);
         }
 
-        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->take(200)->chunk(100, function ($daterevchunk) use ($project){
+        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->take(50)->chunk(25, function ($daterevchunk) use ($project){
             $modules = $this->modulate(
                 $project,
                 $daterevchunk
@@ -275,7 +275,7 @@ class VCSModulesController extends Utility
 
     public function modulate($project, $date_revisions)
     {
-        $revisionchunks = $date_revisions->chunk(50);
+        $revisionchunks = $date_revisions->chunk(25);
         foreach ($revisionchunks as $chunk) {
 //            $cycle = 0;
             foreach ($chunk as $revisionDate) {
@@ -332,8 +332,8 @@ class VCSModulesController extends Utility
                         'module_touched' => '1'
                     ]);
                 }
-                $this->populateModules(
-                    null, $revisionDate->Id, $this->premodules, 'modules');
+//                $this->populateModules(
+//                    null, $revisionDate->Id, $this->premodules, 'modules');
                 unset( $this->premodules );
                 $this->premodules = [];
 

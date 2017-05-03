@@ -262,13 +262,15 @@ class VCSEstimationsController extends Utility
 
     function countTillDate($project, $date, $revisionDate)
     {
+
 //        $result->developers = $distinct->distinct()->count('CommitId');
         $result = collect([]);
-
-        $distinct = $project->vcsFileRevisions()->with('vcsFIleType')
+        $distinct = $project->vcsFileRevisions()
+            ->with('vcsFIleType')
             ->where('Date', '<=', $date) //hopefully laravel didn't do string comparison but allow sql do the job
             ->orderBy('Date', 'asc');
-        $vcs_revisions = $distinct->get();
+        $vcs_revisions = $distinct->get(['AuthorEmail', 'Extension', 'CommitId']);
+        dd(json_encode($vcs_revisions));
 
         $committer = $vcs_revisions->where('AuthorEmail', $revisionDate->CommitterId);
         $result->developers = $vcs_revisions->unique('AuthorEmail')->count();
@@ -281,7 +283,7 @@ class VCSEstimationsController extends Utility
         $result->xml = $vcs_revisions->where('vcsFileType.IsXML', '1')->unique('CommitId')->count();
         $result->xsl = $vcs_revisions->where('Extension', '.xsl')->unique('CommitId')->count();
 
-        $result->committer_previous =$committer->unique('CommitId')->count();
+        $result->committer_previous = $committer->unique('CommitId')->count();
         $result->committer_previous_imp = $committer->where('vcsFileType.IsImperative', '1')->unique('CommitId')->count();
         $result->committer_previous_oo = $committer->where('vcsFileType.IsOO', '1')->unique('CommitId')->count();
         $result->committer_previous_xml = $committer->where('vcsFileType.IsXML', '1')->unique('CommitId')->count();
@@ -312,17 +314,6 @@ class VCSEstimationsController extends Utility
 
     function revise($project, $revisionDates)
     {
-//        $gen_count = 0;
-//
-//        $imp_f_count = ['aic' => 0, 'aooc' => 0, 'axmc' => 0, 'axlc' => 0];
-//        $cntplus = ['aic' => 0, 'aooc' => 0, 'axmc' => 0, 'axlc' => 0];
-//
-//        $_revisions_by_imp = [];
-//        $dev_size = 0;
-//
-//        $developers = $revisions->unique('CommitterId');
-//        $_revisions_by_date = $revisions->groupBy('Date');
-
         $revisionchunks = $revisionDates->chunk(50);
         foreach ($revisionchunks as $chunk)
         {
