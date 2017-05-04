@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 class VCSEstimationsController extends Utility
 {
 
+    protected  $total_developers;
 
     protected $estimations;
     protected $results;
@@ -85,6 +86,8 @@ class VCSEstimationsController extends Utility
             ->orWhere('id', $_project)->first()) {
             return $this->respond('Project does not exist', 404);
         }
+        $this->total_developers = $project->commits()->distinct('author_email')->count('author_email');
+        dd($this->total_developers);
 
 //            $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(20)->with('vcsFileType')->with('vcsFileExtension')->get();
         $revisionDates = $project->projectDateRevisions()
@@ -269,43 +272,69 @@ class VCSEstimationsController extends Utility
 
 //        $result->developers = $distinct->distinct()->count('CommitId');
         $result = collect([]);
-        $distinct = $project->vcsFileRevisions()
-            ->select('Id', 'CommitId', 'AuthorEmail', 'FiletypeId')
-            ->where('Date', '<=', $date) //hopefully laravel didn't do string comparison but allow sql do the job
+        $commits = $project->commits()
+            ->select(
+                'id as CommitId',
+                'date_committed as Date',
+                'author_email as AuthorEmail'
+            )
+            ->where('date_committed', '<=', $date)
             ->orderBy('Date', 'asc')
-            ->with('vcsFIleType');
+            ->get()
+            ->transform(function ($item, $key){
+            return [
+                'CommitId' => $item->CommitId,
+                'Date' => str_replace(['T', 'Z'], [' ', ''], $item->Date),
+                'AuthorEmail' => $item->AuthorEmail
+            ];
+        });
+
+//        dd(json_encode($commits[0]));
+        $distinct = $project->vcsFileRevisions()
+            ->select('Id', 'CommitId', 'AuthorEmail', 'FiletypeId', 'Extension')
+            ->where('Date', '<=', $date) //hopefully laravel didn't do string comparison but allow sql do the job
+            ->orderBy('Date', 'asc');
+//            ->with('vcsFIleType');
 
         $vcs_revisions = $distinct->get();
-        dd(json_encode($vcs_revisions[0]));
+        $vcs_revisions->transform(function ($item, $key) {
+            return [
+                'Id' => $item->Id,
+                'CommitId' => $item->CommitId,
+                'AuthorEmail' => $item->AuthorEmail,
+                'Extension' => mb_strtolower(substr($item->Extension, 1))
+                ];
+        });
 
         $committer = $vcs_revisions->where('AuthorEmail', $revisionDate->CommitterId);
-        $result->developers = $vcs_revisions->unique('AuthorEmail')->count();
+        $result->developers = $commits->unique('AuthorEmail')->count();
+        $result->total_developers = $this->total_developers;
 
 //        $commits_coll = collect($vcs_revisions->unique('CommitId')->toArray());
 //        $commitIds = $commits_coll->keyBy('CommitId')->keys();
 
-        $result->imperative = $vcs_revisions->where('vcsFileType.IsImperative', '1')->unique('CommitId')->count();
-        $result->oo = $vcs_revisions->where('vcsFileType.IsOO', '1')->unique('CommitId')->count();
-        $result->xml = $vcs_revisions->where('vcsFileType.IsXML', '1')->unique('CommitId')->count();
+        $result->imperative = $vcs_revisions->whereIn('Extension', $this->imp_langs)->unique('CommitId')->count();
+        $result->oo = $vcs_revisions->whereIn('Extension', $this->oo_langs)->unique('CommitId')->count();
+        $result->xml = $vcs_revisions->whereIn('Extension', $this->xmls)->unique('CommitId')->count();
         $result->xsl = $vcs_revisions->where('Extension', '.xsl')->unique('CommitId')->count();
 
         $result->committer_previous = $committer->unique('CommitId')->count();
-        $result->committer_previous_imp = $committer->where('vcsFileType.IsImperative', '1')->unique('CommitId')->count();
-        $result->committer_previous_oo = $committer->where('vcsFileType.IsOO', '1')->unique('CommitId')->count();
-        $result->committer_previous_xml = $committer->where('vcsFileType.IsXML', '1')->unique('CommitId')->count();
+        $result->committer_previous_imp = $committer->whereIn('Extension', $this->imp_langs)->unique('CommitId')->count();
+        $result->committer_previous_oo = $committer->whereIn('Extension', $this->oo_langs)->unique('CommitId')->count();
+        $result->committer_previous_xml = $committer->whereIn('Extension', $this->xmls)->unique('CommitId')->count();
         $result->committer_previous_xsl = $committer->where('Extension', '.xsl')->unique('CommitId')->count();
 
 
-        $result->imp_files = $vcs_revisions->where('vcsFileType.IsImperative', '1')->unique('Alias')->count();
-        $result->oo_files = $vcs_revisions->where('vcsFileType.IsOO', '1')->unique('Alias')->count();
-        $result->xml_files = $vcs_revisions->where('vcsFileType.IsXML', '1')->unique('Alias')->count();
+        $result->imp_files = $vcs_revisions->whereIn('Extension', $this->imp_langs)->unique('Alias')->count();
+        $result->oo_files = $vcs_revisions->whereIn('Extension', $this->oo_langs)->unique('Alias')->count();
+        $result->xml_files = $vcs_revisions->whereIn('Extension', $this->xmls)->unique('Alias')->count();
         $result->xsl_files = $vcs_revisions->where('Extension', '.xsl')->unique('Alias')->count();
 
-        $result->imp_developers = $vcs_revisions->where('vcsFileType.IsImperative', '1')->unique('AuthorEmail')->count();
-        $result->oo_developers =  $vcs_revisions->where('vcsFileType.IsOO', '1')->unique('AuthorEmail')->count();
-        $result->xml_developers = $vcs_revisions->where('vcsFileType.IsXML', '1')->unique('AuthorEmail')->count();
+        $result->imp_developers = $vcs_revisions->whereIn('Extension', $this->imp_langs)->unique('AuthorEmail')->count();
+        $result->oo_developers =  $vcs_revisions->whereIn('Extension', $this->oo_langs)->unique('AuthorEmail')->count();
+        $result->xml_developers = $vcs_revisions->whereIn('Extension', $this->xmls)->unique('AuthorEmail')->count();
         $result->xsl_developers = $vcs_revisions->where('Extension', '.xsl')->unique('AuthorEmail')->count();
-
+//        dd(json_encode($this->toArray($result)));
         return $result;
     }
 
@@ -393,6 +422,7 @@ class VCSEstimationsController extends Utility
 //                if ($cylce === 10): break; endif;
             }
 
+            dd(\GuzzleHttp\json_encode($this->estimations));
             if($this->insertOrUpdate($this->estimations, 'VCSEstimations')){
                 ProjectDateRevision::whereIn(
                     'Id', $chunk->pluck('Id')->toArray()
