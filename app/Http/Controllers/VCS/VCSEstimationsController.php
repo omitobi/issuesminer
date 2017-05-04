@@ -87,7 +87,11 @@ class VCSEstimationsController extends Utility
         }
 
 //            $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(20)->with('vcsFileType')->with('vcsFileExtension')->get();
-        $revisionDates = $project->projectDateRevisions()->where('estimation_touched', '0')->orderBy('Date','asc')->take(150)->get();
+        $revisionDates = $project->projectDateRevisions()
+            ->where('estimation_touched', '0')
+            ->orderBy('Date','asc')
+            ->take(150)
+            ->get();
         $revise = $this->revise(
             $project,
             $revisionDates
@@ -266,11 +270,13 @@ class VCSEstimationsController extends Utility
 //        $result->developers = $distinct->distinct()->count('CommitId');
         $result = collect([]);
         $distinct = $project->vcsFileRevisions()
-            ->with('vcsFIleType')
+            ->select('Id', 'CommitId', 'AuthorEmail', 'FiletypeId')
             ->where('Date', '<=', $date) //hopefully laravel didn't do string comparison but allow sql do the job
-            ->orderBy('Date', 'asc');
-        $vcs_revisions = $distinct->get(['AuthorEmail', 'Extension', 'CommitId']);
-        dd(json_encode($vcs_revisions));
+            ->orderBy('Date', 'asc')
+            ->with('vcsFIleType');
+
+        $vcs_revisions = $distinct->get();
+        dd(json_encode($vcs_revisions[0]));
 
         $committer = $vcs_revisions->where('AuthorEmail', $revisionDate->CommitterId);
         $result->developers = $vcs_revisions->unique('AuthorEmail')->count();

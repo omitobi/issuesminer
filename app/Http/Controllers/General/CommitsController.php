@@ -36,7 +36,7 @@ class CommitsController extends Utility
             return $this->respond('Project does not exist', 404);
         }
 
-        $vcs_project->commits()->update(['touched' => 0]);
+        $vcs_project->commits()->update(['touched' => '0']);
 
         return $vcs_project;
     }
