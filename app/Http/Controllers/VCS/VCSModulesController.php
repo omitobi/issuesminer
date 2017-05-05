@@ -44,14 +44,18 @@ class VCSModulesController extends Utility
             return $this->respond('Project does not exist', 404);
         }
 
-        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->take(50)->chunk(25, function ($daterevchunk) use ($project){
-            $modules = $this->modulate(
+        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->take(50)->get();
+        $modules = $this->modulate(
                 $project,
-                $daterevchunk
-            );
-        });
+            $date_revisions
+        );
 
-
+        $rev_count = $date_revisions->count();
+        return $this->respond([
+            'message' => 'Load successfully .... VCSModules with '.$rev_count.' VCSProjectDateRevisions',
+            'status' => 'success',
+            'extra' => $rev_count ? '' : 'covered'
+        ]);
         return $this->respond(['passed']);
     }
 

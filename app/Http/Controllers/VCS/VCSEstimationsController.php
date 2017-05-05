@@ -58,14 +58,19 @@ class VCSEstimationsController extends Utility
 
                 if($this->insertOrUpdate($revisions->toArray(), 'ProjectDateRevision' )){
 
-                    VCSFileRevision::whereIn('Id', $revisions->pluck('RevisionId')->toArray())->where(['datetouched' => '0', 'ProjectId' => $project->Id])
+                    VCSFileRevision::whereIn('Id', $revisions->pluck('RevisionId')->toArray())
+                        ->where(['datetouched' => '0', 'ProjectId' => $project->Id])
                         ->update(['datetouched' => 1]);
 
                 };
 
             });
 
-       return $this->respond($this->something);
+       return $this->respond([
+        'message' => 'Load successfully .... All Dates into ProjectDateRevision',
+        'status' => 'success',
+        'extra' => 'covered'
+    ]);
     }
 
 
@@ -87,7 +92,8 @@ class VCSEstimationsController extends Utility
             return $this->respond('Project does not exist', 404);
         }
         $this->total_developers = $project->commits()->distinct('author_email')->count('author_email');
-        dd($this->total_developers);
+        $this->total_developers = !$this->total_developers ? 0 : $this->total_developers+1;
+//        dd($this->total_developers);
 
 //            $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(20)->with('vcsFileType')->with('vcsFileExtension')->get();
         $revisionDates = $project->projectDateRevisions()
@@ -100,6 +106,11 @@ class VCSEstimationsController extends Utility
             $revisionDates
         );
 
+        return $this->respond([
+            'message' => 'Load successfully .... estimations with projectDateRevisions',
+            'status' => 'success',
+            'extra' => $revisionDates->count() ? '' : 'covered'
+        ]);
         return $this->respond( ['ProjectId' => $project->Id, 'Estimations' => $this->estimations] );
     }
 
@@ -271,6 +282,8 @@ class VCSEstimationsController extends Utility
     {
 
 //        $result->developers = $distinct->distinct()->count('CommitId');
+        $_date = Carbon::parse($date);
+
         $result = collect([]);
         $commits = $project->commits()
             ->select(
@@ -328,12 +341,19 @@ class VCSEstimationsController extends Utility
         $result->imp_files = $vcs_revisions->whereIn('Extension', $this->imp_langs)->unique('Alias')->count();
         $result->oo_files = $vcs_revisions->whereIn('Extension', $this->oo_langs)->unique('Alias')->count();
         $result->xml_files = $vcs_revisions->whereIn('Extension', $this->xmls)->unique('Alias')->count();
-        $result->xsl_files = $vcs_revisions->where('Extension', '.xsl')->unique('Alias')->count();
+        $result->xsl_files = $vcs_revisions->where('Extension', 'xsl')->unique('Alias')->count();
 
+        //todo: are these counts total even in the future?
+        //todo: are are everything from today till next year?
         $result->imp_developers = $vcs_revisions->whereIn('Extension', $this->imp_langs)->unique('AuthorEmail')->count();
         $result->oo_developers =  $vcs_revisions->whereIn('Extension', $this->oo_langs)->unique('AuthorEmail')->count();
         $result->xml_developers = $vcs_revisions->whereIn('Extension', $this->xmls)->unique('AuthorEmail')->count();
-        $result->xsl_developers = $vcs_revisions->where('Extension', '.xsl')->unique('AuthorEmail')->count();
+        $result->xsl_developers = $vcs_revisions->where('Extension', 'xsl')->unique('AuthorEmail')->count();
+
+        $result->yearly_loc_churn = $project->commits()
+            ->where('date_committed', '>', $date)
+            ->where('date_committed', '<=', $_date->copy()->addYear()->toDateTimeString())
+        ->sum('total');
 //        dd(json_encode($this->toArray($result)));
         return $result;
     }
@@ -382,15 +402,18 @@ class VCSEstimationsController extends Utility
                 $oo_files = $_counts->oo_files;
                 $xml_files = $_counts->xml_files;
                 $xsl_files = $_counts->xsl_files;
+                $total_developers = $_counts->total_developers;
                 $imp_developers = $_counts->imp_developers;
                 $oo_developers = $_counts->oo_developers;
                 $xml_developers = $_counts->xml_developers;
                 $xsl_developers = $_counts->xsl_developers;
 
+                $yearly_loc_churn = $_counts->yearly_loc_churn;
+
                 /**
                  * Other derived fields
                  */
-                $this->populateEstimations($date, 'Total_Developers', $_counts->developers);
+                $this->populateEstimations($date, 'Total_Developers', $total_developers);
                 $this->populateEstimations($date, 'Total_Imp_Developers', $imp_developers, 'on');
                 $this->populateEstimations($date, 'Total_OO_Developers', $oo_developers);
                 $this->populateEstimations($date, 'Total_XML_Developers', $xml_developers);
@@ -418,11 +441,13 @@ class VCSEstimationsController extends Utility
                 $this->populateEstimations($date, 'XML_Files', $xml_files, 'abc');
                 $this->populateEstimations($date, 'XSL_Files', $xsl_files, 'abc');
 
+                $this->populateEstimations($date, 'ProjectYearlyLOCChurn', $yearly_loc_churn);
+
 //                $cylce++;
 //                if ($cylce === 10): break; endif;
             }
 
-            dd(\GuzzleHttp\json_encode($this->estimations));
+//            dd(json_encode($this->estimations));
             if($this->insertOrUpdate($this->estimations, 'VCSEstimations')){
                 ProjectDateRevision::whereIn(
                     'Id', $chunk->pluck('Id')->toArray()

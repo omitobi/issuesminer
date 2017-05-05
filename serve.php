@@ -17,7 +17,7 @@ $cust_port = isset($argv[1]) ? escapeshellarg($argv[1]) : 8001;
 $port = $cust_port;
 $message = "Started server on localhost:{$port}";
 $comm = system("php -S localhost:{$port} -t ./public 2>&1", $output);
-print_r ("Started app on localhost:{$port} at ".time());
-print_r ($output);
+//print_r ("Started app on localhost:{$port} at ".time());
+//print_r ($output);
 
 exit($comm);
