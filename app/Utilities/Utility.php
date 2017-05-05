@@ -19,7 +19,7 @@ class Utility extends Controller
     protected $unwanted_files;
 
     protected $oo_langs = ['cpp', 'cs', 'php', 'java', 'cxx', 'hpp','js','d', 'fs', 'vb', 'ts', 'py'];
-    protected $imp_langs = ['c','cpp', 'cxx', 'cs', 'php', 'java', 'cxx', '.h', 'hpp', 'js', 'py', 'rb', 'd', 'groovy', 'fs', 'fsx'];
+    protected $imp_langs = ['c','cpp', 'cxx', 'cs', 'php', 'java', 'cxx', 'h', 'hpp', 'js', 'py', 'rb', 'd', 'groovy', 'fs', 'fsx'];
     protected $texts = [
         'dtd',
         'py',
@@ -296,5 +296,13 @@ class Utility extends Controller
         $sql = "INSERT INTO {$table}({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
 
         return \DB::statement( $sql );
+    }
+
+
+    function dot(array $array)
+    {
+        return array_map(function ($value){
+            return '.'.$value;
+        }, $array);
     }
 }

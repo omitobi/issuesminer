@@ -24,7 +24,11 @@ use Illuminate\Http\Request;
 class VCSEstimationsController extends Utility
 {
 
-    protected  $total_developers;
+    protected  $total_developers = 0;
+    protected  $total_imp_developers = 0;
+    protected  $total_oo_developers = 0;
+    protected  $total_xml_developers = 0;
+    protected  $total_xsl_developers = 0;
 
     protected $estimations;
     protected $results;
@@ -82,38 +86,65 @@ class VCSEstimationsController extends Utility
          */
         ini_set('max_execution_time', 420);
 
-
         if(!$_project = $request->get('project_name')) {
             return response(['error' => 'invalid project_name'], 400);
         }
-//         sleep ( 61 );
         if(!$project = VCSProject::where('name', $_project)
             ->orWhere('id', $_project)->first()) {
             return $this->respond('Project does not exist', 404);
         }
-        $this->total_developers = $project->commits()->distinct('author_email')->count('author_email');
-        $this->total_developers = !$this->total_developers ? 0 : $this->total_developers+1;
-//        dd($this->total_developers);
+
+        /**
+         * Set Total developers
+         */
+        $total_developers = $project->commits()->select('id','author_email', 'Date')->distinct();
+
+        $all_dev_count = $total_developers->count('author_email');
+        $this->total_developers = $all_dev_count;
+
+        $this->total_imp_developers = $project->vcsFileRevisions()
+            ->select('AuthorEmail')
+            ->whereIn('Extension', $this->dot($this->imp_langs))
+            ->distinct()
+            ->count('AuthorEmail');
+        $this->total_oo_developers = $project->vcsFileRevisions()
+            ->select('AuthorEmail')
+            ->whereIn('Extension', $this->dot($this->oo_langs))
+            ->distinct()
+            ->count('AuthorEmail');
+        $this->total_xml_developers =$project->vcsFileRevisions()
+            ->select('AuthorEmail')
+            ->whereIn('Extension', $this->dot($this->xmls))
+            ->distinct()
+            ->count('AuthorEmail');
+        $this->total_xsl_developers = $project->vcsFileRevisions()
+            ->select('AuthorEmail')
+            ->where('Extension', '.xsl')
+            ->distinct()
+            ->count('AuthorEmail');
 
 //            $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(20)->with('vcsFileType')->with('vcsFileExtension')->get();
+
+        /**
+         * Developers end here -- real revision starts
+         */
         $revisionDates = $project->projectDateRevisions()
             ->where('estimation_touched', '0')
             ->orderBy('Date','asc')
-            ->take(150)
+            ->take(2)
             ->get();
-        $revise = $this->revise(
-            $project,
-            $revisionDates
-        );
+        if($dtcnt = $revisionDates->count())
+            $revise = $this->revise(
+                $project,
+                $revisionDates
+            );
 
         return $this->respond([
-            'message' => 'Load successfully .... estimations with projectDateRevisions',
+            'message' => 'Load successfully .... '.$dtcnt.' estimations with projectDateRevisions',
             'status' => 'success',
-            'extra' => $revisionDates->count() ? '' : 'covered'
+            'extra' => $dtcnt ? '' : 'covered'
         ]);
-        return $this->respond( ['ProjectId' => $project->Id, 'Estimations' => $this->estimations] );
     }
-
 
 
     function populateEstimations( $date, $field, $value, $action='add' )
@@ -285,22 +316,22 @@ class VCSEstimationsController extends Utility
         $_date = Carbon::parse($date);
 
         $result = collect([]);
-        $commits = $project->commits()
-            ->select(
-                'id as CommitId',
-                'date_committed as Date',
-                'author_email as AuthorEmail'
-            )
-            ->where('date_committed', '<=', $date)
-            ->orderBy('Date', 'asc')
-            ->get()
-            ->transform(function ($item, $key){
-            return [
-                'CommitId' => $item->CommitId,
-                'Date' => str_replace(['T', 'Z'], [' ', ''], $item->Date),
-                'AuthorEmail' => $item->AuthorEmail
-            ];
-        });
+//        $commits = $project->commits()
+//            ->select(
+//                'id as CommitId',
+//                'date_committed as Date',
+//                'author_email as AuthorEmail'
+//            )
+//            ->where('date_committed', '<=', $date)
+//            ->orderBy('Date', 'asc')
+//            ->get()
+//            ->transform(function ($item, $key){
+//            return [
+//                'CommitId' => $item->CommitId,
+//                'Date' => str_replace(['T', 'Z'], [' ', ''], $item->Date),
+//                'AuthorEmail' => $item->AuthorEmail
+//            ];
+//        });
 
 //        dd(json_encode($commits[0]));
         $distinct = $project->vcsFileRevisions()
@@ -320,11 +351,13 @@ class VCSEstimationsController extends Utility
         });
 
         $committer = $vcs_revisions->where('AuthorEmail', $revisionDate->CommitterId);
-        $result->developers = $commits->unique('AuthorEmail')->count();
-        $result->total_developers = $this->total_developers;
+        $result->developers = $vcs_revisions->unique('AuthorEmail')->count();
 
-//        $commits_coll = collect($vcs_revisions->unique('CommitId')->toArray());
-//        $commitIds = $commits_coll->keyBy('CommitId')->keys();
+        $result->total_developers = $this->total_developers;
+        $result->total_imp_developers = $this->total_imp_developers;
+        $result->total_oo_developers = $this->total_oo_developers;
+        $result->total_xml_developers = $this->total_xml_developers;
+        $result->total_xsl_developers = $this->total_xsl_developers;
 
         $result->imperative = $vcs_revisions->whereIn('Extension', $this->imp_langs)->unique('CommitId')->count();
         $result->oo = $vcs_revisions->whereIn('Extension', $this->oo_langs)->unique('CommitId')->count();
@@ -337,14 +370,12 @@ class VCSEstimationsController extends Utility
         $result->committer_previous_xml = $committer->whereIn('Extension', $this->xmls)->unique('CommitId')->count();
         $result->committer_previous_xsl = $committer->where('Extension', '.xsl')->unique('CommitId')->count();
 
+        $files_todate = $vcs_revisions->where('Date', $date);
+        $result->imp_files = $files_todate->whereIn('Extension', $this->imp_langs)->unique('Alias')->count();
+        $result->oo_files = $files_todate->whereIn('Extension', $this->oo_langs)->unique('Alias')->count();
+        $result->xml_files = $files_todate->whereIn('Extension', $this->xmls)->unique('Alias')->count();
+        $result->xsl_files = $files_todate->where('Extension', 'xsl')->unique('Alias')->count();
 
-        $result->imp_files = $vcs_revisions->whereIn('Extension', $this->imp_langs)->unique('Alias')->count();
-        $result->oo_files = $vcs_revisions->whereIn('Extension', $this->oo_langs)->unique('Alias')->count();
-        $result->xml_files = $vcs_revisions->whereIn('Extension', $this->xmls)->unique('Alias')->count();
-        $result->xsl_files = $vcs_revisions->where('Extension', 'xsl')->unique('Alias')->count();
-
-        //todo: are these counts total even in the future?
-        //todo: are are everything from today till next year?
         $result->imp_developers = $vcs_revisions->whereIn('Extension', $this->imp_langs)->unique('AuthorEmail')->count();
         $result->oo_developers =  $vcs_revisions->whereIn('Extension', $this->oo_langs)->unique('AuthorEmail')->count();
         $result->xml_developers = $vcs_revisions->whereIn('Extension', $this->xmls)->unique('AuthorEmail')->count();
@@ -389,24 +420,34 @@ class VCSEstimationsController extends Utility
                  */
 
                 $_counts = $this->countTillDate($project, $date, $revisionDate);
+
                 $imperative_count = $_counts->imperative;
                 $oo = $_counts->oo;
                 $xml = $_counts->xml;
                 $xsl = $_counts->xsl;
+
                 $committer_previous = $_counts->committer_previous;
                 $committer_previous_imp = $_counts->committer_previous_imp;
                 $committer_previous_oo = $_counts->committer_previous_oo;
                 $committer_previous_xml = $_counts->committer_previous_xml;
                 $committer_previous_xsl = $_counts->committer_previous_xsl;
+
                 $imp_files = $_counts->imp_files;
                 $oo_files = $_counts->oo_files;
                 $xml_files = $_counts->xml_files;
                 $xsl_files = $_counts->xsl_files;
-                $total_developers = $_counts->total_developers;
-                $imp_developers = $_counts->imp_developers;
-                $oo_developers = $_counts->oo_developers;
-                $xml_developers = $_counts->xml_developers;
-                $xsl_developers = $_counts->xsl_developers;
+
+                $total_developers = $this->total_developers;
+                $total_imp_developers = $this->total_imp_developers;
+                $total_oo_developers = $this->total_oo_developers;
+                $total_xml_developers = $this->total_xml_developers;
+                $total_xsl_developers = $this->total_xsl_developers;
+
+                $developers_to_date = $_counts->developers;
+                $imp_developers_to_date = $_counts->imp_developers;
+                $oo_developers_to_date = $_counts->oo_developers;
+                $xml_developers_to_date = $_counts->xml_developers;
+                $xsl_developers_to_date = $_counts->xsl_developers;
 
                 $yearly_loc_churn = $_counts->yearly_loc_churn;
 
@@ -414,21 +455,21 @@ class VCSEstimationsController extends Utility
                  * Other derived fields
                  */
                 $this->populateEstimations($date, 'Total_Developers', $total_developers);
-                $this->populateEstimations($date, 'Total_Imp_Developers', $imp_developers, 'on');
-                $this->populateEstimations($date, 'Total_OO_Developers', $oo_developers);
-                $this->populateEstimations($date, 'Total_XML_Developers', $xml_developers);
-                $this->populateEstimations($date, 'Total_XSL_Developers', $xsl_developers);
+                $this->populateEstimations($date, 'Total_Imp_Developers', $total_imp_developers, 'on');
+                $this->populateEstimations($date, 'Total_OO_Developers', $total_oo_developers);
+                $this->populateEstimations($date, 'Total_XML_Developers', $total_xml_developers);
+                $this->populateEstimations($date, 'Total_XSL_Developers', $total_xsl_developers);
 
-                $this->populateEstimations($date, 'Developers_On_Project_To_Date', $_counts->developers);
-                $this->populateEstimations($date, 'Imp_Developers_On_Project_To_Date', $imp_developers);
-                $this->populateEstimations($date, 'OO_Developers_On_Project_To_Date', $oo_developers);
-                $this->populateEstimations($date, 'XML_Developers_On_Project_To_Date', $xml_developers);
-                $this->populateEstimations($date, 'XSL_Developers_On_Project_To_Date', $xsl_developers);
+                $this->populateEstimations($date, 'Developers_On_Project_To_Date', $developers_to_date);
+                $this->populateEstimations($date, 'Imp_Developers_On_Project_To_Date', $imp_developers_to_date);
+                $this->populateEstimations($date, 'OO_Developers_On_Project_To_Date', $oo_developers_to_date);
+                $this->populateEstimations($date, 'XML_Developers_On_Project_To_Date', $xml_developers_to_date);
+                $this->populateEstimations($date, 'XSL_Developers_On_Project_To_Date', $xsl_developers_to_date);
 
-                $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $imperative_count / $_counts->developers, 'on');
-                $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $oo / $_counts->developers, 'on');
-                $this->populateEstimations($date, 'Avg_Previous_XML_Commits', $xml / $_counts->developers, 'on');
-                $this->populateEstimations($date, 'Avg_Previous_XSL_Commits', $xsl / $_counts->developers, 'on');
+                $this->populateEstimations($date, 'Avg_Previous_Imp_Commits', $imperative_count / $developers_to_date, 'on');
+                $this->populateEstimations($date, 'Avg_Previous_OO_Commits', $oo / $developers_to_date, 'on');
+                $this->populateEstimations($date, 'Avg_Previous_XML_Commits', $xml / $developers_to_date, 'on');
+                $this->populateEstimations($date, 'Avg_Previous_XSL_Commits', $xsl / $developers_to_date, 'on');
 
                 $this->populateEstimations($date, 'Committer_Previous_Commits', $committer_previous, 'on');
                 $this->populateEstimations($date, 'Committer_Previous_Imp_Commits', $committer_previous_imp, 'on');

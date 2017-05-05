@@ -63,7 +63,7 @@ class VCSFileRevisionsController extends Utility
 //            $_SESSION['timeout'] = time() + 70;rer
 
             $this->headers['headers']['Accept']  = 'application/vnd.github.v3.full+json';
-            Log::notice('For project '.$project->id.' \'s Commits all '.$commits_count.' retrieved is being handled');
+            Log::notice('For project '.$project->Id.' \'s Commits all '.$commits_count.' retrieved is being handled');
             foreach ($commits as $key => $commit)
             {
                 $the_commit = $commit;
