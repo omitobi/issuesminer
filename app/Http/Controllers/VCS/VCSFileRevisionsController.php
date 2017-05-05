@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\Log;
 class VCSFileRevisionsController extends Utility
 {
 
-    protected $unwanted_files;
     public function sortRevisions(Request $request)
     {
         return $this->loadFromCommits($request);
@@ -34,12 +33,6 @@ class VCSFileRevisionsController extends Utility
 
     public function loadFromCommits(Request $request)
     {
-        $this->unwanted_files[] = '.jar';
-//        $logger = app()->make(\Psr\Log\LoggerInterface::class);
-////        $handler = new \Monolog\Handler\StreamHandler(storage_path('logs/lumen.log'));
-//        $logger->popHandler();
-//        $logger->pushHandler(new \Monolog\Handler\ErrorLogHandler());
-
         $_errors = [];
 //         sleep ( 61 );
         if(!$project = VCSProject::where('name', $request->get('project_name'))->first())
@@ -53,7 +46,7 @@ class VCSFileRevisionsController extends Utility
         $text_files_revision_counts = 0;
         $commits = Commit::where('project_id', $project->Id)
             ->where('touched', '0')->orderBy('date_committed', 'asc')
-            ->take(9)  //in order to stick with Github's 83.33 requests per minute
+            ->take(80)  //in order to stick with Github's 83.33 requests per minute
             ->get();
         $commits_count = $commits->count();
         if($commits_count) {
@@ -153,10 +146,10 @@ class VCSFileRevisionsController extends Utility
                         $file_['patch'] = (!isset($_file->patch)) ?:$_file->patch;
                         $file_['ContentsU'] = '0';
 //                        $content = (!isset($_file->contents_url)) ?0: $this->ping($_file->contents_url, $this->headers, ['body'], 'GET', true);
-                        if(!in_array('.' . $ext, $this->unwanted_files)){
+                        if( !in_array( mb_strtolower( $ext ), $this->unwanted_files ) ){
                             try{
                                 $file_['ContentsU'] = (!isset($_file->raw_url) || !$_file->raw_url) ?'0': (string)$this->ping($_file->raw_url, [], ['body'], 'GET', true);
-                                Log::notice('Commit '.$the_commit->id.' here and and the raw_url'.(!isset($_file->raw_url)?'':$_file->raw_url).' is being fetched');
+                                Log::notice('Commit '.$the_commit->id.' here and and the raw_url '.(!isset($_file->raw_url)?'':$_file->raw_url).' is being fetched');
 //                                 $headers = $this->headers;
 //                                $headers['headers']['Accept']  = 'application/vnd.github.v3.raw';
 //                                $file_['ContentsU'] = !$_file->contents_url ?:(string)$this->ping($_file->contents_url, $headers, ['body'], 'GET', true);
@@ -240,6 +233,7 @@ class VCSFileRevisionsController extends Utility
                 $the_commit->touched = json_encode($isTouched);
                 $the_commit->description = $_commit->commit->message;
                 $the_commit->update();
+                Log::notice('Commit '.$the_commit->id.' must have been marked done and author updated, next commit?');
 //                break;
 //                return ;
                 $request_count ++;

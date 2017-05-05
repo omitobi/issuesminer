@@ -16,6 +16,7 @@ class Utility extends Controller
 {
     const BEFORE_STRING = 0;
     const AFTER_STRING = 1;
+    protected $unwanted_files;
 
     protected $oo_langs = ['cpp', 'cs', 'php', 'java', 'cxx', 'hpp','js','d', 'fs', 'vb', 'ts', 'py'];
     protected $imp_langs = ['c','cpp', 'cxx', 'cs', 'php', 'java', 'cxx', '.h', 'hpp', 'js', 'py', 'rb', 'd', 'groovy', 'fs', 'fsx'];
@@ -118,6 +119,7 @@ class Utility extends Controller
 
     public function __construct()
     {
+        $this->unwanted_files[] = 'jar';
         $this->guzzleclient = new GuzzleHttp\Client();
         $this->access_token = getenv('GITHUB_API_SECRET');
         $this->github_url = getenv('GITHUB_URL');
