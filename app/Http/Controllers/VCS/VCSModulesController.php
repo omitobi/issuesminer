@@ -7,7 +7,6 @@
  */
 namespace App\Http\Controllers\VCS;
 
-
 use App\Project;
 use  \App\Utilities\Utility;
 use App\VCSModels\ProjectDateRevision;
@@ -18,7 +17,6 @@ use Illuminate\Http\Request;
 
 class VCSModulesController extends Utility
 {
-
     protected $modules;
     protected $premodules;
 
@@ -44,7 +42,7 @@ class VCSModulesController extends Utility
             return $this->respond('Project does not exist', 404);
         }
 
-        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->take(50)->get();
+        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->take(200)->get();
         $modules = $this->modulate(
                 $project,
             $date_revisions
@@ -98,8 +96,8 @@ class VCSModulesController extends Utility
         $result = collect([]);
 
         $distinct = $project->vcsFileRevisions()->select('Date', 'Alias', 'Extension')
-            ->where('Date', '<=', $revisionDate->Date)//hopefully laravel didn't do string comparison but allow sql do the job
-            ->orderBy('Date', 'asc')->groupBy('Alias');
+            ->where('Date', '=', $revisionDate->Date)//hopefully laravel didn't do string comparison but allow sql do the job
+            ->orderBy('Date', 'asc');
         $vcs_revisions = $distinct->get();  //todo: why not return distinct result already from query?
 
 //        dd(json_encode($vcs_revisions->pluck('Alias')->values()));
@@ -131,7 +129,7 @@ class VCSModulesController extends Utility
             {
                 $extension = mb_strtolower(substr($modules_file->Extension, 1));
 
-                if(starts_with($modules_file->Alias, $module)){
+                if($module === "" || starts_with($modules_file->Alias, $module)){
                     $all_the_files++;
                     $modules[$module] = ['Files' => $all_the_files];
 
@@ -273,6 +271,8 @@ class VCSModulesController extends Utility
             }
         }
         $result->modules = $modules;
+        if(!$result->modules)
+            dd($this->respond($modules)->content());
 
         return $result;
     }

@@ -82,9 +82,9 @@ class VCSEstimationsController extends Utility
     public function loadAll(Request $request)
     {
         /**
-         * Allow up to 5 minutes execution
+         * Allow up to 7 minutes execution
          */
-        ini_set('max_execution_time', 420);
+        ini_set('max_execution_time', 1200);
 
         if(!$_project = $request->get('project_name')) {
             return response(['error' => 'invalid project_name'], 400);
@@ -97,7 +97,7 @@ class VCSEstimationsController extends Utility
         /**
          * Set Total developers
          */
-        $total_developers = $project->commits()->select('id','author_email', 'Date')->distinct();
+        $total_developers = $project->commits()->select('id','author_email', 'date_committed')->distinct();
 
         $all_dev_count = $total_developers->count('author_email');
         $this->total_developers = $all_dev_count;
@@ -129,9 +129,10 @@ class VCSEstimationsController extends Utility
          * Developers end here -- real revision starts
          */
         $revisionDates = $project->projectDateRevisions()
+            ->select('Id', 'ProjectId', 'Date', 'CommitId', 'CommitterId')
             ->where('estimation_touched', '0')
             ->orderBy('Date','asc')
-            ->take(2)
+            ->take(100)
             ->get();
         if($dtcnt = $revisionDates->count())
             $revise = $this->revise(
@@ -504,7 +505,7 @@ class VCSEstimationsController extends Utility
 
 //        $this->insertOrUpdate(array_values($this->estimations), 'VCSEstimations');
 
-//        return $this->respond( $this->estimations );
+        return true;
 
     }
 
