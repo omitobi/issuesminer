@@ -299,10 +299,11 @@ class Utility extends Controller
     }
 
 
-    function dot(array $array)
+    static function dot(array $array)
     {
         return array_map(function ($value){
             return '.'.$value;
         }, $array);
     }
+
 }

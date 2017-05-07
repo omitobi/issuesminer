@@ -14,7 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class Cachetility
+class Cachetility extends Utility
 {
     protected $cacheExpiry;
 
@@ -22,7 +22,7 @@ class Cachetility
     {
         $carbon = $carbon ?: Carbon::now();
         $this->cacheExpiry = $this->cacheExpiry ? : $carbon->addMinutes(10);
-
+        parent::__construct();
 //        if(function_exists('getProject')){
 //
 //            forward_static_call('getProject', get)
@@ -39,6 +39,21 @@ class Cachetility
                     ->count('author_email');
             });
     }
+
+
+    public static function countDevelopers($project, $langs, $lang_type, $expiry = null)
+    {
+        $expiry = self::setExpiry($expiry);
+        return Cache::remember('vcs_dev_count_project_'.$project->Id.'_lang_'.$lang_type, $expiry, function () use ($project, $langs) {
+            return $project->vcsFileRevisions()
+                ->select('AuthorEmail')
+                ->whereIn('Extension', parent::dot($langs))
+                ->distinct()
+                ->count('AuthorEmail');
+        });
+    }
+
+
 
     protected static function setExpiry($expiry = 0)
     {
