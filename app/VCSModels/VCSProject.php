@@ -36,4 +36,9 @@ class VCSProject extends Model
     {
         return $this->hasMany(Commit::class, 'project_id', 'Id');
     }
+
+    public function scopeSeek($query, $project_id)
+    {
+        return $query->where('Id', $project_id)->orWhere('Name',$project_id)->first();
+    }
 }

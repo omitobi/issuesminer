@@ -62,3 +62,4 @@ $app->get('/vcs/estimations', 'VCS\VCSEstimationsController@loadAll');
 $app->get('/vcs/revisions/dates', 'VCS\VCSEstimationsController@loadRevisionDates');
 
 $app->get('/vcs/modules', 'VCS\VCSModulesController@loadAll');
+$app->get('cachetests', 'VCS\CachesController@test');
