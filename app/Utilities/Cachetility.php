@@ -57,7 +57,7 @@ class Cachetility extends Utility
 
     protected static function setExpiry($expiry = 0)
     {
-        $expiry = $expiry ? : Carbon::now()->addMinutes(10)->toDateTimeString();
+        $expiry = $expiry ? : Carbon::now()->addMinutes(60)->toDateTimeString();
         return $expiry;
     }
 

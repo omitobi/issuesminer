@@ -95,10 +95,6 @@ class VCSEstimationsController extends Utility
 
     public function loadAll(Request $request)
     {
-        /**
-         * Allow up to 7 minutes execution
-         */
-        ini_set('max_execution_time', 1200);
 
         if(!$_project = $request->get('project_name')) {
             return response(['error' => 'invalid project_name'], 400);
@@ -112,19 +108,11 @@ class VCSEstimationsController extends Utility
          * Set Total developers
          */
 
-        $total_developers = $project->commits()->select('id','author_email', 'date_committed')->distinct();
-
-        $all_dev_count = $this->cachetility->getDevelopersCount($project);
-//
-//        $all_dev_count = $total_developers->count('author_email');
-        $this->total_developers = $all_dev_count;
-
+        $this->total_developers = $this->cachetility->getDevelopersCount($project);
         $this->total_imp_developers = $this->cachetility->countDevelopers($project, $this->imp_langs, 'imp');
         $this->total_oo_developers  =  $this->cachetility->countDevelopers($project, $this->oo_langs, 'oo');
         $this->total_xml_developers = $this->cachetility->countDevelopers($project, $this->xmls, 'xml');
         $this->total_xsl_developers = $this->cachetility->countDevelopers($project, ['xsl'], 'xsl');
-
-//            $revisions = $project->vcsFileRevisions()->orderBy('Date','asc')->take(20)->with('vcsFileType')->with('vcsFileExtension')->get();
 
         /**
          * Developers end here -- real revision starts
@@ -135,6 +123,15 @@ class VCSEstimationsController extends Utility
             ->orderBy('Date','asc')
             ->take(100)
             ->get();
+
+        /**
+         * Allow up to 7 minutes execution
+         */
+        ini_set('max_execution_time', 1200);
+
+        /**
+         * start collecting the revisions
+         */
         if($dtcnt = $revisionDates->count())
             $revise = $this->revise(
                 $project,

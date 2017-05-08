@@ -154,7 +154,7 @@ class VCSFileRevisionsController extends Utility
 //                                $headers['headers']['Accept']  = 'application/vnd.github.v3.raw';
 //                                $file_['ContentsU'] = !$_file->contents_url ?:(string)$this->ping($_file->contents_url, $headers, ['body'], 'GET', true);
 ////                            }
-                            } catch ( ClientException $exception){
+                            } catch ( \Exception $exception){
                                 $file_['ContentsU'] = '0';
                             }
                         }
