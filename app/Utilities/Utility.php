@@ -119,7 +119,7 @@ class Utility extends Controller
 
     public function __construct()
     {
-        $this->unwanted_files[] = 'jar';
+        $this->unwanted_files = ['jar', 'gif', 'jpg', 'png'];
         $this->guzzleclient = new GuzzleHttp\Client();
         $this->access_token = getenv('GITHUB_API_SECRET');
         $this->github_url = getenv('GITHUB_URL');
