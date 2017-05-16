@@ -10,10 +10,12 @@ namespace App\Http\Controllers\VCS;
 use App\Project;
 use  \App\Utilities\Utility;
 use App\VCSModels\ProjectDateRevision;
+use App\VCSModels\VCS_Module;
 use App\VCSModels\VCSProject;
 use App\VCSModels\VCSSystem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class VCSModulesController extends Utility
 {
@@ -42,7 +44,7 @@ class VCSModulesController extends Utility
             return $this->respond('Project does not exist', 404);
         }
 
-        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->take(200)->get();
+        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->orderBy('Date', 'asc')->take(1)->get();
         $modules = $this->modulate(
                 $project,
             $date_revisions
@@ -93,13 +95,21 @@ class VCSModulesController extends Utility
      */
     function countTillDate($project, $revisionDate)
     {
+        $last_revised_ids = ProjectDateRevision::where('Date', '<', $revisionDate->Date)->where('ProjectId', $project->Id)->orderBy('Date', 'desc')->get(['Id']);
+//        dd($this->to_json($last_revised_ids->all()));
+        $last_modules = null;
+        if(count($last_revised_ids)){
+           $last_modules =  VCS_Module::whereIn('ProjectDateRevisionId',  $last_revised_ids->values() )->where('ProjectId', $project->Id)->get();
+
+        }
+
         $result = collect([]);
 
-        $distinct = $project->vcsFileRevisions()->select('Date', 'Alias', 'Extension')
-            ->where('Date', '=', $revisionDate->Date)//hopefully laravel didn't do string comparison but allow sql do the job
+        $distinct = $project->vcsFileRevisions()->select('Date', 'Alias', 'Extension', 'status')
+            ->where('Date', '<=', $revisionDate->Date)//hopefully laravel didn't do string comparison but allow sql do the job
             ->orderBy('Date', 'asc');
         $vcs_revisions = $distinct->get();  //todo: why not return distinct result already from query?
-
+//        dd(json_encode($vcs_revisions));
 //        dd(json_encode($vcs_revisions->pluck('Alias')->values()));
         $all_files = $vcs_revisions;
 
@@ -109,6 +119,10 @@ class VCSModulesController extends Utility
 
         $result->modules_files = $all_files;
 
+        if($last_modules){
+
+//            dd($this->to_json($last_modules));
+        }
 
         foreach ($result->the_modules as $module)
         {
@@ -130,68 +144,73 @@ class VCSModulesController extends Utility
                 $extension = mb_strtolower(substr($modules_file->Extension, 1));
 
                 if($module === "" || starts_with($modules_file->Alias, $module)){
-                    $all_the_files++;
+
+
+                    $all_the_files += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
+
+
+
                     $modules[$module] = ['Files' => $all_the_files];
 
 
                     if(!isset($modules[$module])) {
                         if (in_array($extension, $this->xmls)) {
-                            $xml_here++;
+                            $xml_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module] = ['XMLFiles' => $xml_here];
                         }else{
                             $modules[$module] = ['XMLFiles' => $xml_here];
                         }
                         if (in_array($extension, $this->imp_langs)) {
-                            $imp_here++;
+                            $imp_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module] = ['ImperativeFiles' => $imp_here];
                         }else{
                             $modules[$module] = ['ImperativeFiles' => $imp_here];
                         }
                         if (in_array($extension, $this->oo_langs)) {
-                            $oo_here++;
+                            $oo_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module] = ['OOFiles' => $oo_here];
                         }else{
                             $modules[$module] = ['OOFiles' => $oo_here];
                         }
                         if ($extension === 'xsl') {
-                            $xls_here++;
+                            $xls_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             //todo: change table column name to XSLFiles and this to XSLFiles not 'XLS'
                             $modules[$module] = ['XLSFiles' => $xls_here];
                         }else{
                             $modules[$module] = ['XLSFiles' => $xls_here];
                         }
                         if ($extension === 'java') {
-                            $xls_here++;
+                            $xls_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module] = ['JAVAFiles' => $java_here];
                         }else{
                             $modules[$module] = ['JAVAFiles' => $java_here];
                         }
                         if (in_array(mb_strtolower($extension), ['c','h'])) {
-                            $c_here++;
+                            $c_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module] = ['CFiles' => $c_here];
                         }else{
                             $modules[$module] = ['CFiles' => $c_here];
                         }
                         if (mb_strtolower($extension) === 'cs') {
-                            $cs_here++;
+                            $cs_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module] = ['CSharpFiles' => $cs_here];
                         }else{
                             $modules[$module] = ['CSharpFiles' => $cs_here];
                         }
                         if (mb_strtolower($extension) === 'rb') {
-                            $rb_here++;
+                            $rb_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module] = ['RubyFiles' => $rb_here];
                         }else{
                             $modules[$module] = ['RubyFiles' => $rb_here];
                         }
                         if (in_array(mb_strtolower($extension), ['php', 'phpt'])) {
-                            $php_here++;
+                            $php_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module] = ['PHPFiles' => $php_here];
                         }else{
                             $modules[$module] = ['PHPFiles' => $php_here];
                         }
                         if (mb_strtolower($extension) === 'js') {
-                            $js_here++;
+                            $js_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module] = ['JavaScriptFiles' => $js_here];
                         }else{
                             $modules[$module] = ['JavaScriptFiles' => $js_here];
@@ -199,67 +218,67 @@ class VCSModulesController extends Utility
                     }
                     else {
                         if (in_array($extension, $this->xmls)) {
-                            $xml_here++;
+                            $xml_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['XMLFiles'] = $xml_here;
                         }else{
                             $modules[$module]['XMLFiles'] = $xml_here;
                         }
                         if ($extension === 'xsl') {
-                            $xls_here++;
+                            $xls_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['XLSFiles'] =  $xls_here;
                         }else{
                             $modules[$module]['XLSFiles'] =  $xls_here;
                         }
                         if (in_array($extension, $this->oo_langs)) {
-                            $oo_here++;
+                            $oo_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['OOFiles'] = $oo_here;
                         }else{
                             $modules[$module]['OOFiles'] = $oo_here;
                         }
                         if (in_array($extension, $this->imp_langs)) {
-                            $imp_here++;
+                            $imp_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['ImperativeFiles'] =  $imp_here;
                         }else{
                             $modules[$module]['ImperativeFiles'] = $imp_here;
                         }
                         if ($extension === 'java') {
-                            $xls_here++;
+                            $xls_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['JavaFiles'] = $java_here;
                         }else{
                             $modules[$module]['JavaFiles'] = $java_here;
                         }
                         if (mb_strtolower($extension) === 'cpp') {
-                            $cpp_here++;
+                            $cpp_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['CPPFiles'] = $cpp_here;
                         }else{
                             $modules[$module]['CPPFiles'] = $cpp_here;
                         }
                         if (in_array(mb_strtolower($extension), ['c','h'])) {
-                            $c_here++;
+                            $c_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['CFiles'] = $c_here;
                         }else{
                             $modules[$module]['CFiles'] = $c_here;
                         }
                         if (mb_strtolower($extension) === 'cs') {
-                            $cs_here++;
+                            $cs_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['CSharpFiles'] = $cs_here;
                         }else{
                             $modules[$module]['CSharpFiles'] = $cs_here;
                         }
                         if (in_array(mb_strtolower($extension), ['php', 'phpt'])) {
-                            $php_here++;
+                            $php_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['PHPFiles'] = $php_here;
                         }else{
                             $modules[$module]['PHPFiles'] = $php_here;
                         }
                         if (mb_strtolower($extension) === 'js') {
-                            $js_here++;
+                            $js_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['JavaScriptFiles'] = $js_here;
                         }else{
                             $modules[$module]['JavaScriptFiles'] = $js_here;
                         }
                         if (mb_strtolower($extension) === 'rb') {
-                            $rb_here++;
+                            $rb_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['RubyFiles'] = $rb_here;
                         }else{
                             $modules[$module]['RubyFiles'] = $rb_here;
@@ -271,6 +290,8 @@ class VCSModulesController extends Utility
             }
         }
         $result->modules = $modules;
+
+//        dd($this->to_json($modules));
         if(!$result->modules)
             dd($this->respond($modules)->content());
 
@@ -279,7 +300,10 @@ class VCSModulesController extends Utility
 
     public function modulate($project, $date_revisions)
     {
+        Log::notice('VCSModules: projectId '.$project->Id.' gets a set of date revisions : '.$date_revisions->implode('Id', '|'));
+
         $revisionchunks = $date_revisions->chunk(25);
+        $prev_modules = [];
         foreach ($revisionchunks as $chunk) {
 //            $cycle = 0;
             foreach ($chunk as $revisionDate) {
@@ -287,8 +311,7 @@ class VCSModulesController extends Utility
                 /**
                  * General counts
                  */
-
-                $_counts = $this->countTillDate($project, $revisionDate);
+                $_counts = $this->countTillDate($project, $revisionDate, $prev_modules);
                 $modules = $_counts->modules;
 
                 foreach ($modules as $p => $module) {
@@ -322,9 +345,13 @@ class VCSModulesController extends Utility
 
                     $this->populateModules($module['ModulePath'], 'ModuleId', sha1($module['ModulePath']));
                 }
+
+                Log::notice('VCSModules: projectId '.$project->Id.' Modules Retrieved at revisionDateId  '.$revisionDate->Id.' has ', $this->premodules);
                 /**
                  * Set and reset
                  */
+                $prev_modules = $this->premodules;
+//                dd($this->to_json($prev_modules));
 
                 if($this->insertOrUpdate($this->premodules, 'VCS_modules')){
                     ProjectDateRevision::where(

@@ -11,12 +11,15 @@ namespace App\Utilities;
 use GuzzleHttp;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
+use Monolog\Logger;
 
 class Utility extends Controller
 {
     const BEFORE_STRING = 0;
     const AFTER_STRING = 1;
     protected $unwanted_files;
+    protected $log;
 
     protected $oo_langs = ['cpp', 'cs', 'php', 'java', 'cxx', 'hpp','js','d', 'fs', 'vb', 'ts', 'py'];
     protected $imp_langs = ['c','cpp', 'cxx', 'cs', 'php', 'java', 'cxx', 'h', 'hpp', 'js', 'py', 'rb', 'd', 'groovy', 'fs', 'fsx'];
@@ -124,6 +127,7 @@ class Utility extends Controller
         $this->access_token = getenv('GITHUB_API_SECRET');
         $this->github_url = getenv('GITHUB_URL');
         $this->setDone();
+        $this->log = '';
     }
 
 
@@ -217,6 +221,18 @@ class Utility extends Controller
     function jsonToObject($_json)
     {
         return json_decode($_json);
+    }
+
+    /**
+     * Encode the variable/value to a json string using json_encode()
+     *
+     * @param $_var
+     * @param int $options
+     * @param int $depth
+     * @return string
+     */
+    function to_json($_var, $options = 0, $depth = 512){
+        return json_encode($_var, $options, $depth);
     }
 
     function toArray($_var)
