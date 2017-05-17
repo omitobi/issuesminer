@@ -125,7 +125,7 @@ class VCSEstimationsController extends Utility
             ->get();
 
         /**
-         * Allow up to 7 minutes execution
+         * Allow up to 20 minutes execution
          */
         ini_set('max_execution_time', 1200);
 
@@ -503,7 +503,6 @@ class VCSEstimationsController extends Utility
             $this->estimations = [];
         }
 
-//        $this->insertOrUpdate(array_values($this->estimations), 'VCSEstimations');
 
         return true;
 

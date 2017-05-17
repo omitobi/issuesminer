@@ -31,7 +31,7 @@ class VCSModulesController extends Utility
         /**
          * Allow up to 5 minutes execution
          */
-        ini_set('max_execution_time', 300);
+
         ini_set('memory_limit', '256M');
 //        ini_set('php_value memory_limit', '256M');
 
@@ -44,7 +44,12 @@ class VCSModulesController extends Utility
             return $this->respond('Project does not exist', 404);
         }
 
-        $date_revisions = $project->projectDateRevisions()->where('module_touched', '0')->orderBy('Date', 'asc')->take(1)->get();
+        $date_revisions = $project->projectDateRevisions()
+            ->where('module_touched', '0')
+            ->orderBy('Date', 'asc')
+            ->take(200)
+            ->get();
+
         $modules = $this->modulate(
                 $project,
             $date_revisions
@@ -95,17 +100,11 @@ class VCSModulesController extends Utility
      */
     function countTillDate($project, $revisionDate)
     {
-        $last_revised_ids = ProjectDateRevision::where('Date', '<', $revisionDate->Date)->where('ProjectId', $project->Id)->orderBy('Date', 'desc')->get(['Id']);
-//        dd($this->to_json($last_revised_ids->all()));
-        $last_modules = null;
-        if(count($last_revised_ids)){
-           $last_modules =  VCS_Module::whereIn('ProjectDateRevisionId',  $last_revised_ids->values() )->where('ProjectId', $project->Id)->get();
-
-        }
 
         $result = collect([]);
 
-        $distinct = $project->vcsFileRevisions()->select('Date', 'Alias', 'Extension', 'status')
+        $distinct = $project->vcsFileRevisions()
+            ->select('Date', 'Alias', 'Extension', 'status')
             ->where('Date', '<=', $revisionDate->Date)//hopefully laravel didn't do string comparison but allow sql do the job
             ->orderBy('Date', 'asc');
         $vcs_revisions = $distinct->get();  //todo: why not return distinct result already from query?
@@ -118,11 +117,6 @@ class VCSModulesController extends Utility
         $result->the_modules = $this->getModules($all_files->pluck('Alias')->values());
 
         $result->modules_files = $all_files;
-
-        if($last_modules){
-
-//            dd($this->to_json($last_modules));
-        }
 
         foreach ($result->the_modules as $module)
         {
@@ -148,7 +142,7 @@ class VCSModulesController extends Utility
 
                     $all_the_files += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
 
-
+                    Log::notice('VCSModules: projectId '.$project->Id.' This module at this date : '.$modules_file->Date.' file '.$modules_file->Alias.' has status '.$modules_file->status);
 
                     $modules[$module] = ['Files' => $all_the_files];
 
@@ -302,20 +296,23 @@ class VCSModulesController extends Utility
     {
         Log::notice('VCSModules: projectId '.$project->Id.' gets a set of date revisions : '.$date_revisions->implode('Id', '|'));
 
-        $revisionchunks = $date_revisions->chunk(25);
-        $prev_modules = [];
+        $revisionchunks = $date_revisions->chunk(50);
+
         foreach ($revisionchunks as $chunk) {
 //            $cycle = 0;
+            ini_set('max_execution_time', 1200);
+
             foreach ($chunk as $revisionDate) {
 
                 /**
                  * General counts
                  */
-                $_counts = $this->countTillDate($project, $revisionDate, $prev_modules);
+                $_counts = $this->countTillDate($project, $revisionDate);
                 $modules = $_counts->modules;
 
                 foreach ($modules as $p => $module) {
 
+//                    Log::notice('VCSModules: projectId '.$project->Id.' This module at this date : '.$revisionDate->Date.' is '.$module['ModulePath']);
                     /**
                      * Others follow here
                      */
@@ -344,14 +341,12 @@ class VCSModulesController extends Utility
                     $this->populateModules($module['ModulePath'], 'RubyFiles', $module['RubyFiles']);
 
                     $this->populateModules($module['ModulePath'], 'ModuleId', sha1($module['ModulePath']));
+//                    Log::notice('VCSModules: projectId '.$project->Id.' Modules Retrieved at revisionDateId  '.$revisionDate->Id.' has '.$module['Files']);
                 }
 
-                Log::notice('VCSModules: projectId '.$project->Id.' Modules Retrieved at revisionDateId  '.$revisionDate->Id.' has ', $this->premodules);
                 /**
                  * Set and reset
                  */
-                $prev_modules = $this->premodules;
-//                dd($this->to_json($prev_modules));
 
                 if($this->insertOrUpdate($this->premodules, 'VCS_modules')){
                     ProjectDateRevision::where(
