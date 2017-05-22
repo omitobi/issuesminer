@@ -50,18 +50,20 @@ class VCSModulesController extends Utility
             ->take(200)
             ->get();
 
-        $modules = $this->modulate(
-                $project,
-            $date_revisions
-        );
-
         $rev_count = $date_revisions->count();
+
+        if($rev_count){
+            $modules = $this->modulate(
+                $project,
+                $date_revisions
+            );
+        }
+
         return $this->respond([
             'message' => 'Load successfully .... VCSModules with '.$rev_count.' VCSProjectDateRevisions',
             'status' => 'success',
             'extra' => $rev_count ? '' : 'covered'
         ]);
-        return $this->respond(['passed']);
     }
 
     /**
@@ -300,9 +302,9 @@ class VCSModulesController extends Utility
 
         foreach ($revisionchunks as $chunk) {
 //            $cycle = 0;
-            ini_set('max_execution_time', 1200);
 
             foreach ($chunk as $revisionDate) {
+                ini_set('max_execution_time', 1200);
 
                 /**
                  * General counts
