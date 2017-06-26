@@ -146,18 +146,18 @@ class VCSFileRevisionsController extends Utility
                         $file_['patch'] = (!isset($_file->patch)) ?:$_file->patch;
                         $file_['ContentsU'] = '0';
 //                        $content = (!isset($_file->contents_url)) ?0: $this->ping($_file->contents_url, $this->headers, ['body'], 'GET', true);
-                        if( !in_array( mb_strtolower( $ext ), $this->unwanted_files ) ){
-                            try{
-                                $file_['ContentsU'] = (!isset($_file->raw_url) || !$_file->raw_url) ?'0': (string)$this->ping($_file->raw_url, [], ['body'], 'GET', true);
-                                Log::notice('Commit '.$the_commit->id.' here and and the raw_url '.(!isset($_file->raw_url)?'':$_file->raw_url).' is being fetched');
-//                                 $headers = $this->headers;
-//                                $headers['headers']['Accept']  = 'application/vnd.github.v3.raw';
-//                                $file_['ContentsU'] = !$_file->contents_url ?:(string)$this->ping($_file->contents_url, $headers, ['body'], 'GET', true);
-////                            }
-                            } catch ( \Exception $exception){
-                                $file_['ContentsU'] = '0';
-                            }
-                        }
+//                        if( !in_array( mb_strtolower( $ext ), $this->unwanted_files ) ){
+//                            try{
+//                                $file_['ContentsU'] = (!isset($_file->raw_url) || !$_file->raw_url) ?'0': (string)$this->ping($_file->raw_url, [], ['body'], 'GET', true);
+//                                Log::notice('Commit '.$the_commit->id.' here and and the raw_url '.(!isset($_file->raw_url)?'':$_file->raw_url).' is being fetched');
+////                                 $headers = $this->headers;
+////                                $headers['headers']['Accept']  = 'application/vnd.github.v3.raw';
+////                                $file_['ContentsU'] = !$_file->contents_url ?:(string)$this->ping($_file->contents_url, $headers, ['body'], 'GET', true);
+//////                            }
+//                            } catch ( \Exception $exception){
+//                                $file_['ContentsU'] = '0';
+//                            }
+//                        }
 
                         $substr_count = $file_['ContentsU'] == '0' ? 0 : substr_count($file_['ContentsU'], "\n")+1;
                         $file_['LinesOfCode'] = $substr_count;

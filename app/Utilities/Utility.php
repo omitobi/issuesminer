@@ -122,7 +122,7 @@ class Utility extends Controller
 
     public function __construct()
     {
-        $this->unwanted_files = ['jar', 'gif', 'jpg', 'png'];
+        $this->unwanted_files = ['jar', 'gif', 'jpg', 'png', 'gz', 'tar', 'zip'];
         $this->guzzleclient = new GuzzleHttp\Client();
         $this->access_token = getenv('GITHUB_API_SECRET');
         $this->github_url = getenv('GITHUB_URL');
@@ -134,7 +134,7 @@ class Utility extends Controller
     /**
      * We can have something like this:
      *
-     * {
+     * <code type="json">{
     "laravel": {
     "repo": "https://api.github.com/laravel/laravel",
     "issues": "https://api.github.com/laravel/laravel/issues",
@@ -142,6 +142,7 @@ class Utility extends Controller
     "commits": "https://api.github.com/laravel/laravel/commits"
     }
     }
+     * </code>
      */
     public function setDone()
     {
@@ -231,7 +232,8 @@ class Utility extends Controller
      * @param int $depth
      * @return string
      */
-    function to_json($_var, $options = 0, $depth = 512){
+    function to_json($_var, $options = 0, $depth = 512)
+    {
         return json_encode($_var, $options, $depth);
     }
 
