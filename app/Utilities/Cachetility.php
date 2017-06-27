@@ -54,6 +54,14 @@ class Cachetility extends Utility
     }
 
 
+    public static function getRevisionDateIndex($project, $expiry = null)
+    {
+        $expiry = self::setExpiry($expiry);
+        return Cache::remember('vcs_daterevision_idx_project_'.$project->Id, $expiry, function () use ($project) {
+            return $project->projectDateRevisions()->orderBy('Date', 'Asc')
+                ->pluck('Date');
+        });
+    }
 
     protected static function setExpiry($expiry = 0)
     {

@@ -30,6 +30,13 @@ class VCSEstimationsController extends Utility
     private $dot_xsl = '.xsl';
 
 
+    /**
+     * @var \Illuminate\Support\Collection $project_dates_index
+     */
+    protected  $project_dates_index;
+
+    private $total_dates_count = 0;
+
     protected  $total_developers = 0;
     protected  $total_imp_developers = 0;
     protected  $total_oo_developers = 0;
@@ -118,6 +125,9 @@ class VCSEstimationsController extends Utility
         $this->total_oo_developers  =  $this->cachetility->countDevelopers($project, $this->oo_langs, 'oo');
         $this->total_xml_developers = $this->cachetility->countDevelopers($project, $this->xmls, 'xml');
         $this->total_xsl_developers = $this->cachetility->countDevelopers($project, ['xsl'], 'xsl');
+
+        $this->project_dates_index = $this->cachetility->getRevisionDateIndex($project);
+        $this->total_dates_count = $this->project_dates_index->count();
 
         $this->dot_imps = dot_array($this->imp_langs);
         $this->dot_oos = dot_array($this->oo_langs);
@@ -424,6 +434,10 @@ class VCSEstimationsController extends Utility
             ->where('date_committed', '>', $date)
             ->where('date_committed', '<=', $_date->copy()->addYear()->toDateTimeString())
         ->sum('total');
+
+        $_idx = $this->project_dates_index->search($date, true)+1;
+        $_perc = ($_idx/$this->total_dates_count)*1;
+        $result->dev_percent = $_perc;
 //        dd(json_encode($this->toArray($files_todate)));
         return $result;
     }
@@ -490,6 +504,7 @@ class VCSEstimationsController extends Utility
                 $xsl_developers_to_date = $_counts->xsl_developers;
 
                 $yearly_loc_churn = $_counts->yearly_loc_churn;
+                $dev_percent = $_counts->dev_percent;
 
                 /**
                  * Other derived fields
@@ -524,12 +539,13 @@ class VCSEstimationsController extends Utility
                 $this->populateEstimations($date, 'XSL_Files', $xsl_files, 'abc');
 
                 $this->populateEstimations($date, 'ProjectYearlyLOCChurn', $yearly_loc_churn);
+                $this->populateEstimations($date, 'DevelopmentStageAsPercent', $dev_percent);
 
 //                $cylce++;
 //                if ($cylce === 10): break; endif;
             }
-
 //            dd(json_encode($this->estimations));
+
             if($this->insertOrUpdate($this->estimations, 'VCSEstimations')){
                 ProjectDateRevision::whereIn(
                     'Id', $chunk->pluck('Id')->toArray()
