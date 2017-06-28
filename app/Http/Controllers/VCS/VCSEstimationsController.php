@@ -158,7 +158,7 @@ class VCSEstimationsController extends Utility
             );
 
         return $this->respond([
-            'message' => 'Load successfully .... '.$dtcnt.' estimations with projectDateRevisions',
+            'message' => 'Load successfully .... '.$dtcnt.' estimations with projectDateRevisions at '.Carbon::parse(null, 'Europe/Helsinki'),
             'status' => 'success',
             'extra' => $dtcnt ? '' : 'covered'
         ]);
