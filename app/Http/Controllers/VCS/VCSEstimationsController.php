@@ -538,8 +538,8 @@ class VCSEstimationsController extends Utility
                 $this->populateEstimations($date, 'XML_Files', $xml_files, 'abc');
                 $this->populateEstimations($date, 'XSL_Files', $xsl_files, 'abc');
 
-                $this->populateEstimations($date, 'ProjectYearlyLOCChurn', $yearly_loc_churn);
-                $this->populateEstimations($date, 'DevelopmentStageAsPercent', $dev_percent);
+                $this->populateEstimations($date, 'ProjectYearlyLOCChurn', $yearly_loc_churn, 'abc');
+                $this->populateEstimations($date, 'DevelopmentStageAsPercent', $dev_percent, 'abc');
 
 //                $cylce++;
 //                if ($cylce === 10): break; endif;

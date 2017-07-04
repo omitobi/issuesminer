@@ -32,3 +32,5 @@ composer.phar
 
 /app/config/packages
 /public/packages
+/storage/paths
+/storage/structures

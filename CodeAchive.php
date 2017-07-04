@@ -353,6 +353,76 @@ class CodeAchive
 //$this->insertOrUpdate(array_values($this->estimations), 'VCSEstimations');
 
 
+/*
+ *
 
+
+
+public function index(Request $request)
+    {
+        $token =  $request->session()->get('token');
+        $user_response = $this->guzzleclient->getBodyToArray(user_from_token_route, ['token' => $token]);
+        if ($user_response->isNotOK()) {
+            return back()->with('error', true);
+        }
+        $user = $user_response['body'];
+        $user_names = $user['data']['name'];
+        $user['data']['first_name'] = substr($user_names, 0, strripos($user_names, ' '));
+        $user['data']['last_name'] = substr($user_names, strripos($user_names, ' '));
+        $dt = Carbon::now();
+        $expiryDate = Carbon::parse($user['data']['code'][0]['expires_at']);
+        if ($dt->copy()->startOfDay()->eq($expiryDate->copy()->startOfDay())) {
+            $user['data']['code']['expiredays'] = 0;
+        } elseif ($dt->copy()->startOfDay()->greaterThan($expiryDate->copy()->startOfDay())) {
+            $user['data']['code']['expiredays'] = $dt->diffInDays($expiryDate, false);
+        } else {
+            $user['data']['code']['expiredays'] = $dt->diffInDays($expiryDate, false) + 1;
+        }
+
+        $user['data']['code']['card_used'] = $user['data']['code'][0]['expires_at'] != '0000-00-00 00:00:00' ? true : false;
+
+        $user_visits_response = $this->guzzleclient->getBodyToArray(sprintf(users_visits_route, $user['data']['id']), ['include' => 'museum']);
+
+        $user_visits = $user_visits_response->isNotOK() ? [] : $user_visits_response['body'];
+
+        $user_trans_response = $this->guzzleclient->getBodyToArray(sprintf(users_transactions_route, $user['data']['id']));
+
+        $user_trans = $user_trans_response->isNotOK() ? [] : $user_trans_response['body'];
+
+        $user_payment_cards_response = $this->guzzleclient->getBodyToArray(sprintf(users_payment_cards_route, $user['data']['id']));
+
+        $user_pay_cards = $user_payment_cards_response->isNotOK() ? [] : $user_payment_cards_response['body'];
+
+        $user_renewal_response = $this->guzzleclient->getBodyToArray(sprintf(users_get_renewal_route, $user['data']['id']));
+
+        $user_renewal = $user_renewal_response->isNotOK() ? [] : $user_renewal_response['body'];
+        dd($user_renewal_response, sprintf(users_get_renewal_route, $user['data']['id']));
+//        dd($user_renewal_response, $user_trans, $user_visits, $user_pay_cards, sprintf(users_transactions_route, $user['data']['id']));
+        return view('dashboard', compact('user', 'token', 'user_visits', 'user_trans', 'user_pay_cards', 'user_renewal'));
+    }
+
+
+define('base_route', 'http://api.museoliitto.dev.neocard.fi/v1/');
+define('auth_route', base_route.'users/authenticate');
+define('user_from_token_route', base_route.'auth/users');
+define('users_route',  base_route.'users');
+define('users_password_check_route',  base_route.'users/check/password');
+define('users_password_set_route',  base_route.'users/password');
+define('users_update_info',  base_route.'users');
+define('users_logout_route',  base_route.'auth/logout');
+
+define('users_visits_route',  base_route.'users/%s/visits');
+define('users_transactions_route',  base_route.'users/%s/transactions');
+define('users_payment_cards_route',  base_route.'users/%s/paymentCards');
+define('users_get_renewal_route',  base_route.'users/%s/settings');
+
+define('users_update_renewal_route',  base_route.'user/settings');
+define('users_reset_password_route',  base_route.'users/reset_password');
+
+
+
+ *
+ *
+ */
 
 }
