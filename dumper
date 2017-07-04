@@ -38,4 +38,7 @@ $comm = system("mysqldump --where=".'"'."ProjectId = $project_id limit $limit of
 //print_r ("Started app on localhost:{$port} at ".time());
 print_r ($output);
 
+$latest_file = file_get_contents($location);
+$latest_sql = str_replace('`','', $latest_file);
+file_put_contents($location, $latest_sql);
 exit($comm);
