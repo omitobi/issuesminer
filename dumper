@@ -24,7 +24,7 @@ $offset =     isset($argv[3]) ? $argv[3] : 1000;
 $table =      isset($argv[4]) ? $argv[4] : 'VCSEstimations';
 $database =   isset($argv[5]) ? $argv[5] : 'issuesminer';
 $location =   isset($argv[6]) ? (ends_with($argv[6], '.sql') ? $argv[6] : $argv[6].'.sql')
-    : '/Users/omitobisam/Documents/Thesis/DBExports/'.$table.date('Y_m_d').'/'.$table.date('ymdHis').'.sql';
+    : '/Users/omitobisam/Documents/Thesis/DBExports/'.$table.date('Y_m_d').'/'.$table.date('ymdHis').'Project'.$project_id.'.sql';
 $sub_dir = substr($location, 0, strripos($location, '/'));
 if(!is_dir($sub_dir)) {
  mkdir($sub_dir);

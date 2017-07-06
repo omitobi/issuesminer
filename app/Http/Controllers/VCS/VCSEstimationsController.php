@@ -419,7 +419,7 @@ class VCSEstimationsController extends Utility
             }
 
         });
-        $result->files = $__files['imp_files'];
+        $result->files = $__files['files'];
         $result->imp_files = $__files['imp_files'];
         $result->oo_files = $__files['oo_files'];
         $result->xml_files = $__files['xml_files'];
@@ -467,6 +467,7 @@ class VCSEstimationsController extends Utility
 
                 $this->populateEstimations($date, 'ProjectId', $revisionDate->ProjectId, 'normal');
                 $this->populateEstimations($date, 'ProjectDateRevisionId', $revisionDate->Id, 'normal');
+                $this->populateEstimations($date, 'Date', $revisionDate->Id, 'normal');
 
                 /**
                  * General counts
