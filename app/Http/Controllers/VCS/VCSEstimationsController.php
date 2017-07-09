@@ -8,6 +8,7 @@
 namespace App\Http\Controllers\VCS;
 
 
+use App\Commit;
 use App\Project;
 use App\Utilities\Cachetility;
 use App\Utilities\CollectionUtility;
@@ -34,6 +35,11 @@ class VCSEstimationsController extends Utility
      * @var \Illuminate\Support\Collection $project_dates_index
      */
     protected  $project_dates_index;
+
+    /**
+     * @var \Illuminate\Support\Collection $project_commits_index
+     */
+    protected  $project_commits_index;
 
     private $total_dates_count = 0;
 
@@ -128,7 +134,12 @@ class VCSEstimationsController extends Utility
 
         $this->project_dates_index = $this->cachetility->getRevisionDateIndex($project);
         $this->total_dates_count = $this->project_dates_index->count();
+//        $this->cachetility->clear('vcs_commits_idx_project_'.$project->Id);
+        $this->project_commits_index = $this->cachetility->getCommitsIndex($project)->transform(function ($date){
+            return str_replace(['T', 'Z'], [' ', ''], $date);
+        });
 
+//        dd(json_it($this->project_commits_index->toArray()));
         $this->dot_imps = dot_array($this->imp_langs);
         $this->dot_oos = dot_array($this->oo_langs);
         $this->dot_xmls = dot_array($this->xmls);
@@ -470,6 +481,7 @@ class VCSEstimationsController extends Utility
                 $this->populateEstimations($date, 'ProjectId', $revisionDate->ProjectId, 'normal');
                 $this->populateEstimations($date, 'ProjectDateRevisionId', $revisionDate->Id, 'normal');
                 $this->populateEstimations($date, 'Date', $date, 'normal');
+                $this->populateEstimations($date, 'RevisionNumber', $this->project_commits_index->search($date, true)+1, 'normal');
 
                 /**
                  * General counts

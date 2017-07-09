@@ -9,6 +9,7 @@
 namespace App\Utilities;
 
 
+use App\Commit;
 use App\VCSModels\VCSProject;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -60,6 +61,15 @@ class Cachetility extends Utility
         return Cache::remember('vcs_daterevision_idx_project_'.$project->Id, $expiry, function () use ($project) {
             return $project->projectDateRevisions()->orderBy('Date', 'Asc')
                 ->pluck('Date');
+        });
+    }
+
+    public static function getCommitsIndex($project, $expiry = null)
+    {
+        $expiry = self::setExpiry($expiry);
+        return Cache::remember('vcs_commits_idx_project_'.$project->Id, $expiry, function () use ($project) {
+            return Commit::where('project_id', $project->Id)->orderBy('date_committed', 'Asc')
+                ->pluck('date_committed');
         });
     }
 
