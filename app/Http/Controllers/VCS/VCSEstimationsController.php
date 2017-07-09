@@ -386,6 +386,7 @@ class VCSEstimationsController extends Utility
         $__files['xml_files']  = 0;
         $__files['xsl_files']  = 0;
         $__files['files']  = 0;
+
         $vcs_revisions->each(function ($vcs_fr) use (&$__files){
             if ($vcs_fr['status'] === 'added') {
                 $__files['files'] ++;
@@ -403,8 +404,8 @@ class VCSEstimationsController extends Utility
                 }
             }
             if ($vcs_fr['status'] === 'removed') {
+                $__files['files'] --;
                 if (in_array($vcs_fr['Extension'], $this->dot_imps)){
-                    $__files['files'] ++;
                     $__files['imp_files'] --;
                 }
                 if (in_array($vcs_fr['Extension'], $this->dot_oos)){
@@ -419,6 +420,7 @@ class VCSEstimationsController extends Utility
             }
 
         });
+
         $result->files = $__files['files'];
         $result->imp_files = $__files['imp_files'];
         $result->oo_files = $__files['oo_files'];
@@ -467,7 +469,7 @@ class VCSEstimationsController extends Utility
 
                 $this->populateEstimations($date, 'ProjectId', $revisionDate->ProjectId, 'normal');
                 $this->populateEstimations($date, 'ProjectDateRevisionId', $revisionDate->Id, 'normal');
-                $this->populateEstimations($date, 'Date', $revisionDate->Id, 'normal');
+                $this->populateEstimations($date, 'Date', $date, 'normal');
 
                 /**
                  * General counts
