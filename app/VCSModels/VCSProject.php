@@ -26,6 +26,10 @@ class VCSProject extends Model
     {
         return $this->hasMany(VCSFileRevision::class, 'ProjectId', 'Id');
     }
+    public function vcsModules()
+    {
+        return $this->hasMany(VCS_Module::class, 'ProjectId', 'Id');
+    }
 
     public function projectDateRevisions()
     {

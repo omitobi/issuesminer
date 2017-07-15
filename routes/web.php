@@ -63,3 +63,6 @@ $app->get('/vcs/revisions/dates', 'VCS\VCSEstimationsController@loadRevisionDate
 
 $app->get('/vcs/modules', 'VCS\VCSModulesController@loadAll');
 $app->get('cachetests', 'VCS\CachesController@test');
+
+
+$app->get('/tester/projects/{project}', 'VCS\TestersController@updateVCS_ModulesWithDate');

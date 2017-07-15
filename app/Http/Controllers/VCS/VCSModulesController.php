@@ -47,7 +47,7 @@ class VCSModulesController extends Utility
         $date_revisions = $project->projectDateRevisions()
             ->where('module_touched', '0')
             ->orderBy('Date', 'asc')
-            ->take(200)
+            ->take(50)
             ->get();
 
         $rev_count = $date_revisions->count();
@@ -109,10 +109,10 @@ class VCSModulesController extends Utility
             ->select('Date', 'Alias', 'Extension', 'status')
             ->where('Date', '<=', $revisionDate->Date)//hopefully laravel didn't do string comparison but allow sql do the job
             ->orderBy('Date', 'asc');
-        $vcs_revisions = $distinct->get();  //todo: why not return distinct result already from query?
+        $all_files = $distinct->get();  //todo: why not return distinct result already from query?
 //        dd(json_encode($vcs_revisions));
 //        dd(json_encode($vcs_revisions->pluck('Alias')->values()));
-        $all_files = $vcs_revisions;
+//        $all_files = $vcs_revisions;
 
         $modules = [];
 
@@ -176,7 +176,7 @@ class VCSModulesController extends Utility
                             $modules[$module] = ['XLSFiles' => $xls_here];
                         }
                         if ($extension === 'java') {
-                            $xls_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
+                            $java_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module] = ['JAVAFiles' => $java_here];
                         }else{
                             $modules[$module] = ['JAVAFiles' => $java_here];
@@ -238,7 +238,7 @@ class VCSModulesController extends Utility
                             $modules[$module]['ImperativeFiles'] = $imp_here;
                         }
                         if ($extension === 'java') {
-                            $xls_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
+                            $java_here += $modules_file->status == 'added' ? 1 : ($modules_file->status == 'removed' ? -1 : 0);
                             $modules[$module]['JavaFiles'] = $java_here;
                         }else{
                             $modules[$module]['JavaFiles'] = $java_here;
@@ -320,6 +320,7 @@ class VCSModulesController extends Utility
                      */
 
                     $this->populateModules($module['ModulePath'], 'ProjectDateRevisionId', $revisionDate->Id);
+                    $this->populateModules($module['ModulePath'], 'Date', $revisionDate->Date);
                     $this->populateModules($module['ModulePath'], 'ProjectId', $project->Id);
                     $this->populateModules($module['ModulePath'], 'CommitId', $revisionDate->CommitId);
 
