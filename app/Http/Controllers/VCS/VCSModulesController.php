@@ -15,6 +15,7 @@ use App\VCSModels\VCSProject;
 use App\VCSModels\VCSSystem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class VCSModulesController extends Utility
@@ -105,8 +106,9 @@ class VCSModulesController extends Utility
 
         $result = collect([]);
 
-        $distinct = $project->vcsFileRevisions()
+        $distinct = DB::table('VCSFileRevision')
             ->select('Date', 'Alias', 'Extension', 'status')
+            ->where('ProjectId', $project->Id)
             ->where('Date', '<=', $revisionDate->Date)//hopefully laravel didn't do string comparison but allow sql do the job
             ->orderBy('Date', 'asc');
         $all_files = $distinct->get();  //todo: why not return distinct result already from query?
