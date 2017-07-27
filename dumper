@@ -34,7 +34,7 @@ $port = 3306;
 $user = getenv('DB_USERNAME') ? getenv('DB_USERNAME') : 'root';
 $password = getenv('DB_PASSWORD') ? getenv('DB_PASSWORD') : file_get_contents('env') ;
 
-$comm = system("mysqldump --where=".'"'."ProjectId = $project_id limit $limit offset $offset".'"'." --host=localhost --protocol=tcp --user=$user --password=$password --complete-insert=TRUE --port=$port --default-character-set=utf8 --no-create-info=TRUE --skip-triggers \"$database\" VCSEstimations > $location 2>&1", $output);
+$comm = system("mysqldump --where=".'"'."ProjectId = $project_id order by Date limit $limit offset $offset".'"'." --host=localhost --protocol=tcp --user=$user --password=$password --complete-insert=TRUE --port=$port --default-character-set=utf8 --no-create-info=TRUE --skip-triggers \"$database\" VCSEstimations > $location 2>&1", $output);
 
 print_r ( $output );
 
