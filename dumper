@@ -39,6 +39,11 @@ $comm = system("mysqldump --where=".'"'."ProjectId = $project_id order by Date l
 print_r ( $output );
 
 $latest_file = file_get_contents($location);
-$latest_sql = str_replace('`','', $latest_file);
+$latest_sql = str_replace([
+        '`',
+        'mysqldump: [Warning] Using a password on the command line interface can be insecure.',
+    'LOCK TABLES '.$table.' WRITE;',
+    'UNLOCK TABLES;',
+    ],'', $latest_file);
 file_put_contents($location, $latest_sql);
 exit($comm);
