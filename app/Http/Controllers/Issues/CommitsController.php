@@ -22,7 +22,8 @@ class CommitsController extends Utility
     {
         $_errors = [];
 //         sleep ( 61 );
-        if(!$project = Project::where('name', $request->get('project_name'))->first())
+        if(!$project = Project::where('name', $request->get('project_name'))
+            ->orWhere('id', $request->get('project_name'))->first())
         {
             return $this->respond('Project does not exist', 404);
         }
@@ -31,7 +32,7 @@ class CommitsController extends Utility
         $_record_count = 0;
         if(count($issuesPrs = IssuesPr::where('project_id', $project->id)
             ->where('commits_retrieved', '0')
-            ->take(5)  //in order to stick with Github's 30 requests per minute
+            ->take(29)  //in order to stick with Github's 30 requests per minute
             ->get())) {
 
             session_start();
@@ -49,6 +50,8 @@ class CommitsController extends Utility
                 $commits_urls[] = $pr_commits_url;
                 $_commits = $this->jsonToObject($this->ping($pr_commits_url));
 
+//                return $_commits;
+
                 foreach ($_commits as $_commit)
                 {
                     $commits_['project_id'] = $project->id;
@@ -60,8 +63,8 @@ class CommitsController extends Utility
                     $commits_['api_url'] = $_commit->url; //*
                     $commits_['web_url'] = $_commit->html_url;
                     $commits_['file_changed_count'] = 0; //to be updated when each commits is checked
-                    $commits_['date_committed'] = ''; //to be updated when each commits is checked
-                    $commits_['description'] = ''; //to be updated when each commit is checked too
+                    $commits_['date_committed'] = $_commit->commit->committer->date; //to be updated when each commits is checked
+                    $commits_['description'] = $_commit->commit->message; //to be updated when each commit is checked too
 
                     Model::unguard();
                     if(issuesCommit::firstOrCreate([

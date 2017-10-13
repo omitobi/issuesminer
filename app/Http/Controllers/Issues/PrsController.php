@@ -23,7 +23,9 @@ class PrsController extends Utility
     {
         $_errors = [];
 //         sleep ( 61 );
-        if(!$project = Project::where('name', $request->get('project_name'))->first())
+        if(!$project = Project::where('name', $request->get('project_name'))
+            ->orWhere('id', $request->get('project_name'))
+            ->first())
         {
             return $this->respond('Project does not exist', 404);
         }

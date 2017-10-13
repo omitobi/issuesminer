@@ -27,7 +27,7 @@ class AddProjectYearlyLocChurnToVCSEstimations extends Migration
     public function down()
     {
         Schema::table('VCSEstimations', function (Blueprint $table) {
-            $table->removeColumn('ProjectYearlyLOCChurn');
+            $table->dropColumn('ProjectYearlyLOCChurn');
         });
     }
 }

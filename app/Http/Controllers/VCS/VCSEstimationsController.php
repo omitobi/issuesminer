@@ -80,6 +80,8 @@ class VCSEstimationsController extends Utility
 //        return $project->vcsFileRevisions()->orderBy('Date','asc')->distinct('Date')->count('Date');
 //        return $project->vcsFileRevisions()->orderBy('Date','asc')->whereDate('Date','<=', '2006-03-23')->count();
 
+        return  $vcsRevisions = $project->vcsFileRevisions()->orderBy('Date','asc')
+            ->where('datetouched', 0)->get();
         $vcsRevisions = $project->vcsFileRevisions()->orderBy('Date','asc')->where('AuthorEmail', '!=', NULL)
         ->where('datetouched', '0')
             ->select([

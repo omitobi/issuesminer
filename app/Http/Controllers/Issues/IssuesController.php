@@ -32,11 +32,12 @@ class IssuesController extends Utility
         $_next['last_page'] = 'x';
         if(!$request->get('is_update'))
         {
-            if(!$project = Project::where('name', $project_name)->first())
+            if(!$project = Project::where('name', $project_name)->orWhere('id', $project_name)->first())
             {
                 return $this->respond("Project '{$project_name}' does not exist", 400);
             }
 
+//            return $project;
             session_start();
             if(isset($_SESSION['timeout']) && $_SESSION['timeout'] >= time()){
                 $diff = $_SESSION['timeout'] - time();
@@ -47,13 +48,18 @@ class IssuesController extends Utility
 
 
             $_query = http_build_query(array_except($request->all(), ['project_name']));
+
             $issue_url = substr($project->issues_url, 0, -9);
             $issues_query_url = $this->concat($issue_url, $_query, '?');
+//            $issues_query_url = 'https://api.github.com/search/issues?q=repo:jquery/jquery+is:pr+is:closed+bug+in:title+is:merged';
+//            $issues_query_url = 'https://api.github.com/search/issues?q=repo%3Ajquery%2Fjquery+is%3Apr+is%3Aclosed+bug+in%3Atitle+is%3Amerged&page=2';
+//            $issues_query_url = 'https://api.github.com/search/issues?q=repo:atom/atom+is:pr+is:closed+fix+in:title+is:merged+updated:%3C2017-05-01&'.$_query;
 
 
             $ping = $this->ping($issues_query_url, $this->headers, ['body', 'head'] );
             $_body = $ping->getBody();
 
+//            return $ping->getHeader('Link');
 
             if($ping->getHeader('Link') && count($header_ = $ping->getHeader('Link')))
             {
@@ -73,6 +79,7 @@ class IssuesController extends Utility
                     $_next['last_page'] = substr($links[1], $_lsn+6, -13);
             }
             $in_issues = $this->jsonToArray($_body);
+//            $in_issues = $this->jsonToArray($_body)['items'];
 
             $final_issues = [];
             $_record_count = 0;
@@ -92,7 +99,9 @@ class IssuesController extends Utility
                 {
                     foreach ($in_issue['labels'] as  $label)
                     {
-                        if ($label['name'] && $label['name'] === $request->get('labels'))
+                        if ($label['name']
+                            && $label['name'] === $request->get('labels')
+                        )
                         {
                             $final_issues['issues'][$idx]['type'] = $label['name'];
                         }
