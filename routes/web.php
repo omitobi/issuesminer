@@ -41,6 +41,7 @@ $app->get('commits/files/load', 'Issues\CommitsFilesController@loadFromCommits')
 //load all commits
 $app->get('commits', 'General\CommitsController@load');
 $app->get('commits/updates', 'General\CommitsController@updateAll');
+$app->get('commits/reload', 'General\CommitsController@updateCommitsWithoutEmail');
 $app->get('commits/untouch', 'General\CommitsController@untouch_commits');
 
 

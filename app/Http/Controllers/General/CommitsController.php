@@ -10,16 +10,20 @@ namespace App\Http\Controllers\General;
 
 use App\Commit;
 use App\Project;
+use App\Utilities\Util;
 use App\Utilities\Utility;
 use App\VCSModels\VCSFileRevision;
 use App\VCSModels\VCSProject;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use GuzzleHttp\Psr7;
 
 
 class CommitsController extends Utility
 {
+
+    use Util;
 
     public function untouch_commits(Request $request)
     {
@@ -181,7 +185,39 @@ class CommitsController extends Utility
 
 
 
+public function updateCommitsWithoutEmail(Request $request)
+{
+    try{
+        $project_name = $request->get('project_name');
+        $project = $this->getProject($project_name);
 
+    } catch (ModelNotFoundException $exception) {
+
+        return $this->respond('Project does not exist', 404);
+    }
+
+    $commits = $project->commits()->whereNull('author_email')->take(35)->get();
+
+    $commits->each( function ($commit) {
+            $result =  $this->jsonToObject($this->ping($this->concat($commit->api_url), $this->headers)->getContents());
+            $commit->author_email = $result->commit->author->email;
+            $commit->author_name = $result->commit->author->name;
+            $commit->touched = '0';
+            $commit->update();
+
+    });
+
+    $count = $commits->count();
+
+    $msg = [
+        "status" => "success",
+        "message" => "'{$count}' record(s) successfully UPDATED to {$project->Name}'s 'commits'. ",
+        "extra" => (! $count) ? 'covered' : '',
+        "params" => ''
+    ];
+
+    return $this->respond($msg, 201);
+}
 
 
 

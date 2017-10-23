@@ -15,7 +15,10 @@
 | Kill the process on the terminal 'ps -ef | grep php'
 | Then pick the process_id, and use 'kill [:process_id]' or 'kill -9 [:process_id] to force kill'
 |
+| Run in terminal: php dumper 6 2000 //ProjectId 6, offset 2000, limit -default[1000] ---
 */
+
+
 date_default_timezone_set('Europe/Helsinki');
 $where = true;
 $project_id = isset($argv[1]) ? $argv[1] : 1;

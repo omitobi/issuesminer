@@ -190,18 +190,23 @@ class Utility extends Controller
 
     protected function ping( $link, $headers = [], $default_response = ['body'], $method = 'GET', $public_client = false)
     {
-        if($public_client)
-            $client = $this->guzzleclient;
-        else
-            $client = new GuzzleHttp\Client();
+
+        $client = $public_client ? $this->guzzleclient : (new GuzzleHttp\Client());
+
         $res = $client->request($method, $link, $headers);
+
         $result = $res;
+
         $_d_count = count($default_response);
-        if($default_response[0] === 'body' && $_d_count === 1) {
+
+        if ($default_response[0] === 'body' && $_d_count === 1) {
             $result = $res->getBody();
+
         } elseif($default_response[0] === 'head'  && $_d_count === 1) {
             $result = $res->getHeaders();
+
         }
+
         return $result;
     }
 
