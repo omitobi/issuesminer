@@ -72,11 +72,11 @@ class IssuesController extends Utility
                 if (($_ls = strpos($links[1], '<')) === 1)
                     $_next['last'] =  substr($links[1], $_ls+1, strpos($links[1],'>')-2);
 
-                if (($_fsn = strpos($links[0], "&page=")) > 0)
-                    $_next['next_page'] = substr($links[0], $_fsn+6, -13);
+                if (($_fsn = strpos($links[0], "page=")) > 0)
+                    $_next['next_page'] = substr($links[0], $_fsn+5, -13);
 
-                if (($_lsn = strpos($links[1], "&page=")) > 0)
-                    $_next['last_page'] = substr($links[1], $_lsn+6, -13);
+                if (($_lsn = strpos($links[1], "page=")) > 0)
+                    $_next['last_page'] = substr($links[1], $_lsn+5, -13);
             }
             $in_issues = $this->jsonToArray($_body);
 //            $in_issues = $this->jsonToArray($_body)['items'];
@@ -133,12 +133,13 @@ class IssuesController extends Utility
 
 
                 $requests['page'] = (isset($_next['next_page'])) ? $_next['next_page'] : '';
+//                dd($_next, $ping->getHeader('Link'));
                 $msg = [
                     "status" => "success",
                     'model' => 'issues',
                     "message" => "'{$_record_count}' record(s) successfully loaded to {$project->name}'s 'issues'",
                     "extra" => (!$_record_count || !is_numeric($_next['next_page']) ) ? 'covered' : '',
-                    'next' => (isset($_next['next_page'])) ? (is_numeric(!$_next['next_page']) || ($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
+                    'next' => (isset($_next['next_page']) && is_numeric($_next['next_page']) ) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
                     'params' => http_build_query($requests),
                     'notes' => [
                         array_except($_next, ['last','page'])
@@ -151,7 +152,7 @@ class IssuesController extends Utility
                     'model' => 'issues',
                     "message" => "'{$_record_count}' record(s) successfully loaded to {$project->name}'s 'issues'",
                     "extra" => (!$_record_count || !is_numeric($_next['next_page']) ) ? 'covered' : '',
-                    'next' => (isset($_next['next_page'])) ? (is_numeric(!$_next['next_page']) || ($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
+                    'next' => (isset($_next['next_page']) && is_numeric($_next['next_page']) ) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
                     'params' => http_build_query($requests),
                     'notes' => [
                         array_except($_next, ['last','page'])
