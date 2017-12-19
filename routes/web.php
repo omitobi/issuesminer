@@ -41,6 +41,7 @@ $app->get('commits/files/load', 'Issues\CommitsFilesController@loadFromCommits')
 //load all commits
 $app->get('commits', 'General\CommitsController@load');
 $app->get('commits/updates', 'General\CommitsController@updateAll');
+$app->get('commits/reload', 'General\CommitsController@updateCommitsWithoutEmail');
 $app->get('commits/untouch', 'General\CommitsController@untouch_commits');
 
 
@@ -63,3 +64,6 @@ $app->get('/vcs/revisions/dates', 'VCS\VCSEstimationsController@loadRevisionDate
 
 $app->get('/vcs/modules', 'VCS\VCSModulesController@loadAll');
 $app->get('cachetests', 'VCS\CachesController@test');
+
+
+$app->get('/tester/projects/{project}', 'VCS\TestersController@updateVCS_ModulesWithDate');

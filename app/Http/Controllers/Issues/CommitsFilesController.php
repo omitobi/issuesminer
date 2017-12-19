@@ -12,17 +12,22 @@ namespace App\Http\Controllers\Issues;
 use App\CommitsFileChange;
 use App\issuesCommit;
 use App\Project;
+use App\Utilities\Util;
 use App\Utilities\Utility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class CommitsFilesController extends Utility
 {
+    use Util;
+
     public function loadFromCommits(Request $request)
     {
         $_errors = [];
 //         sleep ( 61 );
-        if(!$project = Project::where('name', $request->get('project_name'))->first())
+        if(!$project = Project::where('name', $request->get('project_name'))
+            ->orWhere('id', $request->get('project_name'))
+            ->first())
         {
             return $this->respond('Project does not exist', 404);
         }
@@ -40,7 +45,7 @@ class CommitsFilesController extends Utility
                   $error = ["You need to wait $diff seconds before making another request"];
                   return $this->respond($error, 503);
               }
-              $_SESSION['timeout'] = time() + 75;
+              $_SESSION['timeout'] = time() + 15;
 
 
             foreach ($issuesCommits as $key => $issuesCommit)
@@ -50,6 +55,7 @@ class CommitsFilesController extends Utility
                 $_commit = $this->jsonToObject($this->ping($commits_url));
                 $_files = $_commit->files;
 
+//                return [$this->makeModules($_files[0]->filename)];
                 $file_count = count($_files);
                 foreach ($_files as $_file)
                 {
@@ -60,8 +66,9 @@ class CommitsFilesController extends Utility
                     $file_['author_name'] = $_commit->commit->committer->name;
 
                     $file_['file'] = $_file->filename;
+                    $file_['module'] = $project->name.'/'.$this->makeModules($_file->filename)[0];
 
-                    $file_['file_sha'] = $_file->sha;
+                    $file_['file_sha'] = $_file->sha ? $_file->sha : 'fx-'.sha1(uniqid());
                     $file_['status'] = $_file->status;
 
                     $file_['date_changed'] = $_commit->commit->committer->date;
@@ -76,7 +83,7 @@ class CommitsFilesController extends Utility
                     {
                         $issuesCommit->file_changed_count = $file_count;
                         $issuesCommit->files_retrieved = $file_['file_sha'];
-                        $issuesCommit->description = $_commit->commit->message;
+//                        $issuesCommit->description = $_commit->commit->message;
                         $issuesCommit->update();
                         $_errors[] = true;
                         $_record_count ++;

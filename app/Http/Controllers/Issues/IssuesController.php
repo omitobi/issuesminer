@@ -32,11 +32,12 @@ class IssuesController extends Utility
         $_next['last_page'] = 'x';
         if(!$request->get('is_update'))
         {
-            if(!$project = Project::where('name', $project_name)->first())
+            if(!$project = Project::where('name', $project_name)->orWhere('id', $project_name)->first())
             {
                 return $this->respond("Project '{$project_name}' does not exist", 400);
             }
 
+//            return $project;
             session_start();
             if(isset($_SESSION['timeout']) && $_SESSION['timeout'] >= time()){
                 $diff = $_SESSION['timeout'] - time();
@@ -47,13 +48,18 @@ class IssuesController extends Utility
 
 
             $_query = http_build_query(array_except($request->all(), ['project_name']));
+
             $issue_url = substr($project->issues_url, 0, -9);
             $issues_query_url = $this->concat($issue_url, $_query, '?');
+//            $issues_query_url = 'https://api.github.com/search/issues?q=repo:jquery/jquery+is:pr+is:closed+bug+in:title+is:merged';
+//            $issues_query_url = 'https://api.github.com/search/issues?q=repo%3Ajquery%2Fjquery+is%3Apr+is%3Aclosed+bug+in%3Atitle+is%3Amerged&page=2';
+//            $issues_query_url = 'https://api.github.com/search/issues?q=repo:atom/atom+is:pr+is:closed+fix+in:title+is:merged+updated:%3C2017-05-01&'.$_query;
 
 
             $ping = $this->ping($issues_query_url, $this->headers, ['body', 'head'] );
             $_body = $ping->getBody();
 
+//            return $ping->getHeader('Link');
 
             if($ping->getHeader('Link') && count($header_ = $ping->getHeader('Link')))
             {
@@ -66,13 +72,14 @@ class IssuesController extends Utility
                 if (($_ls = strpos($links[1], '<')) === 1)
                     $_next['last'] =  substr($links[1], $_ls+1, strpos($links[1],'>')-2);
 
-                if (($_fsn = strpos($links[0], "&page=")) > 0)
-                    $_next['next_page'] = substr($links[0], $_fsn+6, -13);
+                if (($_fsn = strpos($links[0], "page=")) > 0)
+                    $_next['next_page'] = substr($links[0], $_fsn+5, -13);
 
-                if (($_lsn = strpos($links[1], "&page=")) > 0)
-                    $_next['last_page'] = substr($links[1], $_lsn+6, -13);
+                if (($_lsn = strpos($links[1], "page=")) > 0)
+                    $_next['last_page'] = substr($links[1], $_lsn+5, -13);
             }
             $in_issues = $this->jsonToArray($_body);
+//            $in_issues = $this->jsonToArray($_body)['items'];
 
             $final_issues = [];
             $_record_count = 0;
@@ -92,7 +99,9 @@ class IssuesController extends Utility
                 {
                     foreach ($in_issue['labels'] as  $label)
                     {
-                        if ($label['name'] && $label['name'] === $request->get('labels'))
+                        if ($label['name']
+                            && $label['name'] === $request->get('labels')
+                        )
                         {
                             $final_issues['issues'][$idx]['type'] = $label['name'];
                         }
@@ -124,12 +133,13 @@ class IssuesController extends Utility
 
 
                 $requests['page'] = (isset($_next['next_page'])) ? $_next['next_page'] : '';
+//                dd($_next, $ping->getHeader('Link'));
                 $msg = [
                     "status" => "success",
                     'model' => 'issues',
                     "message" => "'{$_record_count}' record(s) successfully loaded to {$project->name}'s 'issues'",
                     "extra" => (!$_record_count || !is_numeric($_next['next_page']) ) ? 'covered' : '',
-                    'next' => (isset($_next['next_page'])) ? (is_numeric(!$_next['next_page']) || ($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
+                    'next' => (isset($_next['next_page']) && is_numeric($_next['next_page']) ) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
                     'params' => http_build_query($requests),
                     'notes' => [
                         array_except($_next, ['last','page'])
@@ -142,7 +152,7 @@ class IssuesController extends Utility
                     'model' => 'issues',
                     "message" => "'{$_record_count}' record(s) successfully loaded to {$project->name}'s 'issues'",
                     "extra" => (!$_record_count || !is_numeric($_next['next_page']) ) ? 'covered' : '',
-                    'next' => (isset($_next['next_page'])) ? (is_numeric(!$_next['next_page']) || ($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
+                    'next' => (isset($_next['next_page']) && is_numeric($_next['next_page']) ) ? (($_next['next_page']+1 == $_next['last_page']) ? '' : $_next['next_page']) : '',
                     'params' => http_build_query($requests),
                     'notes' => [
                         array_except($_next, ['last','page'])

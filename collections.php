@@ -21,14 +21,14 @@ if (!Collection::hasMacro('whereDate')) {
      *
      * @return \Illuminate\Support\Collection
      */
-    Collection::macro('whereDate', function ( $key, $operator, $value = null, $format = 'Y-m-d H:i:s' ) {
+    Collection::macro('whereDate', function ( $key, $operator, $value = null ) {
         if ( func_num_args() == 2 ) {
             $value = $operator;
 
             $operator = '=';
         }
 
-        return $this->filter(operatorForWhereDate($key, $operator, $value, $format));
+        return $this->filter(operatorForWhereDate($key, $operator, $value));
     });
 }
 
@@ -65,13 +65,13 @@ if (!Collection::hasMacro('maxDate')) {
      * @param  mixed  $format
      * @return \Closure
      */
-    function operatorForWhereDate( $key, $operator, $value, $format )
+    function operatorForWhereDate( $key, $operator, $value )
     {
-        return function ( $item ) use ( $key, $operator, $value, $format ) {
+        return function ( $item ) use ( $key, $operator, $value ) {
             $retrieved = data_get( $item, $key );
 
-            $retrieved = Carbon::createFromFormat( $format, $retrieved );
-            $value = Carbon::createFromFormat( $format, $value );
+            $retrieved = Carbon::parse( $retrieved );
+            $value = Carbon::parse( $value );
             switch ( $operator ) {
                 default:    return $retrieved->equalTo( $value );
                 case '=':   return $retrieved->equalTo( $value );

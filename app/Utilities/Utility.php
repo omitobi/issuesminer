@@ -190,18 +190,23 @@ class Utility extends Controller
 
     protected function ping( $link, $headers = [], $default_response = ['body'], $method = 'GET', $public_client = false)
     {
-        if($public_client)
-            $client = $this->guzzleclient;
-        else
-            $client = new GuzzleHttp\Client();
+
+        $client = $public_client ? $this->guzzleclient : (new GuzzleHttp\Client());
+
         $res = $client->request($method, $link, $headers);
+
         $result = $res;
+
         $_d_count = count($default_response);
-        if($default_response[0] === 'body' && $_d_count === 1) {
+
+        if ($default_response[0] === 'body' && $_d_count === 1) {
             $result = $res->getBody();
+
         } elseif($default_response[0] === 'head'  && $_d_count === 1) {
             $result = $res->getHeaders();
+
         }
+
         return $result;
     }
 
@@ -237,7 +242,7 @@ class Utility extends Controller
         return json_encode($_var, $options, $depth);
     }
 
-    function toArray($_var)
+    static function toArray($_var)
     {
         return (array)$_var;
     }
@@ -249,18 +254,18 @@ class Utility extends Controller
         return $this->toCollection($this->jsonToArray($_array));
     }
 
-    function stringToArray($__attr)
+    static function stringToArray($__attr)
     {
         return is_string($__attr) ? [$__attr] : $__attr;
     }
 
-    protected function respond($__attr, $code = 200)
+    public static function respond($__attr, $code = 200)
     {
         if(is_string($__attr))
-            return $this->respond($this->stringToArray($__attr), $code);
+            return self::respond(self::stringToArray($__attr), $code);
 
         if(is_object($__attr))
-            return $this->respond($this->toArray($__attr), $code);
+            return self::respond(self::toArray($__attr), $code);
 
         return response()->json($__attr, $code);
     }
@@ -317,7 +322,11 @@ class Utility extends Controller
     }
 
 
-    static function dot(array $array)
+    /**
+     * @param array $array
+     * @return array
+     */
+    public static function dot(array $array)
     {
         return array_map(function ($value){
             return '.'.$value;

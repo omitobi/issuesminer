@@ -4,6 +4,7 @@
 Homestead.yaml
 Homestead.json
 .env
+env
 
 
 
@@ -32,3 +33,5 @@ composer.phar
 
 /app/config/packages
 /public/packages
+/storage/paths
+/storage/structures

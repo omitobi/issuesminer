@@ -23,7 +23,9 @@ class PrsController extends Utility
     {
         $_errors = [];
 //         sleep ( 61 );
-        if(!$project = Project::where('name', $request->get('project_name'))->first())
+        if(!$project = Project::where('name', $request->get('project_name'))
+            ->orWhere('id', $request->get('project_name'))
+            ->first())
         {
             return $this->respond('Project does not exist', 404);
         }
@@ -66,8 +68,8 @@ class PrsController extends Utility
                 $prs_['state'] = $_prs->state;
                 $prs_['date_created'] = $_prs->created_at;
                 $prs_['date_updated'] = $_prs->updated_at;
-                $prs_['date_closed'] = $_prs->closed_at;
-                $prs_['date_merged'] = $_prs->merged_at; //*
+                $prs_['date_closed'] = $_prs->closed_at ?: '';
+                $prs_['date_merged'] = $_prs->merged_at ?: ''; //*
 
 
                 Model::unguard();

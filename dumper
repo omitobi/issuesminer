@@ -1,0 +1,52 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Created by PhpStorm.
+ * User: omitobisam
+ * Date: 20/03/2017
+ * Time: 12:41
+ */
+
+//mysqldump --where="ProjectId = 1 limit 1000 offset 6000" --host=localhost --protocol=tcp --user=root --password --complete-insert=TRUE --port=3306 --default-character-set=utf8 --no-create-info=TRUE --skip-triggers "issuesminer" VCSEstimations > /Users/omitobisam/Documents/Thesis/DBExports/VCSEstimations_04_July/VCSEstimations_P1_04_07_2014.sql
+/*
+|-------------------------------------------------------------------------------------------------
+| Dump a database table to a file
+|-------------------------------------------------------------------------------------------------
+| Kill the process on the terminal 'ps -ef | grep php'
+| Then pick the process_id, and use 'kill [:process_id]' or 'kill -9 [:process_id] to force kill'
+|
+| Run in terminal: php dumper 6 2000 //ProjectId 6, offset 2000, limit -default[1000] ---
+*/
+
+
+date_default_timezone_set('Europe/Helsinki');
+$where = true;
+$project_id = isset($argv[1]) ? $argv[1] : 1;
+$offset =     isset($argv[2]) ? $argv[2] : 0;
+$limit =      isset($argv[3]) ? $argv[3] : 1000;
+$table =      isset($argv[4]) ? $argv[4] : 'VCSEstimations';
+$database =   isset($argv[5]) ? $argv[5] : 'issuesminer';
+$location =   isset($argv[6]) ? (ends_with($argv[6], '.sql') ? $argv[6] : $argv[6].'.sql')
+    : '/Users/omitobisam/Documents/Thesis/DBExports/'.$table.date('Y_m_d').'/'.$table.date('ymdHis').'Project'.$project_id.'.sql';
+$sub_dir = substr($location, 0, strripos($location, '/'));
+if(!is_dir($sub_dir)) {
+ mkdir($sub_dir);
+}
+
+$port = 3306;
+$user = getenv('DB_USERNAME') ? getenv('DB_USERNAME') : 'root';
+$password = getenv('DB_PASSWORD') ? getenv('DB_PASSWORD') : file_get_contents('env') ;
+
+$comm = system("mysqldump --where=".'"'."ProjectId = $project_id order by Date limit $limit offset $offset".'"'." --host=localhost --protocol=tcp --user=$user --password=$password --complete-insert=TRUE --port=$port --default-character-set=utf8 --no-create-info=TRUE --skip-triggers \"$database\" VCSEstimations > $location 2>&1", $output);
+
+print_r ( $output );
+
+$latest_file = file_get_contents($location);
+$latest_sql = str_replace([
+        '`',
+        'mysqldump: [Warning] Using a password on the command line interface can be insecure.',
+    'LOCK TABLES '.$table.' WRITE;',
+    'UNLOCK TABLES;',
+    ],'', $latest_file);
+file_put_contents($location, $latest_sql);
+exit($comm);

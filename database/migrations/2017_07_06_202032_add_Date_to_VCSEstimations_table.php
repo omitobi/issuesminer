@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddProjectYearlyLocChurnToVCSEstimations extends Migration
+class AddDateToVCSEstimationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddProjectYearlyLocChurnToVCSEstimations extends Migration
     public function up()
     {
         Schema::table('VCSEstimations', function (Blueprint $table) {
-            $table->bigInteger('ProjectYearlyLOCChurn')->default(0);
-//            $table->addColumn('bigInteger','ProjectYearlyLOCChurn')->default(0);
+            $table->dateTime('Date')->after('ProjectDateRevisionId');
         });
     }
 
@@ -27,7 +26,7 @@ class AddProjectYearlyLocChurnToVCSEstimations extends Migration
     public function down()
     {
         Schema::table('VCSEstimations', function (Blueprint $table) {
-            $table->dropColumn('ProjectYearlyLOCChurn');
+            $table->dropColumn('Date');
         });
     }
 }
