@@ -68,8 +68,8 @@ class PrsController extends Utility
                 $prs_['state'] = $_prs->state;
                 $prs_['date_created'] = $_prs->created_at;
                 $prs_['date_updated'] = $_prs->updated_at;
-                $prs_['date_closed'] = $_prs->closed_at;
-                $prs_['date_merged'] = $_prs->merged_at; //*
+                $prs_['date_closed'] = $_prs->closed_at ?: '';
+                $prs_['date_merged'] = $_prs->merged_at ?: ''; //*
 
 
                 Model::unguard();
