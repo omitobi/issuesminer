@@ -67,3 +67,8 @@ $app->get('cachetests', 'VCS\CachesController@test');
 
 
 $app->get('/tester/projects/{project}', 'VCS\TestersController@updateVCS_ModulesWithDate');
+
+
+//costs and bugfixes
+
+$app->get('/costsfixes/{project}', 'Costs\AlternativeCostController@mergeCostsAndIssues');

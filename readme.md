@@ -15,6 +15,17 @@ per_page [max: 100],
 until  [given: last datetimestamp .eg 2017-03-21T22:32:43Z]
 ```
 
-## License
+## Issues Retrieval:
 
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+- is_pr "Fix" in Title, and is_closed, is_merged:
+https://api.github.com/search/issues?q=repo:FortAwesome/Font-Awesome+is:pr+is:closed+fix+in:title+is:merged+updated:%3C2017-05-01
+https://api.github.com/search/issues?q=repo:jquery/jquery+is:pr+is:closed+fix+in:title+is:merged
+
+- "bugfix" in Title, is_closed, is_merged
+https://api.github.com/search/issues?q=repo:jquery/jquery+is:pr+is:closed+bugfix+in:title+is:merged
+
+- "bug" in Title, is_closed, is_merged
+https://api.github.com/search/issues?q=repo:jquery/jquery+is:pr+is:closed+bug+in:title+is:merged
+
+- "error" in Title, is_closed, is_merged
+https://api.github.com/search/issues?q=repo:jquery/jquery+is:pr+is:closed+error+in:title+is:merged

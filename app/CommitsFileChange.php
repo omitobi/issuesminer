@@ -14,4 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 class CommitsFileChange extends Model
 {
 
+    public function issue()
+    {
+        return $this->belongsTo(Issue::class);
+    }
 }
