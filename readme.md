@@ -81,3 +81,29 @@ $issues_query_url = 'https://api.github.com/search/issues?q=repo:facebook/react+
  ```php
 $in_issues = $this->jsonToArray($_body)['items'];
 ```
+
+## retrieve Pull Requests (PRs) from issues
+
+### Normal
+
+```text
+http://localhost:8001/issues/prs/load?project_name=react
+```
+
+After retrieval the `pr_retrieved` column in the `issue` table is filled the hash/id of the pr
+
+## Retrieve (issues_commits) Commits from PRs
+
+### Normal
+
+```text
+http://localhost:8001/prs/commits/load?project_name=react
+```
+
+## Retrieve commits_file_changes from issues_commits
+
+### Normal
+
+```text
+http://localhost:8001/commits/files/load?project_name=react
+```
