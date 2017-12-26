@@ -54,6 +54,7 @@ class IssuesController extends Utility
 //            $issues_query_url = 'https://api.github.com/search/issues?q=repo:jquery/jquery+is:pr+is:closed+bug+in:title+is:merged';
 //            $issues_query_url = 'https://api.github.com/search/issues?q=repo%3Ajquery%2Fjquery+is%3Apr+is%3Aclosed+bug+in%3Atitle+is%3Amerged&page=2';
 //            $issues_query_url = 'https://api.github.com/search/issues?q=repo:atom/atom+is:pr+is:closed+fix+in:title+is:merged+updated:%3C2017-05-01&'.$_query;
+//            $issues_query_url = 'https://api.github.com/search/issues?q=repo:facebook/react+is:pr+is:closed+fix+in:title+is:merged+created:%3C2017-03-31+sort%3Acreated-asc&'.$_query;
 
 
             $ping = $this->ping($issues_query_url, $this->headers, ['body', 'head'] );
@@ -80,12 +81,13 @@ class IssuesController extends Utility
             }
             $in_issues = $this->jsonToArray($_body);
 //            $in_issues = $this->jsonToArray($_body)['items'];
+//            return $in_issues;
 
             $final_issues = [];
             $_record_count = 0;
             foreach ($in_issues as $idx => $in_issue)
             {
-                if(!isset($in_issue['pull_request']))
+                if(! isset($in_issue['pull_request']))
                 {
                     continue;
                 }
