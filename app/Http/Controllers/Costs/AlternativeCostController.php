@@ -23,6 +23,11 @@ class AlternativeCostController extends Controller
         //pp
     }
 
+    /**
+     * @param Request $request ['module_level': {1..4}]
+     * @param $project_id
+     * @return array
+     */
     public function mergeCostsAndIssues(Request $request, $project_id)
     {
         $this->validate($request, [
@@ -43,13 +48,17 @@ class AlternativeCostController extends Controller
             ->whereRaw('LENGTH(module) - LENGTH(REPLACE(module, \'/\', \'\')) = '.$module_level)
             ->distinct('module')->pluck('module');
 
-        $last_date = '2017-03-30';
+        $last_date = '2017-03-31';
+//        return ['affected_modules' => $affected_modules,
+//            'ModulePath' => ModuleChurnLevel::where('ProjectId', $project_id)->whereDate('Date', '<=', $last_date)->where('ModuleLevel', $module_level)
+//                ->whereIn('ModulePath', $affected_modules)->distinct()->pluck('ModulePath')->intersect($affected_modules)
+//            ];
 //        return ModuleChurnLevel::whereDate('Date', '<=', $last_date)->where('ModuleLevel', $module_level)
 //            ->whereIn('ModulePath', $affected_modules)->get()->filter(function ($churn) use ($project){
 //                return ! starts_with($churn->ModulePath, $project->name);
 //            });
 
-        foreach (ModuleChurnLevel::whereDate('Date', '<=', $last_date)->where('ModuleLevel', $module_level)
+        foreach (ModuleChurnLevel::where('ProjectId', $project_id)->whereDate('Date', '<=', $last_date)->where('ModuleLevel', $module_level)
                      ->whereIn('ModulePath', $affected_modules)->cursor() as $cost) {
 
             $date_plus_year = Carbon::parse($cost->Date)->addYear();
