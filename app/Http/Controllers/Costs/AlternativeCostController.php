@@ -10,6 +10,7 @@ use App\Project;
 use App\VCSModels\VCS_Module;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AlternativeCostController extends Controller
 {
@@ -58,29 +59,35 @@ class AlternativeCostController extends Controller
 //                return ! starts_with($churn->ModulePath, $project->name);
 //            });
 
-        foreach (ModuleChurnLevel::where('ProjectId', $project_id)->whereDate('Date', '<=', $last_date)->where('ModuleLevel', $module_level)
-                     ->whereIn('ModulePath', $affected_modules)->cursor() as $cost) {
+        foreach (ModuleChurnLevel::whereDate('Date', '<=', $last_date)->where('ModuleLevel', $module_level)
+                     ->whereIn('ModulePath', $affected_modules)->orderBy('Date')->cursor() as $cost) {
+
+            ini_set('max_execution_time', 1200);
+            Log::info('Loading '.$cost->ProjectId.'\'s '.$cost->Date.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel);
 
             $date_plus_year = Carbon::parse($cost->Date)->addYear();
             $issues_ = Issue::where('project_id', $project_id)
                 ->whereDate('date_closed', '>=', $cost->Date)
                 ->whereDate('date_created', '<=', $date_plus_year)
-                ->whereDate('date_created', '<=', $last_date)
+                ->whereDate('date_created', '<=', $last_date) //todo: seems there's a wrong query here.
                 ->whereDate('date_closed', '<=', $last_date)
-                ->whereHas('fileChanges', function ($file_change) use ($cost, $project_id){
-                    $file_change->where('project_id', $project_id)->where('module', $cost->ModulePath);
+                ->whereHas('fileChanges', function ($file_change) use ($cost){
+                    $file_change->where('module', $cost->ModulePath);
                 })->count();
+
             if (! starts_with($cost->ModulePath, $project->name)) {
-               return $cost;
-               break;
+                continue;
             }
-            $cost->fixes = $issues_;
-            ! $issues_ ?: $cost->update();
 
-            $issues[$cost->ModulePath.'|'.$cost->Date] = $issues_;
+            if( $issues_ ) {
+                $cost->fixes = $issues_;
+                $cost->update();
+                $issues[$cost->ModulePath.'|'.$cost->Date] = $issues_;
+                Log::info('DONE: Updating '.$cost->ProjectId.'\'s '.$cost->Date.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel. ' Fixes: '.$cost->fixes);
+            } else {
+                Log::info('SKIPPED: Updating '.$cost->ProjectId.'\'s '.$cost->Date.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel. ' Fixes: '.$cost->fixes);
+            }
 
-            $count ++;
-//            if ($issues >= 5) break;
         }
         return $issues;
 
