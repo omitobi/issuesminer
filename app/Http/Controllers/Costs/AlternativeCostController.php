@@ -32,7 +32,7 @@ class AlternativeCostController extends Controller
     public function mergeCostsAndIssues(Request $request, $project_id)
     {
         $this->validate($request, [
-           'module_level' => 'required|int|min:1|max:4'
+            'module_level' => 'required|int|min:1|max:4'
         ]);
 
         $project = Project::findOrFail($project_id);
@@ -49,7 +49,7 @@ class AlternativeCostController extends Controller
             ->whereRaw('LENGTH(module) - LENGTH(REPLACE(module, \'/\', \'\')) = '.$module_level)
             ->distinct('module')->pluck('module');
 
-        $last_date = '2017-03-31';
+        $last_date = Carbon::parse('2017-03-31');
 //        return ['affected_modules' => $affected_modules,
 //            'ModulePath' => ModuleChurnLevel::where('ProjectId', $project_id)->whereDate('Date', '<=', $last_date)->where('ModuleLevel', $module_level)
 //                ->whereIn('ModulePath', $affected_modules)->distinct()->pluck('ModulePath')->intersect($affected_modules)
@@ -63,17 +63,25 @@ class AlternativeCostController extends Controller
                      ->whereIn('ModulePath', $affected_modules)->orderBy('Date')->cursor() as $cost) {
 
             ini_set('max_execution_time', 1200);
-            Log::info('Loading '.$cost->ProjectId.'\'s '.$cost->Date.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel);
 
             $date_plus_year = Carbon::parse($cost->Date)->addYear();
+            $date_plus_year_= $date_plus_year->greaterThan($last_date) ? $last_date : $date_plus_year;
+
+            $_dt['md'] = $cost->ModulePath;
+            $_dt['cd'] = $cost->Date;
+            $_dt['d+y'] = $date_plus_year->toDateString();
+            $_dt['d+y_'] = $date_plus_year_->toDateString();
+            $_dt['ld'] = $last_date->toDateString();
+
+            Log::info('Loading '.$cost->ProjectId.'\'s '.$cost->Date.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel, $_dt);
+
             $issues_ = Issue::where('project_id', $project_id)
+                ->whereDate('date_created', '<=', $date_plus_year_->toDateString())
                 ->whereDate('date_closed', '>=', $cost->Date)
-                ->whereDate('date_created', '<=', $date_plus_year)
-                ->whereDate('date_created', '<=', $last_date) //todo: seems there's a wrong query here.
-                ->whereDate('date_closed', '<=', $last_date)
                 ->whereHas('fileChanges', function ($file_change) use ($cost){
                     $file_change->where('module', $cost->ModulePath);
                 })->count();
+
 
             if (! starts_with($cost->ModulePath, $project->name)) {
                 continue;
@@ -83,9 +91,9 @@ class AlternativeCostController extends Controller
                 $cost->fixes = $issues_;
                 $cost->update();
                 $issues[$cost->ModulePath.'|'.$cost->Date] = $issues_;
-                Log::info('DONE: Updating '.$cost->ProjectId.'\'s '.$cost->Date.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel. ' Fixes: '.$cost->fixes);
+                Log::info('DONE: Updating '.$cost->ProjectId.'\'s '.$cost->Date.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel. ' Fixes: '.$cost->fixes, $_dt);
             } else {
-                Log::info('SKIPPED: Updating '.$cost->ProjectId.'\'s '.$cost->Date.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel. ' Fixes: '.$cost->fixes);
+                Log::info('SKIPPED: Updating '.$cost->ProjectId.'\'s '.$cost->Date.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel. ' Fixes: '.$cost->fixes, $_dt);
             }
 
         }
@@ -94,23 +102,23 @@ class AlternativeCostController extends Controller
     }
 
 
-/*-- SELECT COUNT(*) from (
-SELECT
--- cfc.commit_id,
--- COUNT(distinct(cfc.module)) as bug_freq,
-cfc.issue_id,
-cfc.module,
-DATE_FORMAT(i.date_closed, '%Y-%m-%d') AS Date
--- count(distinct cfc.module)
-FROM
-commits_file_changes cfc,
-issues i
-WHERE
-LENGTH(cfc.module) - LENGTH(REPLACE(cfc.module, '/', '')) = 2
-AND cfc.project_id = 1
-AND cfc.issue_id = i.id
-AND (i.date_closed >= '2013-01-08' and i.date_created <= '2014-01-08')
-AND cfc.module = 'jquery/src/'
-GROUP BY  Date, cfc.module, cfc.issue_id;
--- ORDER BY Date) as nt;*/
+    /*-- SELECT COUNT(*) from (
+    SELECT
+    -- cfc.commit_id,
+    -- COUNT(distinct(cfc.module)) as bug_freq,
+    cfc.issue_id,
+    cfc.module,
+    DATE_FORMAT(i.date_closed, '%Y-%m-%d') AS Date
+    -- count(distinct cfc.module)
+    FROM
+    commits_file_changes cfc,
+    issues i
+    WHERE
+    LENGTH(cfc.module) - LENGTH(REPLACE(cfc.module, '/', '')) = 2
+    AND cfc.project_id = 1
+    AND cfc.issue_id = i.id
+    AND (i.date_closed >= '2013-01-08' and i.date_created <= '2014-01-08')
+    AND cfc.module = 'jquery/src/'
+    GROUP BY  Date, cfc.module, cfc.issue_id;
+    -- ORDER BY Date) as nt;*/
 }
