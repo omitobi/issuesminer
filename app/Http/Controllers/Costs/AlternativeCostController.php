@@ -14,28 +14,22 @@ use Illuminate\Support\Facades\Log;
 
 class AlternativeCostController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //pp
-    }
 
     /**
      * @param Request $request ['module_level': {1..4}]
      * @param $project_id
-     * @return array
+     * @return array|mixed
      */
     public function mergeCostsAndIssues(Request $request, $project_id)
     {
+        $request->merge(['project_id' => $project_id]);
+
         $this->validate($request, [
-            'module_level' => 'required|int|min:1|max:4'
+            'project_id' => 'required|min:1|in:1,4,6,9',
+            'module_level' => 'required|int|min:1|max:4',
+
         ]);
 
-        $project = Project::findOrFail($project_id);
         /**
          * Sample:
          *
@@ -43,24 +37,15 @@ class AlternativeCostController extends Controller
          * //changes 2013-01-08
          */
         $module_level = $request->get('module_level');
-        $count = 0;
         $issues = [];
-        $affected_modules = CommitsFileChange::whereProjectId($project_id)
-            ->whereRaw('LENGTH(module) - LENGTH(REPLACE(module, \'/\', \'\')) = '.$module_level)
-            ->distinct('module')->pluck('module');
-
         $last_date = Carbon::parse('2017-03-31');
-//        return ['affected_modules' => $affected_modules,
-//            'ModulePath' => ModuleChurnLevel::where('ProjectId', $project_id)->whereDate('Date', '<=', $last_date)->where('ModuleLevel', $module_level)
-//                ->whereIn('ModulePath', $affected_modules)->distinct()->pluck('ModulePath')->intersect($affected_modules)
-//            ];
-//        return ModuleChurnLevel::whereDate('Date', '<=', $last_date)->where('ModuleLevel', $module_level)
-//            ->whereIn('ModulePath', $affected_modules)->get()->filter(function ($churn) use ($project){
-//                return ! starts_with($churn->ModulePath, $project->name);
-//            });
 
-        foreach (ModuleChurnLevel::whereDate('Date', '<=', $last_date)->where('ModuleLevel', $module_level)
-                     ->whereIn('ModulePath', $affected_modules)->orderBy('Date')->cursor() as $cost) {
+        foreach (ModuleChurnLevel::whereDate('Date', '<=', $last_date)
+                     ->where('ProjectId', $project_id)
+                     ->where('ModuleLevel', $module_level)
+                     ->orderBy('Date')
+                     ->cursor() as $cost)
+        {
 
             ini_set('max_execution_time', 1200);
 
@@ -79,15 +64,10 @@ class AlternativeCostController extends Controller
                 ->whereDate('date_created', '<=', $date_plus_year_->toDateString())
                 ->whereDate('date_closed', '>=', $cost->Date)
                 ->whereHas('fileChanges', function ($file_change) use ($cost){
-                    $file_change->where('module', $cost->ModulePath);
+                    $file_change->where('module', 'LIKE', $cost->ModulePath.'%');
                 })->count();
 
-
-            if (! starts_with($cost->ModulePath, $project->name)) {
-                continue;
-            }
-
-            if( $issues_ ) {
+            if( $issues_ > 0 ) {
                 $cost->fixes = $issues_;
                 $cost->update();
                 $issues[$cost->ModulePath.'|'.$cost->Date] = $issues_;
