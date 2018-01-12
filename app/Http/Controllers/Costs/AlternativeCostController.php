@@ -25,7 +25,7 @@ class AlternativeCostController extends Controller
         $request->merge(['project_id' => $project_id]);
 
         $this->validate($request, [
-            'project_id' => 'required|min:1|in:1,4,6,9',
+            'project_id' => 'required|min:1|in:1,4,6,9|exists:projects,id',
             'module_level' => 'required|int|min:1|max:4',
 
         ]);
