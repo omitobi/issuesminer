@@ -72,3 +72,4 @@ $app->get('/tester/projects/{project}', 'VCS\TestersController@updateVCS_Modules
 //costs and bugfixes
 
 $app->get('/costsfixes/{project}', 'Costs\AlternativeCostController@mergeCostsAndIssues');
+$app->get('/locs/{project}', 'Costs\LOCCounterController@load');

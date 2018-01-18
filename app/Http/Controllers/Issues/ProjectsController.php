@@ -95,11 +95,9 @@ class ProjectsController extends Utility
     public function fetch(Request $request)
     {
         $requests = $request->only(['by']);
-
         if($requests['by'])
         {
-            return $this->respond(
-                [
+            return $this->respond([
                     'status' => 'success',
                     'message' => "retrieved projects by '{$requests['by']}'",
                     'model' => 'projects',
@@ -107,8 +105,7 @@ class ProjectsController extends Utility
             ]);
         }
 
-        return $this->respond(
-        [
+        return $this->respond([
             'status' => 'success',
             'message' => 'retrieved all projects',
             'model' => 'projects',
