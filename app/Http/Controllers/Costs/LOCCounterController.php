@@ -36,6 +36,7 @@ class LOCCounterController extends Utility
 
         $project = Project::findOrFail($project_id);
 
+
         /**
          * Sample:
          *
@@ -46,7 +47,7 @@ class LOCCounterController extends Utility
         $locs = [];
         $last_date = Carbon::parse('2017-03-31');
 
-        foreach (ModuleChurnLevel::whereDate('Date', '<=', $last_date)
+        foreach (ModuleChurnLevel::whereDate('Date', '<=', $last_date)  //todo: should I remove the last date?
                      ->where('ProjectId', $project_id)
                      ->where('ModuleLevel', $module_level)
                      ->where('loc', 0)
@@ -55,25 +56,24 @@ class LOCCounterController extends Utility
         {
             ini_set('max_execution_time', 1200);
 
-            $date_plus_year = Carbon::parse($cost->Date)->addYear();
-            $date_plus_year_= $date_plus_year->greaterThan($last_date) ? $last_date : $date_plus_year;
+            $date_ = Carbon::parse($cost->Date)->addDay()->startOfDay()->toDateTimeString();
 
             $_dt['md'] = $cost->ModulePath;
             $_dt['cd'] = $cost->Date;
-            $_dt['d+y'] = $date_plus_year->toDateString();
-            $_dt['d+y_'] = $date_plus_year_->toDateString();
             $_dt['ld'] = $last_date->toDateString();
+            $_dt['cd_'] = $date_;
 
-            Log::info('Loading LOC For project: '.$cost->ProjectId.'\'s '.$cost->Date.' for plus_year '.$date_plus_year_->toDateString().' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel, $_dt);
+            Log::info('Loading LOC For project: '.$cost->ProjectId.'\'s '.$cost->Date.' plus day: '.$date_.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel, $_dt);
 
             $cwd = "/Applications/MAMP/htdocs/projects_src/$project->name";
+            $this->runProcess('git checkout master', $cwd);
 
             $module = $cost->ModulePath;
             $module_ = Str::replaceFirst($project->name,'', $module );
 
             $result = collect();
 
-            $result->push($this->runProcess('git rev-list -1 --before="'.$date_plus_year_->copy()->addDay()->startOfDay()->toDateString().'" master', $cwd));
+            $result->push($this->runProcess('git rev-list -1 --before="'.$date_.'" master', $cwd));
             $sha = $result->first()->get('result')->first();
 
             $loc_at_date = 0;
@@ -93,7 +93,7 @@ class LOCCounterController extends Utility
                     $loc_at_date = Str::startsWith($count_string_at_date, 'line count:') ? intval(trim(Str::replaceLast('line count:', '', $count_string_at_date))) : $loc_at_date;
                     $result->push(['loc' => $loc_at_date]);
                 }
-                sleep(1);
+//                sleep(1);
                 $result->push($this->runProcess('git checkout master', $cwd)); //checkout back to master
 
                 if ($loc_at_date > 0) {
