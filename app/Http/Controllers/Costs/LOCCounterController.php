@@ -49,6 +49,7 @@ class LOCCounterController extends Utility
         foreach (ModuleChurnLevel::whereDate('Date', '<=', $last_date)
                      ->where('ProjectId', $project_id)
                      ->where('ModuleLevel', $module_level)
+                     ->where('loc', 0)
                      ->orderBy('Date')
                      ->cursor() as $cost)
         {
@@ -92,7 +93,7 @@ class LOCCounterController extends Utility
                     $loc_at_date = Str::startsWith($count_string_at_date, 'line count:') ? intval(trim(Str::replaceLast('line count:', '', $count_string_at_date))) : $loc_at_date;
                     $result->push(['loc' => $loc_at_date]);
                 }
-
+                sleep(1);
                 $result->push($this->runProcess('git checkout master', $cwd)); //checkout back to master
 
                 if ($loc_at_date > 0) {
