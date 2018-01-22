@@ -66,7 +66,7 @@ class LOCCounterController extends Utility
             Log::info('Loading LOC For project: '.$cost->ProjectId.'\'s '.$cost->Date.' plus day: '.$date_.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel, $_dt);
 
             $cwd = "/Applications/MAMP/htdocs/projects_src/$project->name";
-            $this->runProcess('git checkout master', $cwd);
+//            $this->runProcess('git checkout master', $cwd);
 
             $module = $cost->ModulePath;
             $module_ = Str::replaceFirst($project->name,'', $module );
@@ -93,7 +93,7 @@ class LOCCounterController extends Utility
                     $loc_at_date = Str::startsWith($count_string_at_date, 'line count:') ? intval(trim(Str::replaceLast('line count:', '', $count_string_at_date))) : $loc_at_date;
                     $result->push(['loc' => $loc_at_date]);
                 }
-//                sleep(1);
+                sleep(1);
                 $result->push($this->runProcess('git checkout master', $cwd)); //checkout back to master
 
                 if ($loc_at_date > 0) {
