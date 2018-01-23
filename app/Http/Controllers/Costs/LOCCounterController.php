@@ -36,6 +36,8 @@ class LOCCounterController extends Utility
 
         $project = Project::findOrFail($project_id);
 
+        $cwd = "/Applications/MAMP/htdocs/projects_src/$project->name";
+//            $this->runProcess('git checkout master', $cwd);
 
         /**
          * Sample:
@@ -51,7 +53,8 @@ class LOCCounterController extends Utility
                      ->where('ProjectId', $project_id)
                      ->where('ModuleLevel', $module_level)
                      ->where('loc', 0)
-                     ->orderBy('Date')
+                     ->where('Date', '>=', '2017-01-25')
+                     ->orderBy('Date') //2017-01-25" project 6 level 3
                      ->cursor() as $cost)
         {
             ini_set('max_execution_time', 1200);
@@ -64,9 +67,6 @@ class LOCCounterController extends Utility
             $_dt['cd_'] = $date_;
 
             Log::info('Loading LOC For project: '.$cost->ProjectId.'\'s '.$cost->Date.' plus day: '.$date_.' and module: '.$cost->ModulePath.' at Level: '.$cost->ModuleLevel, $_dt);
-
-            $cwd = "/Applications/MAMP/htdocs/projects_src/$project->name";
-//            $this->runProcess('git checkout master', $cwd);
 
             $module = $cost->ModulePath;
             $module_ = Str::replaceFirst($project->name,'', $module );
@@ -93,7 +93,7 @@ class LOCCounterController extends Utility
                     $loc_at_date = Str::startsWith($count_string_at_date, 'line count:') ? intval(trim(Str::replaceLast('line count:', '', $count_string_at_date))) : $loc_at_date;
                     $result->push(['loc' => $loc_at_date]);
                 }
-                sleep(1);
+//                sleep(1);
                 $result->push($this->runProcess('git checkout master', $cwd)); //checkout back to master
 
                 if ($loc_at_date > 0) {
