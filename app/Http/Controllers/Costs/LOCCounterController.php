@@ -53,7 +53,7 @@ class LOCCounterController extends Utility
                      ->where('ProjectId', $project_id)
                      ->where('ModuleLevel', $module_level)
                      ->where('loc', 0)
-                     ->where('Date', '>=', '2017-01-25')
+//                     ->where('Date', '>=', '2016-12-09')
                      ->orderBy('Date') //2017-01-25" project 6 level 3
                      ->cursor() as $cost)
         {
