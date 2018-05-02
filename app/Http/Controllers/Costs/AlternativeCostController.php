@@ -10,6 +10,7 @@ use App\Project;
 use App\VCSModels\VCS_Module;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AlternativeCostController extends Controller
@@ -78,6 +79,46 @@ class AlternativeCostController extends Controller
         }
         return $issues;
 
+    }
+
+    public function getCostDiffs(Request $request)
+    {
+        $this->validate($request, [
+            'level' => 'required|in:4'
+        ]);
+        $project_id = 6;
+        $module_level = 4;
+
+
+            DB::table('projectmoduleachurnhistory as t1')
+            ->join('projectmoduleachurnhistory as t2', function ($join) {
+                $join->on('t1.Date', '=', 't2.Date')
+                    ->on('t1.ProjectId', '=', 't2.ProjectId')
+                    ->on('t1.ModulePath', '<>', 't2.ModulePath')
+                    ->on('t1.ModulePath', 'NOT LIKE', DB::raw('CONCAT(`t2`.`ModulePath`, "%")'))
+                    ->on('t2.ModulePath', 'NOT LIKE', DB::raw('CONCAT(`t1`.`ModulePath`, "%")'));
+            })
+            ->selectRaw('
+            t1.ProjectId, 
+            t1.ModuleLevel, 
+            t1.ModulePath,
+            t2.ModulePath as ModulePath2,
+            ABS(t1.AlternativeCost - t2.AlternativeCost) as costDifference,
+            t1.loc as loc1,
+            t2.loc as loc,
+            t1.Date
+        ')->where([
+                't1.ProjectId' => $project_id,
+                't1.ModuleLevel' => $module_level
+            ])->orderBy('t1.Date')->chunk(5000, function ($chunks) {
+               DB::table('projectcostdiffs')->insert($chunks);
+            });
+
+
+        return [
+            $project_id,
+            $module_level,
+        ];
     }
 
 

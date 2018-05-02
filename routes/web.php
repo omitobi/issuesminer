@@ -17,6 +17,14 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
+$app->get('abc', function (){
+   return [
+       'tuuuy'
+   ];
+});
+
+$app->get('costdiffs', 'Costs\AlternativeCostController@getCostDiffs');
+
 
 $app->get('/projects', 'Issues\ProjectsController@fetch');
 
@@ -73,3 +81,4 @@ $app->get('/tester/projects/{project}', 'VCS\TestersController@updateVCS_Modules
 
 $app->get('/costsfixes/{project}', 'Costs\AlternativeCostController@mergeCostsAndIssues');
 $app->get('/locs/{project}', 'Costs\LOCCounterController@load');
+
