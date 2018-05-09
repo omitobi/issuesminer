@@ -84,36 +84,88 @@ class AlternativeCostController extends Controller
     public function getCostDiffs(Request $request)
     {
         $this->validate($request, [
-            'level' => 'required|in:4'
+            'level' => 'required|in:3,4'
         ]);
         $project_id = 6;
-        $module_level = 4;
+        $module_level = 3;
 
+        $result = DB::table('projectmoduleachurnhistory')
+            ->where([
+                'ProjectId' => $project_id,
+                'ModuleLevel' => $module_level,
+                'taken' => false
+            ])->take(100)
+            ->pluck('Id');
 
-            DB::table('projectmoduleachurnhistory as t1')
+        DB::table('projectmoduleachurnhistory as t1')
             ->join('projectmoduleachurnhistory as t2', function ($join) {
                 $join->on('t1.Date', '=', 't2.Date')
                     ->on('t1.ProjectId', '=', 't2.ProjectId')
                     ->on('t1.ModulePath', '<>', 't2.ModulePath')
                     ->on('t1.ModulePath', 'NOT LIKE', DB::raw('CONCAT(`t2`.`ModulePath`, "%")'))
                     ->on('t2.ModulePath', 'NOT LIKE', DB::raw('CONCAT(`t1`.`ModulePath`, "%")'));
-            })
-            ->selectRaw('
-            t1.ProjectId, 
-            t1.ModuleLevel, 
-            t1.ModulePath,
-            t2.ModulePath as ModulePath2,
-            ABS(t1.AlternativeCost - t2.AlternativeCost) as costDifference,
-            t1.loc as loc1,
-            t2.loc as loc,
-            t1.Date
-        ')->where([
-                't1.ProjectId' => $project_id,
-                't1.ModuleLevel' => $module_level
-            ])->orderBy('t1.Date')->chunk(5000, function ($chunks) {
-               DB::table('projectcostdiffs')->insert($chunks);
-            });
+        })
+        ->selectRaw('
+          t1.Id,
+          t1.ProjectId,
+          t1.ModuleLevel,
+          t1.ModulePath,
+          t2.ModulePath                                AS ModulePath2,
+          t1.AlternativeCost,
+          t2.AlternativeCost                           as AlternativeCost2,
+          ABS(t1.AlternativeCost - t2.AlternativeCost) AS costDifference,
+          CASE WHEN (ABS(t1.AlternativeCost - t2.AlternativeCost) > 8000)
+            THEN IF(t1.AlternativeCost > t2.AlternativeCost, 1, -1)
+          ELSE 0 END                                   as costCompare,
+          ABS(t1.fixes - t2.fixes)                     AS fixesDifference,
+          CASE WHEN (ABS(t1.fixes - t2.fixes) > 10)
+            THEN IF(t1.fixes > t2.fixes, 1, -1)
+          ELSE 0 END                                   as fixesCompare,
+          t1.loc                                       AS loc1,
+          t2.loc                                       AS loc2,
+          t1.fixes,
+          t2.fixes                                     as fixes2,
+          t1.Date
+        ')->whereIn('t1.Id', $result)
+            ->get()
+            ->each(function ($chunk) {
+                DB::table('projectcostdifference')->insert([
+                  'ProjectId' =>  $chunk->ProjectId,
+                  'ModuleLevel' =>  $chunk->ModuleLevel,
+                  'ModulePath' =>  $chunk->ModulePath,
+                  'ModulePath2' =>  $chunk->ModulePath2,
+                  'AlternativeCost' =>  $chunk->AlternativeCost,
+                  'AlternativeCost2' =>  $chunk->AlternativeCost2,
+                  'costDifference' =>  $chunk->costDifference,
+                  'costCompare' =>  $chunk->costCompare,
+                  'fixesDifference' =>  $chunk->fixesDifference,
+                  'fixesCompare' =>  $chunk->fixesCompare,
+                  'loc1' =>  $chunk->loc1,
+                  'loc2' =>  $chunk->loc2,
+                  'fixes' =>  $chunk->fixes,
+                  'fixes2' =>  $chunk->fixes2,
+                  'Date' =>  $chunk->Date,
+                ]);
+        });
 
+        $result_count = count($result);
+        if ($result_count > 0) {
+
+            DB::table('projectmoduleachurnhistory')->whereIn('Id', $result)
+                ->update(['taken' => true]);
+
+            return [
+              'status' => 'success',
+                'extra' => '',
+                'message' => 'successfully loaded cost diffs of '.$result_count
+            ];
+        }
+
+        return [
+            'status' => 'success',
+            'extra' => 'covered',
+            'message' => 'Finished loading cost diffs left: '.$result_count
+        ];
 
         return [
             $project_id,
