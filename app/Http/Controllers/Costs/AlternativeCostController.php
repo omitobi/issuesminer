@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Costs;
 
 use App\ChurnCostsModels\ModuleChurnLevel;
 use App\CommitsFileChange;
+use App\Developer;
+use App\Folder;
 use App\Http\Controllers\Controller;
 use App\Issue;
 use App\Project;
@@ -12,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use function PHPSTORM_META\type;
 
 class AlternativeCostController extends Controller
 {
@@ -83,11 +86,36 @@ class AlternativeCostController extends Controller
 
     public function getCostDiffs(Request $request)
     {
+//      Update the comparison of a variable
+//        DB::statement("
+//                        update projectcostdifference
+//                        set
+//                          `fixesCompare`
+//                            = CASE WHEN (`fixesDifference` > 4)
+//                                THEN IF(`fixes` > `fixes2`, 1, -1)
+//                              ELSE 0 END"
+//        );
+
+        //Update the difference of a variable
+//        DB::statement("
+//                        update projectcostdifference
+//                        set
+//                          `locDifference`= ABS(loc1 - loc2)"
+//        );
+
+        //Update the compare of a variable
+//        DB::statement("
+//                        update projectcostdifference
+//                        set `locCompare`
+//                          = CASE WHEN (`locDifference` > 4) #8038 90%
+//                                THEN IF(`loc1` > `loc2`, 1, -1)
+//                              ELSE 0 END"
+//        );
         $this->validate($request, [
             'level' => 'required|in:3,4'
         ]);
         $project_id = 6;
-        $module_level = 3;
+        $module_level = 4;
 
         $result = DB::table('projectmoduleachurnhistory')
             ->where([
@@ -118,7 +146,7 @@ class AlternativeCostController extends Controller
             THEN IF(t1.AlternativeCost > t2.AlternativeCost, 1, -1)
           ELSE 0 END                                   as costCompare,
           ABS(t1.fixes - t2.fixes)                     AS fixesDifference,
-          CASE WHEN (ABS(t1.fixes - t2.fixes) > 10)
+          CASE WHEN (ABS(t1.fixes - t2.fixes) > 8)
             THEN IF(t1.fixes > t2.fixes, 1, -1)
           ELSE 0 END                                   as fixesCompare,
           t1.loc                                       AS loc1,
@@ -165,11 +193,6 @@ class AlternativeCostController extends Controller
             'status' => 'success',
             'extra' => 'covered',
             'message' => 'Finished loading cost diffs left: '.$result_count
-        ];
-
-        return [
-            $project_id,
-            $module_level,
         ];
     }
 
