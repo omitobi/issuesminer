@@ -2,7 +2,7 @@
 
 ### Introduction
 
-This repo contains the code base for the Laravel (Lumen) project use to retrieve Commits data from Github API Version 3 and also re-organize the data to be used in the Thesis titled: 'The relationship between Module size, Alternative cost and Bugs' as fulfilment of the requirement of obtaining Masters' of Software Engineering 
+This repo contains the code base for the Laravel (Lumen) project use to retrieve Commits data from Github API Version 3 and also re-organize the data to be used in the Thesis titled: 'The relationship between Module size, Alternative cost and Bugs' as fulfilment of the requirement of obtaining Masters' of Software Engineering at the University of Tartu (August 2018)
 
 ### The following is considered in their order
 ```php
