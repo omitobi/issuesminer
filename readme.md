@@ -1,10 +1,15 @@
 # Issues Miner
 
-### Introduction
+## Introduction
 
 This repo contains the code base for the Laravel (Lumen) project use to retrieve Commits data from Github API Version 3 and also re-organize the data to be used in the Thesis titled: 'The relationship between Module size, Alternative cost and Bugs' as fulfilment of the requirement of obtaining Masters' of Software Engineering at the University of Tartu (August 2018)
 
-### The following is considered in their order
+## Other projects related
+
+- Front-end: https://github.com/omitobi/issuesminer_front
+- Analysis (R) scripts and data: https://github.com/omitobi/issuesminerscripts
+
+## The following is considered in their order
 ```php
 $app->get('/projects', 'Issues\ProjectsController@fetch');
 
@@ -23,7 +28,6 @@ $app->get('prs/commits/load', 'Issues\CommitsController@loadFromPrs');
 //5. Load: commits->file_changes
 $app->get('commits/files/load', 'Issues\CommitsFilesController@loadFromCommits');
 ```
-
 
 ## Load Commits from a project:
 
@@ -86,7 +90,7 @@ $issues_query_url = 'https://api.github.com/search/issues?q=repo:facebook/react+
 $in_issues = $this->jsonToArray($_body)['items'];
 ```
 
-## retrieve Pull Requests (PRs) from issues
+## Retrieve Pull Requests (PRs) from issues
 
 ### Normal
 
@@ -110,8 +114,13 @@ http://localhost:8001/prs/commits/load?project_name=react
 
 ```text
 http://localhost:8001/commits/files/load?project_name=react
+```
 
 ## Authors
-- Omisakin Oluwatobi
+
+- Omisakin Oluwatobi [@omitobi](https://github.com/omitobi)
 - Coming soon...
-```
+
+## Permissions
+
+The code base and its related projects cannot be used unless by written and approved permission of the Author
