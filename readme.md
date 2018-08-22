@@ -118,8 +118,7 @@ http://localhost:8001/commits/files/load?project_name=react
 
 ## Authors
 
-- Omisakin Oluwatobi [@omitobi](https://github.com/omitobi)
-- Coming soon...
+- Oluwatobi Samuel Omisakin [@omitobi](https://github.com/omitobi)
 
 ## Permissions
 
